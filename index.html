@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Science Model Evaluation Metrics Dashboard</title>
+
+<!-- MathJax for mathematical notation -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+body { font-family: sans-serif; line-height: 1.5; margin: 20px; }
+h1 { font-size: 1.8em; margin-bottom: 0; }
+h2 { font-size: 1.4em; margin-top: 1.5em; margin-bottom: 0.5em; }
+
+details summary {
+  font-weight: bold;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin: 1em 0;
+}
+details summary::-webkit-details-marker { display: none; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; }
+
+/* No outer borders, just separators */
+th, td {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 8px;
+  vertical-align: top;
+}
+th {
+  background: none;
+  text-align: left;
+}
+
+/* Alternating row shading */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Status badges */
+.good {
+  background-color: #c8e6c9;
+  color: #256029;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+.moderate {
+  background-color: #fff9c4;
+  color: #827717;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+.poor {
+  background-color: #ffccbc;
+  color: #b71c1c;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+/* ====== COLOR BARS (shared) ====== */
+.colorbar {
+  height: 15px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+/* 0–1 metrics: higher is better */
+.colorbar-standard {
+  background: linear-gradient(to right,
+    #ff8c00 0%,    /* low = poor */
+    #ff8c00 50%,
+    #ffecb3 50%,   /* mid = moderate */
+    #ffecb3 70%,
+    #ffeb3b 70%,   /* good */
+    #ffeb3b 80%,
+    #81c784 80%,   /* very good */
+    #81c784 100%
+  );
+}
+
+/* F1 Score */
+.colorbar-f1 {
+  background: linear-gradient(to right,
+    #ff8c00 0%,    /* <0.5 poor */
+    #ff8c00 50%,
+    #ffeb3b 50%,   /* 0.5–0.8 good */
+    #ffeb3b 80%,
+    #81c784 80%,   /* >0.8 very good */
+    #81c784 100%
+  );
+}
+
+/* ROC AUC */
+.colorbar-auc {
+  background: linear-gradient(to right,
+    #ff8c00 0%,    /* <0.7 poor */
+    #ff8c00 70%,
+    #ffecb3 70%,   /* 0.7–0.8 moderate */
+    #ffecb3 80%,
+    #81c784 80%,   /* >0.8 good */
+    #81c784 100%
+  );
+}
+
+/* R² / Adjusted R² (0–1) */
+.colorbar-r2 {
+  background: linear-gradient(to right,
+    #ff8c00 0%,    /* weak */
+    #ff8c00 25%,
+    #ffecb3 25%,   /* moderate */
+    #ffecb3 50%,
+    #81c784 50%,   /* strong */
+    #81c784 100%
+  );
+}
+
+/* Correlations & symmetric -1..+1 type scales (|value| small = poor, large = good) */
+.colorbar-correlation {
+  background: linear-gradient(to right,
+    #256029 0%,    /* strong negative (large |r|, good strength) */
+    #c8e6c9 20%,   /* moderate negative */
+    #ffccbc 45%,   /* near 0 (weak, poor) */
+    #ffccbc 55%,
+    #c8e6c9 80%,   /* moderate positive */
+    #256029 100%   /* strong positive */
+  );
+}
+
+/* P-values for testing effects: small p (evidence for effect) = good */
+.colorbar-pvalue-effect {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* 0–0.05 significant (good) */
+    #c8e6c9 5%,
+    #ffccbc 5%,    /* >0.05 non-significant (less useful) */
+    #ffccbc 100%
+  );
+}
+
+/* P-values for assumption checks: small p (violation) = bad, large p (no violation) = good */
+.colorbar-pvalue-assump {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* 0–0.05 violation (bad) */
+    #ffccbc 5%,
+    #c8e6c9 5%,    /* >0.05 no evidence of violation (good) */
+    #c8e6c9 100%
+  );
+}
+
+/* t-statistics |t|: bigger = stronger evidence */
+.colorbar-tstat {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* ~0–1 weak (bad) */
+    #fff9c4 50%,   /* ~2 marginal */
+    #c8e6c9 75%,   /* ~3 strong */
+    #256029 100%   /* very strong */
+  );
+}
+
+/* Chi-square (0 → critical → large). For effect tests: small χ² = little evidence, large = strong evidence */
+.colorbar-chi2 {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* near 0: no detectable difference (poor for effect detection) */
+    #ffccbc 40%,
+    #c8e6c9 60%,   /* around/above critical: some evidence */
+    #256029 100%   /* far above: strong evidence of difference */
+  );
+}
+
+/* F-statistic (ANOVA): larger = stronger evidence some means differ */
+.colorbar-fstat {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* ~1 no difference */
+    #fff9c4 40%,   /* ~2 marginal */
+    #c8e6c9 70%,   /* ~3 clear */
+    #256029 100%   /* 5+ very strong */
+  );
+}
+
+/* CI width / precision: narrower = better */
+.colorbar-ciwidth {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* narrow/precise (good) */
+    #fff9c4 50%,   /* moderate */
+    #ffccbc 100%   /* very wide/uncertain (bad) */
+  );
+}
+
+/* Generic robustness / stability bar: more stable = better */
+.colorbar-robustness {
+  background: linear-gradient(to right,
+    #b71c1c 0%,    /* very unstable (bad) */
+    #ffccbc 30%,
+    #c8e6c9 70%,
+    #256029 100%   /* very stable (good) */
+  );
+}
+
+/* Bias–Variance tradeoff: both extremes bad, middle good */
+.colorbar-biasvar {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* underfit: high bias */
+    #c8e6c9 50%,   /* balanced */
+    #ffccbc 100%   /* overfit: high variance */
+  );
+}
+
+/* Error magnitude (RMSE / MAE etc.): lower better */
+.colorbar-error {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* 0 error (good) */
+    #fff9c4 50%,   /* moderate */
+    #ffccbc 100%   /* large error (bad) */
+  );
+}
+
+/* Skewness / Kurtosis / Z-score: 0 best, extremes bad */
+.colorbar-skewness,
+.colorbar-kurtosis,
+.colorbar-zscore {
+  background: linear-gradient(to right,
+    #b71c1c 0%,    /* extreme negative (bad) */
+    #ffccbc 20%,
+    #c8e6c9 50%,   /* near 0 (good) */
+    #ffccbc 80%,
+    #b71c1c 100%   /* extreme positive (bad) */
+  );
+}
+
+/* IQR fences: central IQR good, outside fences bad */
+.colorbar-iqr {
+  background: linear-gradient(to right,
+    #b71c1c 0%,    /* beyond lower fence (bad) */
+    #b71c1c 10%,
+    #fff9c4 10%,   /* between fence & Q1 */
+    #fff9c4 25%,
+    #c8e6c9 25%,   /* IQR (Q1–Q3, good) */
+    #c8e6c9 75%,
+    #fff9c4 75%,   /* between Q3 & upper fence */
+    #fff9c4 90%,
+    #b71c1c 90%,   /* beyond upper fence (bad) */
+    #b71c1c 100%
+  );
+}
+
+/* Cook's distance: 0 low influence (good), large = bad */
+.colorbar-cookd {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* low influence (good) */
+    #c8e6c9 25%,
+    #fff9c4 50%,   /* moderate */
+    #ffccbc 75%,   /* high */
+    #b71c1c 100%   /* extreme */
+  );
+}
+
+/* Mahalanobis distance squared vs chi-square cutoffs */
+.colorbar-mahal {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* inside main ellipsoid (good) */
+    #c8e6c9 60%,
+    #fff9c4 80%,   /* near cutoff (watch) */
+    #b71c1c 100%   /* extreme outliers (bad) */
+  );
+}
+
+/* VIF thresholds */
+.colorbar-vif {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* ~1–5 OK (good) */
+    #c8e6c9 33%,
+    #fff9c4 33%,   /* 5–10 moderate concern */
+    #fff9c4 66%,
+    #ffccbc 66%,   /* >10 serious (bad) */
+    #b71c1c 100%
+  );
+}
+
+/* Condition Number thresholds */
+.colorbar-cond {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* <10 low (good) */
+    #c8e6c9 33%,
+    #fff9c4 33%,   /* 10–30 moderate */
+    #fff9c4 66%,
+    #ffccbc 66%,   /* >30 severe (bad) */
+    #b71c1c 100%
+  );
+}
+
+/* ΔAIC / ΔBIC vs best model: larger = worse */
+.colorbar-delta {
+  background: linear-gradient(to right,
+    #c8e6c9 0%,    /* 0–2 essentially tied (good) */
+    #c8e6c9 20%,
+    #fff9c4 20%,   /* 2–10 some loss */
+    #fff9c4 60%,
+    #ffccbc 60%,   /* >10 much worse (bad) */
+    #b71c1c 100%
+  );
+}
+
+/* Mallows Cp difference vs (p+1) (0 best) */
+.colorbar-cp {
+  background: linear-gradient(to right,
+    #ffccbc 0%,    /* far below p+1 (overfit, bad) */
+    #c8e6c9 50%,   /* near p+1 good */
+    #ffccbc 80%,   /* moderately above (underfit) */
+    #b71c1c 100%   /* far above (underfit, bad) */
+  );
+}
+
+/* Durbin–Watson: 0..4, best near 2 */
+.colorbar-dw {
+  background: linear-gradient(to right,
+    #b71c1c 0%,    /* strong positive autocorr (bad) */
+    #ffccbc 25%,
+    #c8e6c9 50%,   /* around 2 good */
+    #ffccbc 75%,
+    #b71c1c 100%   /* strong negative autocorr (bad) */
+  );
+}
+
+/* Wrapper + numeric scale under color bars */
+.colorbar-wrapper { margin-bottom: 8px; }
+.colorbar-scale {
+  position: relative;
+  height: 18px;
+  margin-top: 2px;
+  font-size: 0.75em;
+}
+.colorbar-scale span {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.colorbar-scale span::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 1px;
+  height: 6px;
+  background-color: #555;
+  transform: translateX(-50%);
+}
+
+/* Tick positions: generic 0–1 */
+.tick-0   { left: 0%; }
+.tick-02  { left: 20%; }
+.tick-025 { left: 25%; }
+.tick-05  { left: 50%; }
+.tick-07  { left: 70%; }
+.tick-08  { left: 80%; }
+.tick-10  { left: 100%; }
+
+/* Correlation ticks (-1..1) */
+.tick-m1  { left: 0%; }
+.tick-m05 { left: 25%; }
+.tick-0c  { left: 50%; }
+.tick-05c { left: 75%; }
+.tick-1c  { left: 100%; }
+
+/* P-value ticks */
+.tick-p0   { left: 0%; }
+.tick-p005 { left: 5%; }
+.tick-p1   { left: 100%; }
+
+/* t-stat ticks */
+.tick-t0 { left: 0%; }
+.tick-t1 { left: 33%; }
+.tick-t2 { left: 66%; }
+.tick-t3 { left: 100%; }
+
+/* Chi-square ticks */
+.tick-chi2-0    { left: 0%; }
+.tick-chi2-crit { left: 50%; }
+.tick-chi2-high { left: 100%; }
+
+/* F-stat ticks */
+.tick-f1 { left: 20%; }
+.tick-f2 { left: 45%; }
+.tick-f3 { left: 70%; }
+.tick-f5 { left: 100%; }
+
+/* CI width ticks */
+.tick-ci-narrow { left: 0%; }
+.tick-ci-mid    { left: 50%; }
+.tick-ci-wide   { left: 100%; }
+
+/* Robustness ticks */
+.tick-robust-low  { left: 0%; }
+.tick-robust-mid  { left: 50%; }
+.tick-robust-high { left: 100%; }
+
+/* Error ticks */
+.tick-err0   { left: 0%; }
+.tick-errmid { left: 50%; }
+.tick-errhi  { left: 100%; }
+
+/* Skewness ticks (-3..3) */
+.tick-skew-m3 { left: 0%; }
+.tick-skew-m1 { left: 25%; }
+.tick-skew-0  { left: 50%; }
+.tick-skew-1  { left: 75%; }
+.tick-skew-3  { left: 100%; }
+
+/* Kurtosis ticks (-2..2) */
+.tick-kurt-m2 { left: 0%; }
+.tick-kurt-0  { left: 50%; }
+.tick-kurt-2  { left: 100%; }
+
+/* Z-score ticks (-3..3) */
+.tick-z-m3 { left: 0%; }
+.tick-z-m2 { left: 25%; }
+.tick-z-0  { left: 50%; }
+.tick-z-2  { left: 75%; }
+.tick-z-3  { left: 100%; }
+
+/* IQR ticks */
+.tick-iqr-lf  { left: 10%; }  /* lower fence */
+.tick-iqr-q1  { left: 25%; }
+.tick-iqr-med { left: 50%; }
+.tick-iqr-q3  { left: 75%; }
+.tick-iqr-uf  { left: 90%; }  /* upper fence */
+
+/* Cook's D ticks */
+.tick-cook-0  { left: 0%; }
+.tick-cook-05 { left: 25%; }
+.tick-cook-1  { left: 50%; }
+.tick-cook-2  { left: 100%; }
+
+/* Mahalanobis ticks */
+.tick-mah-0   { left: 0%; }
+.tick-mah-975 { left: 60%; }
+.tick-mah-99  { left: 80%; }
+.tick-mah-ext { left: 100%; }
+
+/* VIF ticks */
+.tick-vif1  { left: 0%; }
+.tick-vif5  { left: 33%; }
+.tick-vif10 { left: 66%; }
+.tick-vif20 { left: 100%; }
+
+/* Condition number ticks */
+.tick-cond1  { left: 0%; }
+.tick-cond10 { left: 33%; }
+.tick-cond30 { left: 66%; }
+.tick-cond60 { left: 100%; }
+
+/* ΔAIC/BIC ticks */
+.tick-delta0  { left: 0%; }
+.tick-delta2  { left: 20%; }
+.tick-delta10 { left: 60%; }
+.tick-delta20 { left: 100%; }
+
+/* Mallows Cp ticks (difference vs p+1) */
+.tick-cp-neg10 { left: 0%; }
+.tick-cp-0     { left: 50%; }
+.tick-cp-pos10 { left: 100%; }
+
+/* Durbin–Watson ticks (0,2,4) */
+.tick-dw0 { left: 0%; }
+.tick-dw2 { left: 50%; }
+.tick-dw4 { left: 100%; }
+
+/* Table wrapper */
+.table-responsive { overflow-x: auto; }
+
+/* MathJax background fix */
+mjx-container {
+  display: inline-block;
+  margin: 0 2px;
+  background-color: transparent !important;
+}
+
+/* Header + buttons */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.controls button {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  margin-left: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.controls button:hover {
+  background-color: #eee;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  body {
+    margin: 10px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.4em;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .controls button {
+    margin-left: 0;
+    margin-top: 6px;
+    font-size: 0.85em;
+    padding: 6px 12px;
+  }
+
+  table {
+    font-size: 0.85em;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Mobile layout for colorbar labels */
+@media (max-width: 600px) {
+  .colorbar-wrapper {
+    max-width: 220px;
+  }
+
+  .colorbar-scale {
+    position: static;
+    height: auto;
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .colorbar-scale span {
+    position: static;
+    transform: none;
+    font-size: 0.7em;
+    margin: 0 2px;
+    white-space: nowrap;
+  }
+
+  .colorbar-scale span::before {
+    position: relative;
+    display: block;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 6px;
+    background-color: #555;
+    margin-bottom: 2px;
+  }
+}
+</style>
+
+<script>
+function toggleDetails(shouldOpen) {
+  const detailsElements = document.querySelectorAll('details');
+  detailsElements.forEach(detail => {
+    detail.open = shouldOpen;
+  });
+}
+</script>
+</head>
+
+<body>
+<header class="page-header">
+  <h1>Comprehensive Model Evaluation Metrics Dashboard</h1>
+  <div class="controls">
+    <button onclick="toggleDetails(true)">▼ Expand all</button>
+    <button onclick="toggleDetails(false)">▲ Collapse all</button>
+  </div>
+</header>
+
+<!-- ===================================== -->
+<!-- 1. PERFORMANCE (CLASSIFICATION)      -->
+<!-- ===================================== -->
+<details open>
+<summary>Performance (Classification)</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric</th>
+  <th>Decision Criterion (Value Range)</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Aim as high as possible.<br><br>
+  <span class="poor">&lt; 0.5</span> = poor overall performance.<br><br>
+  <span class="moderate">0.5–0.7</span> = fair (better than chance but weak).<br><br>
+  <span class="good">0.7–0.8</span> = good.<br><br>
+  <span class="good">&gt; 0.8</span> = very good (relative to chance level).
+</td>
+<td>Gauge overall classification success rate. Useful for quick assessment on
+balanced data, but unreliable alone on strongly imbalanced data.</td>
+<td>Proportion of all predictions that are correct:
+\[
+\text{Accuracy} = \frac{TP + TN}{TP+FP+TN+FN}.
+\]</td>
+<td>Counts correct vs total predictions with all errors weighted equally.</td>
+<td>90 correct predictions out of 100 → accuracy = 0.90.</td>
+<td>Can be very misleading for imbalanced data – a majority‑class predictor can
+have high accuracy but be useless.</td>
+</tr>
+
+<tr>
+<td><strong>Precision</strong> (Positive Predictive Value, PPV)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Higher is better.<br><br>
+  <span class="poor">&lt; 0.5</span> = more than half of predicted positives are wrong.<br><br>
+  <span class="moderate">0.5–0.7</span> = fair.<br><br>
+  <span class="good">0.7–0.8</span> = good.<br><br>
+  <span class="good">&gt; 0.8</span> (especially &gt; 0.9) = very few false positives.
+</td>
+<td>Measures how reliable positive predictions are, crucial when false
+positives are costly.</td>
+<td>
+\[
+\text{Precision} = \frac{TP}{TP+FP}.
+\]</td>
+<td>Improves as false positives decrease, even if recall suffers.</td>
+<td>If 100 flagged spam emails contain 90 real spam, precision = 0.90.</td>
+<td>Can be gamed by predicting very few positives; must be balanced with recall.</td>
+</tr>
+
+<tr>
+<td><strong>Recall</strong> (Sensitivity / True Positive Rate)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Higher is better.<br><br>
+  <span class="poor">&lt; 0.5</span> = more than half of positives are missed.<br><br>
+  <span class="moderate">0.5–0.7</span> = fair coverage.<br><br>
+  <span class="good">0.7–0.8</span> = good.<br><br>
+  <span class="good">&gt; 0.8</span> (especially &gt; 0.9) = very high detection.
+</td>
+<td>Measures completeness of positive detection; key when missing positives is
+costly.</td>
+<td>
+\[
+\text{Recall} = \frac{TP}{TP+FN}.
+\]</td>
+<td>Improves when false negatives decrease.</td>
+<td>Recall = 0.95 means 95% of true positives are found.</td>
+<td>Ignores false positives; predicting everything positive yields recall 1.0.</td>
+</tr>
+
+<tr>
+<td><strong>Specificity</strong> (True Negative Rate)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Higher is better.<br><br>
+  <span class="poor">&lt; 0.5</span> = majority of negatives misclassified.<br><br>
+  <span class="moderate">0.5–0.7</span> = fair.<br><br>
+  <span class="good">0.7–0.8</span> = good.<br><br>
+  <span class="good">&gt; 0.8</span> = very low false‑alarm rate.
+</td>
+<td>Measures ability to correctly identify negatives; important when false
+positives are costly.</td>
+<td>
+\[
+\text{Specificity} = \frac{TN}{TN+FP}.
+\]</td>
+<td>Complement of false positive rate: FPR = 1 − specificity.</td>
+<td>Specificity 0.98 means 98% of real negatives are correctly left unflagged.</td>
+<td>Trivially high if model predicts almost everything negative.</td>
+</tr>
+
+<tr>
+<td><strong>False Positive Rate / False Negative Rate</strong><br>(FPR / FNR)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">moderate</span>
+      <span class="tick-errhi">high</span>
+    </div>
+  </div>
+
+  Lower is better for both.<br><br>
+  <span class="good">&lt; 0.05</span> on either side = very low error rate there.<br><br>
+  <span class="moderate">≈ 0.10–0.20</span> = modest error rate.<br><br>
+  <span class="poor">&gt; 0.30</span> = high error rate; typically unacceptable.
+</td>
+<td>Quantify false alarms (FPR) and missed positives (FNR).</td>
+<td>
+\[
+\text{FPR} = \frac{FP}{FP+TN}, \quad
+\text{FNR} = \frac{FN}{FN+TP}.
+\]</td>
+<td>Threshold choice trades FPR vs FNR; ROC and PR curves illustrate this trade‑off.</td>
+<td>A cancer test may tolerate FPR 0.15 for FNR 0.01 (very few missed cases).</td>
+<td>Need domain‑specific cost trade‑offs; no single “correct” target.</td>
+</tr>
+
+<tr>
+<td><strong>F<sub>1</sub> Score</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-f1"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Higher is better.<br><br>
+  <span class="poor">&lt; 0.5</span> = poor precision–recall balance.<br><br>
+  <span class="good">0.5–0.8</span> = acceptable to good.<br><br>
+  <span class="good">&gt; 0.8</span> = strong overall performance.
+</td>
+<td>Single number that balances precision and recall, especially on imbalanced
+datasets.</td>
+<td>
+\[
+F_1 = 2 \frac{\text{Precision} \times \text{Recall}}
+{\text{Precision} + \text{Recall}}.
+\]</td>
+<td>Harmonic mean, so dominated by the smaller of precision and recall.</td>
+<td>Precision 0.9, recall 0.9 → F1 0.9; precision 0.9, recall 0.1 → F1 ≈ 0.18.</td>
+<td>Weights precision and recall equally; may not match domain priorities.</td>
+</tr>
+
+<tr>
+<td><strong>ROC AUC</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-auc"></div>
+    <div class="colorbar-scale">
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">&lt; 0.7</span> = weak discrimination.<br><br>
+  <span class="moderate">0.7–0.8</span> = moderate.<br><br>
+  <span class="good">&gt; 0.8</span> = good; 0.9+ often excellent.
+</td>
+<td>Measures how well model ranks positives above negatives across thresholds.</td>
+<td>Equivalent to probability a random positive has higher score than a random
+negative.</td>
+<td>Integrates TPR vs FPR curve over all thresholds.</td>
+<td>AUC 0.85 → model ranks positives higher 85% of the time.</td>
+<td>Doesn’t reflect calibration; can look good on heavily imbalanced data even
+if practical performance is poor.</td>
+</tr>
+
+<tr>
+<td><strong>Negative Predictive Value</strong> (NPV)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  Higher is better.<br><br>
+  <span class="poor">&lt; 0.5</span> = “negative” predictions often wrong.<br><br>
+  <span class="moderate">0.5–0.8</span> = moderate trust.<br><br>
+  <span class="good">&gt; 0.8</span> = “all clear” predictions usually correct.
+</td>
+<td>Probability that a predicted negative is truly negative; key when false
+negatives are costly.</td>
+<td>
+\[
+\text{NPV} = \frac{TN}{TN+FN}.
+\]</td>
+<td>Complements precision (PPV).</td>
+<td>In disease screening with low prevalence, NPV often very high even for
+moderate models.</td>
+<td>Strongly dependent on prevalence; high NPV doesn’t automatically imply a
+good model.</td>
+</tr>
+
+<tr>
+<td><strong>Balanced Accuracy</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-07">0.7</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">0.5</span> = chance‑level performance (binary).<br><br>
+  <span class="moderate">0.6–0.7</span> = modest improvement over chance.<br><br>
+  <span class="good">&gt; 0.7</span> = good performance on both classes.
+</td>
+<td>Accounts for class imbalance by averaging recall over classes.</td>
+<td>
+\[
+\text{Balanced Acc} = \frac{\text{TPR} + \text{TNR}}{2}.
+\]</td>
+<td>Penalises models that perform well on majority but poorly on minority
+class.</td>
+<td>TPR 0.9, TNR 0.5 → balanced accuracy 0.7.</td>
+<td>Still hides which side is weak; always inspect TPR and TNR separately.</td>
+</tr>
+
+<tr>
+<td><strong>Brier Score</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">0.25</span>
+      <span class="tick-errhi">1.0</span>
+    </div>
+  </div>
+
+  Lower is better.<br><br>
+  <span class="good">0–0.05</span> = excellent probabilistic predictions.<br><br>
+  <span class="moderate">0.05–0.25</span> = reasonable calibration / accuracy.<br><br>
+  <span class="poor">&gt; 0.25</span> = poor (similar to random or worse).
+</td>
+<td>Measures quality of probabilistic predictions for binary outcomes.</td>
+<td>
+\[
+\text{Brier} = \frac{1}{N} \sum (\hat{p}_i - y_i)^2.
+\]</td>
+<td>Combines calibration and sharpness; penalises confident wrong predictions.</td>
+<td>A model always predicting p=0.5 on a balanced dataset has Brier 0.25.</td>
+<td>Absolute values need baseline for interpretation; doesn’t distinguish
+where (in p‑space) miscalibration occurs.</td>
+</tr>
+
+<tr>
+<td><strong>Calibration Error</strong> (ECE)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">0.1</span>
+      <span class="tick-errhi">0.3+</span>
+    </div>
+  </div>
+
+  Lower is better.<br><br>
+  <span class="good">0–0.02</span> = very well calibrated.<br><br>
+  <span class="moderate">0.02–0.10</span> = minor issues.<br><br>
+  <span class="poor">&gt; 0.10</span> = noticeable miscalibration.
+</td>
+<td>Measures mismatch between predicted probabilities and observed
+frequencies.</td>
+<td>Bins predictions by confidence; compares average predicted probability to
+empirical frequency in each bin, then averages absolute differences.</td>
+<td>Low ECE means that “70% probability” events do happen around 70% of the
+time.</td>
+<td>Used for risk models in credit, medicine, etc. as a complement to AUC.</td>
+<td>Depends on binning; can be unstable with small sample sizes.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 2. INFERENCE & HYPOTHESIS TESTING     -->
+<!-- ===================================== -->
+<details>
+<summary>Inference &amp; Hypothesis Testing</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric / Test</th>
+  <th>Decision Criterion (Test Ranges)</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>p-value</strong> (Significance Level)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-effect"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Typically compared to α = 0.05.<br><br>
+  <span class="good">p &lt; 0.05</span> = statistically significant evidence against H<sub>0</sub> (if an effect is of interest).<br><br>
+  <span class="poor">p ≥ 0.05</span> = no statistically significant evidence; cannot rule out H<sub>0</sub>.
+</td>
+<td>Quantifies evidence against the null hypothesis and provides a common
+decision rule across many tests.</td>
+<td>Probability, assuming H<sub>0</sub> is true, of obtaining a result at least
+as extreme as observed.</td>
+<td>Derived from a test statistic’s null distribution; if p &lt; α, reject H<sub>0</sub>.</td>
+<td>p = 0.03 for a drug effect typically leads to rejecting “no effect” at α=0.05.</td>
+<td>Does not measure effect size or importance; heavily sample‑size‑dependent
+and often misinterpreted.</td>
+</tr>
+
+<tr>
+<td><strong>Adjusted α</strong> (Bonferroni Correction)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-effect"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">α/m</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  For m tests, use α<sub>adj</sub> = α / m.<br><br>
+  <span class="good">p &lt; α<sub>adj</sub></span> = significant even after strict multiple‑testing control.<br><br>
+  <span class="poor">p ≥ α<sub>adj</sub></span> = not significant after correction.<br><br>
+  This keeps family‑wise error rate ≈ α (e.g. 0.05).
+</td>
+<td>Control family‑wise probability of any false positive across multiple tests.</td>
+<td>Divides α by number of tests; each test uses α<sub>adj</sub> as threshold.</td>
+<td>Simple and conservative; strong control of false positives when tests are
+independent or mildly correlated.</td>
+<td>20 tests with α=0.05 → α<sub>adj</sub>=0.0025; only very small p‑values survive.</td>
+<td>Can be overly conservative for large m, greatly reducing power.</td>
+</tr>
+
+<tr>
+<td><strong>Benjamini–Hochberg FDR</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-effect"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">q</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Choose FDR <span class="good">q (e.g. 0.05)</span>.<br><br>
+  Sort p‑values p<sub>(1)</sub> ≤ … ≤ p<sub>(m)</sub>, find largest k with
+  <span class="good">p<sub>(k)</sub> ≤ (k/m)·q</span>.<br><br>
+  Tests 1…k are called significant; expected fraction of false discoveries ≈ q.
+</td>
+<td>Control expected proportion of false positives among declared discoveries.</td>
+<td>Step‑up procedure comparing ordered p‑values to increasing thresholds
+(k/m)·q.</td>
+<td>Less conservative than Bonferroni; more discoveries at the cost of some
+false positives.</td>
+<td>Common in genomics / high‑dimensional feature screening.</td>
+<td>Controls FDR only in expectation and under certain dependence structures.</td>
+</tr>
+
+<tr>
+<td><strong>Type I &amp; Type II Error</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">moderate</span>
+      <span class="tick-errhi">high</span>
+    </div>
+  </div>
+
+  <span class="good">α ≈ 0.01–0.05</span> = standard false‑positive risk.<br><br>
+  <span class="moderate">β ≈ 0.10–0.20</span> (power 80–90%) = typical design target.<br><br>
+  <span class="poor">Very high α or β (&gt; 0.10 or &gt; 0.30)</span> = too many wrong decisions.
+</td>
+<td>Frame trade‑off between false positives (Type I) and false negatives (Type II)
+when designing tests and studies.</td>
+<td>Type I: reject true H<sub>0</sub>. Type II: fail to reject false H<sub>0</sub>.
+Power = 1 − β.</td>
+<td>Power analysis couples α, β, effect size, and sample size.</td>
+<td>A clinical trial might fix α=0.025 (one‑sided) and β=0.10 (90% power).</td>
+<td>Reducing α without increasing sample size generally increases β.</td>
+</tr>
+
+<tr>
+<td><strong>Statistical Power</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">&lt; 0.5</span> = often misses real effects.<br><br>
+  <span class="moderate">0.5–0.8</span> = moderate.<br><br>
+  <span class="good">&gt; 0.8</span> = usually acceptable; &gt;0.9 even better.
+</td>
+<td>Probability a test detects a true effect of given size.</td>
+<td>Depends on α, effect size, variability, and sample size.</td>
+<td>Higher n or larger effect sizes raise power.</td>
+<td>Power 0.8 means 80% chance to detect the specified effect if it exists.</td>
+<td>Post‑hoc power is usually uninformative; better to plan it a priori.</td>
+</tr>
+
+<tr>
+<td><strong>Z / t Tests</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-tstat"></div>
+    <div class="colorbar-scale">
+      <span class="tick-t0">0</span>
+      <span class="tick-t1">1</span>
+      <span class="tick-t2">2</span>
+      <span class="tick-t3">3+</span>
+    </div>
+  </div>
+
+  Two‑sided tests (large df):<br><br>
+  <span class="poor">|Z| or |t| &lt; 1</span> = little evidence.<br><br>
+  <span class="moderate">|Z| or |t| ≈ 2</span> = borderline (p ≈ 0.05).<br><br>
+  <span class="good">|Z| or |t| ≥ 3</span> = strong evidence against H<sub>0</sub>.
+</td>
+<td>Test if a mean / difference / regression coefficient differs from a null
+value.</td>
+<td>Statistic = (estimate − null) / SE, compared against normal or t distribution.</td>
+<td>Large |statistic| means estimate is many SE away from null.</td>
+<td>|t| = 4 with df≈50 usually implies p &lt; 0.001 (strong evidence).</td>
+<td>Assumes approximate normality and independence; sensitive to outliers.</td>
+</tr>
+
+<tr>
+<td><strong>Chi-Square Test</strong> (χ²)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-chi2"></div>
+    <div class="colorbar-scale">
+      <span class="tick-chi2-0">0</span>
+      <span class="tick-chi2-crit">χ²<sub>crit</sub></span>
+      <span class="tick-chi2-high">high</span>
+    </div>
+  </div>
+
+  <span class="poor">χ² near 0</span> = data close to H<sub>0</sub> (little evidence of association/effect).<br><br>
+  <span class="moderate">χ² around χ²<sub>crit</sub></span> = borderline significance.<br><br>
+  <span class="good">χ² well above χ²<sub>crit</sub></span> = strong evidence of association / lack of fit to H<sub>0</sub>.
+</td>
+<td>Test independence (contingency tables) or goodness‑of‑fit of categorical
+data to expected counts.</td>
+<td>
+\[
+χ^2 = \sum \frac{(O_i - E_i)^2}{E_i}.
+\]</td>
+<td>Large χ² means observed counts deviate strongly from expectations.</td>
+<td>Used for testing independence between categorical variables or Mendelian
+ratios in genetics, etc.</td>
+<td>With very large n, tiny practical differences become significant. Needs
+effect size (e.g. Cramér’s V) for magnitude.</td>
+</tr>
+
+<tr>
+<td><strong>ANOVA F-test</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-fstat"></div>
+    <div class="colorbar-scale">
+      <span class="tick-f1">1</span>
+      <span class="tick-f2">2</span>
+      <span class="tick-f3">3</span>
+      <span class="tick-f5">5+</span>
+    </div>
+  </div>
+
+  <span class="poor">F ≈ 1</span> = no detected difference between means.<br><br>
+  <span class="moderate">F ≈ 2–3</span> = might be marginally significant (depends on df).<br><br>
+  <span class="good">F ≫ 1</span> (e.g. &gt;5) = strong evidence at least one group mean differs.
+</td>
+<td>Test if means of 3+ groups are all equal vs at least one differs.</td>
+<td>Compares between‑group variance to within‑group variance.</td>
+<td>Large F implies between‑group differences are large relative to noise.</td>
+<td>Follow significant F with post‑hoc tests to identify which groups differ.</td>
+<td>Assumes normality and equal variances; does not identify specific groups
+or effect sizes by itself.</td>
+</tr>
+
+<tr>
+<td><strong>Confidence Interval</strong> (e.g. 95% CI)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-ciwidth"></div>
+    <div class="colorbar-scale">
+      <span class="tick-ci-narrow">narrow</span>
+      <span class="tick-ci-mid">medium</span>
+      <span class="tick-ci-wide">wide</span>
+    </div>
+  </div>
+
+  <span class="good">95% CI not containing 0 (difference) or 1 (ratio)</span> → statistically significant at ≈5%.<br><br>
+  <span class="good">Narrow CI</span> → precise estimate.<br><br>
+  <span class="poor">Very wide CI</span> → high uncertainty.
+</td>
+<td>Provide a range of plausible values for a parameter.</td>
+<td>Usually estimate ± critical value × standard error.</td>
+<td>Reflects both effect size and uncertainty.</td>
+<td>Difference 5 with 95% CI [2, 8] suggests a clearly positive but moderately
+uncertain effect.</td>
+<td>Relies on model assumptions; misinterpreted as containing the true value
+with 95% probability (frequentist CIs don’t strictly mean that).</td>
+</tr>
+
+<tr>
+<td><strong>Permutation Test</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-effect"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Let p<sub>perm</sub> be the permutation p‑value.<br><br>
+  <span class="good">p<sub>perm</sub> &lt; 0.05</span> → statistic is in extreme tail of null distribution (significant effect).<br><br>
+  <span class="poor">p<sub>perm</sub> ≥ 0.05</span> → compatible with chance re‑labeling.
+</td>
+<td>Distribution‑free significance test using label shuffling.</td>
+<td>Permute labels many times; recompute statistic to get null distribution and
+p<sub>perm</sub>.</td>
+<td>Useful for complex statistics where analytic null distributions are hard to
+derive.</td>
+<td>Accuracy 0.8 vs permutation null mean 0.5 with p<sub>perm</sub>=0.01 is strong
+evidence of real signal.</td>
+<td>Computationally heavy; must respect structure (e.g. grouping or time).</td>
+</tr>
+
+<tr>
+<td><strong>Effect Size</strong> (Cohen’s d)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-02">0.2</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-08">0.8</span>
+      <span class="tick-10">&gt;1</span>
+    </div>
+  </div>
+
+  <span class="poor">|d| &lt; 0.2</span> = negligible.<br><br>
+  <span class="moderate">0.2–0.5</span> = small.<br><br>
+  <span class="moderate">0.5–0.8</span> = medium.<br><br>
+  <span class="good">&gt; 0.8</span> = large effect.
+</td>
+<td>Quantify standardized mean differences independent of sample size.</td>
+<td>
+\[
+d = \frac{\bar{x}_1 - \bar{x}_2}{s_{pooled}}.
+\]</td>
+<td>Helps separate statistical from practical significance.</td>
+<td>d = 0.6 for treatment vs control often considered practically important.</td>
+<td>Assumes similar SDs; thresholds are rough and context‑dependent.</td>
+</tr>
+
+<tr>
+<td><strong>Cliff’s Delta</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-correlation"></div>
+    <div class="colorbar-scale">
+      <span class="tick-m1">-1</span>
+      <span class="tick-m05">-0.5</span>
+      <span class="tick-0c">0</span>
+      <span class="tick-05c">0.5</span>
+      <span class="tick-1c">1</span>
+    </div>
+  </div>
+
+  <span class="poor">|δ| &lt; 0.147</span> = negligible.<br><br>
+  <span class="moderate">0.147–0.33</span> = small.<br><br>
+  <span class="moderate">0.33–0.474</span> = medium.<br><br>
+  <span class="good">&gt; 0.474</span> = large effect (strong dominance).
+</td>
+<td>Non‑parametric effect size based on ranks; robust to non‑normal data.</td>
+<td>δ = P(X&gt;Y) − P(Y&gt;X), where X/Y from two groups; ranges −1..1.</td>
+<td>Equivalent to rank‑biserial correlation; sign shows direction, magnitude
+shows strength.</td>
+<td>δ = 0.5 means X exceeds Y in 75% of pairs, a very strong effect.</td>
+<td>Summarises ordering, not magnitude of differences; can be less intuitive
+than differences in means.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 3. ROBUSTNESS & RESAMPLING            -->
+<!-- ===================================== -->
+<details>
+<summary>Robustness &amp; Resampling</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric / Method</th>
+  <th>Decision Criterion</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>Cross-Validation Mean &amp; Std</strong> (k-fold CV)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="good">Higher mean score</span> = better average performance.<br><br>
+
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-robustness"></div>
+    <div class="colorbar-scale">
+      <span class="tick-robust-low">high var</span>
+      <span class="tick-robust-mid">medium</span>
+      <span class="tick-robust-high">low var</span>
+    </div>
+  </div>
+
+  <span class="good">Low std across folds</span> = stable / robust model.<br><br>
+  <span class="poor">High std across folds</span> = performance sensitive to data split.
+</td>
+<td>Estimate out‑of‑sample performance and stability.</td>
+<td>Repeatedly train/test on different folds of the data.</td>
+<td>Mean = expected performance; std = sensitivity to sample.</td>
+<td>0.88 ± 0.01 across folds is strong & stable; 0.90 ± 0.10 is unstable.</td>
+<td>More expensive than simple train/test; must respect temporal / grouped
+structure.</td>
+</tr>
+
+<tr>
+<td><strong>Bias–Variance Tradeoff</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-biasvar"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">underfit</span>
+      <span class="tick-05">balanced</span>
+      <span class="tick-10">overfit</span>
+    </div>
+  </div>
+
+  <span class="poor">High bias (underfit)</span> → high error on train &amp; test.<br><br>
+  <span class="good">Balanced bias–variance</span> → low and similar train/test error.<br><br>
+  <span class="poor">High variance (overfit)</span> → very low train error, high test error.
+</td>
+<td>Conceptual tool for selecting model complexity.</td>
+<td>Simple models: high bias, low variance; complex models: low bias, high
+variance.</td>
+<td>Analyse learning curves vs model capacity to find sweet spot.</td>
+<td>Deep tree that fits training perfectly but fails on test is high‑variance.</td>
+<td>Not a single numeric statistic; patterns can be subtle for deep models.</td>
+</tr>
+
+<tr>
+<td><strong>Jackknife Variability</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-robustness"></div>
+    <div class="colorbar-scale">
+      <span class="tick-robust-low">high var</span>
+      <span class="tick-robust-mid">medium</span>
+      <span class="tick-robust-high">low var</span>
+    </div>
+  </div>
+
+  <span class="good">Low jackknife SE</span> → estimator stable to leaving out single observations.<br><br>
+  <span class="moderate">Moderate SE</span> → some sensitivity.<br><br>
+  <span class="poor">High SE</span> → highly sensitive to specific cases.
+</td>
+<td>Assess estimator stability and approximate standard errors by
+leave‑one‑out recomputation.</td>
+<td>Compute estimates on N datasets, each missing one observation; inspect
+spread.</td>
+<td>Big changes when omitting particular points indicate influence.</td>
+<td>If dropping any one observation barely changes a coefficient, model is
+stable.</td>
+<td>Less flexible than bootstrap for complex estimators; can be noisy for small
+N.</td>
+</tr>
+
+<tr>
+<td><strong>Bootstrap CI Width</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-ciwidth"></div>
+    <div class="colorbar-scale">
+      <span class="tick-ci-narrow">narrow</span>
+      <span class="tick-ci-mid">medium</span>
+      <span class="tick-ci-wide">wide</span>
+    </div>
+  </div>
+
+  <span class="good">Narrow bootstrap CI</span> = precise estimate.<br><br>
+  <span class="moderate">Medium width</span> = acceptable uncertainty.<br><br>
+  <span class="poor">Very wide or irregular CI</span> = high uncertainty / instability.
+</td>
+<td>Non‑parametric uncertainty quantification for statistics and model
+parameters.</td>
+<td>Resample with replacement, recompute estimator, and use empirical
+distribution.</td>
+<td>Percentile or BCa intervals reflect sampling variability without assuming
+normality.</td>
+<td>Narrow [4.1, 4.2] CI is very precise; [0, 20] shows extreme uncertainty.</td>
+<td>Expensive for large models; assumes sample is representative.</td>
+</tr>
+
+<tr>
+<td><strong>Feature Stability Across Resamples</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-standard"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">&lt; 0.5</span> = feature selected or important in &lt;50% of resamples (unstable).<br><br>
+  <span class="moderate">0.5–0.8</span> = moderate stability.<br><br>
+  <span class="good">&gt; 0.8</span> = highly stable across resamples.
+</td>
+<td>Check whether discovered “important features” are robust to sampling
+variation.</td>
+<td>Repeat feature selection / importance computation over many resamples and
+count how often each feature is selected as important.</td>
+<td>Helps distinguish real signal from noise‑driven feature choices.</td>
+<td>Stable features (e.g. 95/100 bootstrap samples) are more trustworthy than
+features selected rarely.</td>
+<td>Correlated predictors may appear unstable individually; requires careful
+interpretation.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 4. REGRESSION & CORRELATION           -->
+<!-- ===================================== -->
+<details>
+<summary>Regression &amp; Correlation</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric</th>
+  <th>Decision Criterion</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>R<sup>2</sup> (Coefficient of Determination)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-r2"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-025">0.25</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">&lt; 0.25</span> = weak fit.<br><br>
+  <span class="moderate">0.25–0.5</span> = moderate fit.<br><br>
+  <span class="good">&gt; 0.5</span> = strong fit.
+</td>
+<td>Proportion of variance in response explained by the model.</td>
+<td>
+\[
+R^2 = 1 - \frac{SS_{res}}{SS_{tot}}.
+\]</td>
+<td>Compares residual variance to variance around the mean.</td>
+<td>R² = 0.85 → model explains 85% of variability in outcome.</td>
+<td>Can be inflated by overfitting; does not imply causality or good
+out‑of‑sample performance.</td>
+</tr>
+
+<tr>
+<td><strong>Adjusted R<sup>2</sup></strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-r2"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">0</span>
+      <span class="tick-025">0.25</span>
+      <span class="tick-05">0.5</span>
+      <span class="tick-10">1.0</span>
+    </div>
+  </div>
+
+  <span class="good">Higher adjusted R²</span> = better fit after penalising extra predictors.<br><br>
+  <span class="moderate">Small gains</span> = marginal benefit of added predictors.<br><br>
+  <span class="poor">Decrease when adding predictors</span> = likely overfitting / noise variables.
+</td>
+<td>Compare models with different numbers of predictors while penalising
+complexity.</td>
+<td>Adjusts R² downward for each extra degree of freedom.</td>
+<td>Only increases when added variables meaningfully reduce residual variance.</td>
+<td>If R² rises but adjusted R² falls when adding variables, they’re probably
+not helpful.</td>
+<td>Can’t compare across different datasets; still doesn’t guarantee predictive
+performance.</td>
+</tr>
+
+<tr>
+<td><strong>RMSE</strong> (Root Mean Square Error)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">moderate</span>
+      <span class="tick-errhi">large</span>
+    </div>
+  </div>
+
+  <span class="good">Lower RMSE</span> = better (small typical errors).<br><br>
+  <span class="moderate">Similar to target SD</span> = modest improvement over baseline.<br><br>
+  <span class="poor">Close to or above target SD/range</span> = weak predictive value.
+</td>
+<td>Average magnitude of squared prediction errors, back in original units.</td>
+<td>
+\[
+\text{RMSE} = \sqrt{\frac{1}{n}\sum (y_i - \hat{y}_i)^2 }.
+\]</td>
+<td>Squares errors (emphasising large ones), then square‑roots.</td>
+<td>RMSE \$20k on houses with SD \$60k is good; \$55k is poor.</td>
+<td>Highly sensitive to outliers; needs baseline to interpret magnitude.</td>
+</tr>
+
+<tr>
+<td><strong>MAE</strong> (Mean Absolute Error)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">moderate</span>
+      <span class="tick-errhi">large</span>
+    </div>
+  </div>
+
+  <span class="good">Lower MAE</span> = predictions on average close to truth.<br><br>
+  <span class="moderate">Moderate fraction of target scale</span> = acceptable.<br><br>
+  <span class="poor">Large fraction of target scale</span> = poor accuracy.
+</td>
+<td>Average absolute prediction error; more robust than RMSE.</td>
+<td>
+\[
+\text{MAE} = \frac{1}{n}\sum |y_i - \hat{y}_i|.
+\]</td>
+<td>Each error contributes linearly.</td>
+<td>MAE of 1.5k on 20k prices ≈ 7.5% typical error (good).</td>
+<td>Doesn’t strongly penalise rare huge errors.</td>
+</tr>
+
+<tr>
+<td><strong>MSE / RMSLE</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">0</span>
+      <span class="tick-errmid">moderate</span>
+      <span class="tick-errhi">large</span>
+    </div>
+  </div>
+
+  <span class="good">Lower MSE/RMSLE</span> = smaller errors overall.<br><br>
+  <span class="moderate">Intermediate values</span> = moderate performance.<br><br>
+  <span class="poor">High values</span> = many large errors.
+</td>
+<td>Alternative regression loss functions: MSE for squared errors, RMSLE for
+relative/log errors.</td>
+<td>RMSLE uses log1p transform, emphasising multiplicative errors.</td>
+<td>Useful when underestimation of large values is particularly problematic or
+targets are highly skewed.</td>
+<td>Popular in Kaggle competitions for positive‑only targets.</td>
+<td>RMSLE can’t straightforwardly handle zeros/negatives; MSE sensitive to
+outliers.</td>
+</tr>
+
+<tr>
+<td><strong>Pearson Correlation</strong> (r)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-correlation"></div>
+    <div class="colorbar-scale">
+      <span class="tick-m1">-1</span>
+      <span class="tick-m05">-0.5</span>
+      <span class="tick-0c">0</span>
+      <span class="tick-05c">0.5</span>
+      <span class="tick-1c">1</span>
+    </div>
+  </div>
+
+  Interpreting |r|:<br><br>
+  <span class="poor">&lt; 0.3</span> = weak.<br><br>
+  <span class="moderate">0.3–0.5</span> = moderate.<br><br>
+  <span class="good">&gt; 0.7</span> = strong linear association.
+</td>
+<td>Strength and direction of linear association between two numeric
+variables.</td>
+<td>Standardised covariance:
+\[
+r = \frac{\text{Cov}(X,Y)}{\sigma_X\sigma_Y}.
+\]</td>
+<td>Ranges −1..1; sign gives direction, magnitude gives strength.</td>
+<td>Height vs weight often r≈0.7–0.8.</td>
+<td>Very sensitive to outliers; misses non‑linear relationships.</td>
+</tr>
+
+<tr>
+<td><strong>Spearman Correlation</strong> (ρ)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-correlation"></div>
+    <div class="colorbar-scale">
+      <span class="tick-m1">-1</span>
+      <span class="tick-m05">-0.5</span>
+      <span class="tick-0c">0</span>
+      <span class="tick-05c">0.5</span>
+      <span class="tick-1c">1</span>
+    </div>
+  </div>
+
+  Interpreting |ρ|:<br><br>
+  <span class="poor">&lt; 0.3</span> = weak monotonic association.<br><br>
+  <span class="moderate">0.3–0.5</span> = moderate.<br><br>
+  <span class="good">&gt; 0.7</span> = strong monotonic relationship.
+</td>
+<td>Correlation on ranks; robust to outliers and non‑linear but monotonic
+trends.</td>
+<td>Compute ranks of X and Y, then Pearson r on ranks.</td>
+<td>Captures relationships where one variable consistently increases/decreases
+with the other.</td>
+<td>Useful for ordinal data or non‑linear monotonic relationships.</td>
+<td>Near zero for non‑monotonic relationships (e.g. U‑shaped).</td>
+</tr>
+
+<tr>
+<td><strong>Partial Correlation</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-correlation"></div>
+    <div class="colorbar-scale">
+      <span class="tick-m1">-1</span>
+      <span class="tick-m05">-0.5</span>
+      <span class="tick-0c">0</span>
+      <span class="tick-05c">0.5</span>
+      <span class="tick-1c">1</span>
+    </div>
+  </div>
+
+  Interpreting |r<sub>partial</sub>|:<br><br>
+  <span class="poor">≈ 0</span> = little remaining association beyond controls.<br><br>
+  <span class="moderate">≈ 0.3–0.5</span> = moderate residual link.<br><br>
+  <span class="good">&gt; 0.5</span> = strong association beyond controlled factors.
+</td>
+<td>Measure association between two variables while controlling for others.</td>
+<td>Regress each variable on controls, then correlate residuals.</td>
+<td>Helps separate direct from indirect effects.</td>
+<td>Correlation between exercise and blood pressure may shrink after
+controlling for age.</td>
+<td>Only removes linear effects; can be unstable with many correlated
+controls.</td>
+</tr>
+
+<tr>
+<td><strong>Regression Coefficients + CI</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-ciwidth"></div>
+    <div class="colorbar-scale">
+      <span class="tick-ci-narrow">narrow</span>
+      <span class="tick-ci-mid">medium</span>
+      <span class="tick-ci-wide">wide</span>
+    </div>
+  </div>
+
+  <span class="good">CI not containing 0</span> → coefficient significantly different from 0.<br><br>
+  <span class="good">Narrow CI</span> → precise effect estimate.<br><br>
+  <span class="poor">Wide CI including 0</span> → weak or uncertain effect.
+</td>
+<td>Interpret predictor effects and uncertainty in regression models.</td>
+<td>Coefficients describe expected change in response for unit change in
+predictor, holding others fixed; CI shows uncertainty.</td>
+<td>Based on estimated SEs and t / normal critical values.</td>
+<td>“Each extra year of experience adds \$2k (95% CI \$1.5k–\$2.5k)” is clear and
+interpretable.</td>
+<td>Interpretation assumes correct model form and no severe multicollinearity.</td>
+</tr>
+
+<tr>
+<td><strong>Durbin–Watson Test</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-dw"></div>
+    <div class="colorbar-scale">
+      <span class="tick-dw0">0</span>
+      <span class="tick-dw2">2</span>
+      <span class="tick-dw4">4</span>
+    </div>
+  </div>
+
+  <span class="poor">&lt; 1.5</span> = likely positive autocorrelation (bad for OLS SEs).<br><br>
+  <span class="good">1.5–2.5</span> = little evidence of serious autocorrelation.<br><br>
+  <span class="poor">&gt; 2.5</span> = possible negative autocorrelation.
+</td>
+<td>Detect first‑order serial correlation in regression residuals.</td>
+<td>DW ≈ 2(1 − ρ<sub>1</sub>), where ρ<sub>1</sub> is lag‑1 autocorrelation.</td>
+<td>Values far from 2 suggest residual dependence.</td>
+<td>DW = 0.9 suggests strong positive autocorrelation; consider time‑series
+models or GLS.</td>
+<td>Primarily detects first‑order correlation; interpretation uses critical
+value tables or approximations.</td>
+</tr>
+
+<tr>
+<td><strong>Breusch–Pagan Test</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-assump"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  <span class="poor">p &lt; 0.05</span> → reject homoscedasticity; heteroscedastic errors (bad for standard OLS SEs).<br><br>
+  <span class="good">p ≥ 0.05</span> → no strong evidence of non‑constant variance.
+</td>
+<td>Test for heteroscedasticity (non‑constant variance) in regression.</td>
+<td>Regress squared residuals on predictors; statistic ~χ² under constant
+variance.</td>
+<td>Significant p suggests need for robust SEs, transforms, or alternate
+models.</td>
+<td>Often used in linear regression diagnostics.</td>
+<td>Power depends on auxiliary regression specification; may miss complex
+patterns.</td>
+</tr>
+
+<tr>
+<td><strong>Shapiro–Wilk Normality Test</strong> (on residuals)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-assump"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Null: residuals are normal.<br><br>
+  <span class="poor">p &lt; 0.05</span> → reject normality (assumption violation).<br><br>
+  <span class="good">p ≥ 0.05</span> → no strong evidence against normality.
+</td>
+<td>Check normality assumption for regression residuals.</td>
+<td>Statistic W measures agreement between ordered residuals and expected
+normal order statistics.</td>
+<td>Used with residual plots to assess normality assumption for t‑based
+inference.</td>
+<td>p = 0.4 suggests residual normality is acceptable; p = 0.001 suggests
+heavy tails / skew.</td>
+<td>Very powerful for large n (tiny deviations flagged); doesn’t tell how
+residuals deviate.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 5. MULTICOLLINEARITY DIAGNOSTICS      -->
+<!-- ===================================== -->
+<details>
+<summary>Multicollinearity Diagnostics</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric</th>
+  <th>Decision Criterion</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>Variance Inflation Factor (VIF)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-vif"></div>
+    <div class="colorbar-scale">
+      <span class="tick-vif1">1</span>
+      <span class="tick-vif5">5</span>
+      <span class="tick-vif10">10</span>
+      <span class="tick-vif20">20+</span>
+    </div>
+  </div>
+
+  VIF ≈ 1 → no multicollinearity.<br><br>
+  <span class="moderate">5–10</span> = moderate concern.<br><br>
+  <span class="poor">&gt; 10</span> = serious multicollinearity.
+</td>
+<td>Quantify how much variance of a coefficient is inflated by linear
+dependence with other predictors.</td>
+<td>
+\[
+\text{VIF}_j = \frac{1}{1-R_j^2}
+\]
+where R<sub>j</sub>² from regressing predictor j on others.</td>
+<td>Large R<sub>j</sub>² → large VIF → unstable coefficient for that predictor.</td>
+<td>VIF = 12 suggests coefficient may be poorly estimated and highly
+sensitive to small data changes.</td>
+<td>Doesn’t indicate which predictors are collinear with each other; only that
+some redundancy exists.</td>
+</tr>
+
+<tr>
+<td><strong>Condition Number</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-cond"></div>
+    <div class="colorbar-scale">
+      <span class="tick-cond1">1</span>
+      <span class="tick-cond10">10</span>
+      <span class="tick-cond30">30</span>
+      <span class="tick-cond60">60+</span>
+    </div>
+  </div>
+
+  <span class="good">&lt; 10</span> = low multicollinearity.<br><br>
+  <span class="moderate">10–30</span> = moderate.<br><br>
+  <span class="poor">&gt; 30</span> = severe (near singular matrix).
+</td>
+<td>Measure overall multicollinearity of predictor matrix.</td>
+<td>Ratio of largest to smallest singular value (or sqrt of eigenvalue
+ratio).</td>
+<td>Large condition number means XᵀX is ill‑conditioned; coefficient estimates
+can be unstable.</td>
+<td>Condition number ≈ 50 suggests strong collinearity somewhere among
+predictors.</td>
+<td>Scaling affects value; interpret with standardised predictors. Does not
+pinpoint which variables are problematic.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 6. OUTLIER & DISTRIBUTION METRICS     -->
+<!-- ===================================== -->
+<details>
+<summary>Outlier &amp; Distribution Metrics</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric/Test</th>
+  <th>Decision Criterion</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>Skewness</strong> (Distribution Asymmetry)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-skewness"></div>
+    <div class="colorbar-scale">
+      <span class="tick-skew-m3">-3</span>
+      <span class="tick-skew-m1">-1</span>
+      <span class="tick-skew-0">0</span>
+      <span class="tick-skew-1">1</span>
+      <span class="tick-skew-3">3</span>
+    </div>
+  </div>
+
+  <span class="good">Between -1 and +1</span> = modest skew (often acceptable).<br><br>
+  <span class="moderate">Between -2 and -1 or 1 and 2</span> = moderate skew.<br><br>
+  <span class="poor">&lt; -2 or &gt; 2</span> = strong skew; consider transform or robust methods.
+</td>
+<td>Quantify asymmetry of a distribution (left vs right tail).</td>
+<td>Third standardized moment; sign indicates direction of long tail.</td>
+<td>Positive skew → long right tail; negative → long left tail.</td>
+<td>Incomes are typically right‑skewed; log‑incomes are closer to symmetric.</td>
+<td>Unstable in small samples; easily influenced by a few extreme points.</td>
+</tr>
+
+<tr>
+<td><strong>Kurtosis</strong> (Tailedness)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-kurtosis"></div>
+    <div class="colorbar-scale">
+      <span class="tick-kurt-m2">-2</span>
+      <span class="tick-kurt-0">0</span>
+      <span class="tick-kurt-2">2</span>
+    </div>
+  </div>
+
+  (Using excess kurtosis, normal ≈ 0.)<br><br>
+  <span class="good">≈ 0</span> = tails similar to normal.<br><br>
+  <span class="moderate">Between -2 and -0.5</span> = somewhat light‑tailed.<br><br>
+  <span class="poor">&gt; 2</span> = heavy tails / many extreme values.
+</td>
+<td>Describe how heavy the tails are compared to normal.</td>
+<td>Fourth standardized moment minus 3.</td>
+<td>High kurtosis indicates variance dominated by rare large deviations.</td>
+<td>Financial returns often show high positive kurtosis.</td>
+<td>Very sensitive to outliers; hard to interpret without skewness and plots.</td>
+</tr>
+
+<tr>
+<td><strong>Shapiro-Wilk Test</strong> (Normality test)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-assump"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Null: data are normal.<br><br>
+  <span class="poor">p &lt; 0.05</span> → reject normality.<br><br>
+  <span class="good">p ≥ 0.05</span> → no strong evidence against normality.
+</td>
+<td>Formal test of normality for small–moderate samples.</td>
+<td>Statistic W measures agreement between ordered data and expected normal
+quantiles.</td>
+<td>p-value derived from W; small p indicates deviation from normality.</td>
+<td>p=0.08 → normality acceptable; p=0.001 → strong deviation.</td>
+<td>Very sensitive with large n; use with plots and domain context.</td>
+</tr>
+
+<tr>
+<td><strong>Z-score Outlier Detection</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-zscore"></div>
+    <div class="colorbar-scale">
+      <span class="tick-z-m3">-3</span>
+      <span class="tick-z-m2">-2</span>
+      <span class="tick-z-0">0</span>
+      <span class="tick-z-2">2</span>
+      <span class="tick-z-3">3</span>
+    </div>
+  </div>
+
+  Under normality:<br><br>
+  <span class="good">|z| &lt; 2</span> = typical.<br><br>
+  <span class="moderate">2 ≤ |z| ≤ 3</span> = borderline outlier.<br><br>
+  <span class="poor">|z| &gt; 3</span> = potential outlier.
+</td>
+<td>Flag univariate outliers relative to mean and SD.</td>
+<td>
+\[
+z = \frac{x - \mu}{\sigma}.
+\]</td>
+<td>Extremely large |z| values are unlikely under a normal model.</td>
+<td>z = 5 is extremely unusual (probability &lt; 10⁻⁶ under normal).</td>
+<td>Assumes normality; heavy‑tailed data produce many |z|>3 that are not
+truly abnormal. Mean/SD can be distorted by the outliers.</td>
+</tr>
+
+<tr>
+<td><strong>IQR Method</strong> (Tukey’s Fences)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-iqr"></div>
+    <div class="colorbar-scale">
+      <span class="tick-iqr-lf">LF</span>
+      <span class="tick-iqr-q1">Q1</span>
+      <span class="tick-iqr-med">Med</span>
+      <span class="tick-iqr-q3">Q3</span>
+      <span class="tick-iqr-uf">UF</span>
+    </div>
+  </div>
+
+  <span class="good">Within [Q1−1.5·IQR, Q3+1.5·IQR]</span> = typical range.<br><br>
+  <span class="moderate">Outside 1.5·IQR but within 3·IQR</span> = moderate outlier.<br><br>
+  <span class="poor">Beyond 3·IQR fences</span> = extreme outlier.
+</td>
+<td>Non‑parametric, robust rule of thumb for univariate outliers.</td>
+<td>Uses quartiles and interquartile range (IQR = Q3–Q1).</td>
+<td>Points outside whiskers in a boxplot correspond to Tukey outliers.</td>
+<td>Common default rule in statistical software boxplots.</td>
+<td>Skewed distributions may produce many flagged points; rule is heuristic
+and dimension‑wise only.</td>
+</tr>
+
+<tr>
+<td><strong>Robust Z-score (MAD)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-zscore"></div>
+    <div class="colorbar-scale">
+      <span class="tick-z-m3">-3</span>
+      <span class="tick-z-m2">-2</span>
+      <span class="tick-z-0">0</span>
+      <span class="tick-z-2">2</span>
+      <span class="tick-z-3">3</span>
+    </div>
+  </div>
+
+  For robust z<sub>MAD</sub>:<br><br>
+  <span class="good">|z<sub>MAD</sub>| &lt; 2.5</span> = typical.<br><br>
+  <span class="moderate">2.5–3.5</span> = borderline.<br><br>
+  <span class="poor">&gt; 3.5</span> = strong outlier candidate.
+</td>
+<td>Detect outliers robustly using median and median absolute deviation.</td>
+<td>Robust Z = (x − median) / (1.4826 · MAD), where MAD is median(|x −
+median|).</td>
+<td>More stable than classical z‑score in presence of outliers.</td>
+<td>Good for heavy‑tailed or skewed distributions where mean/SD are distorted.</td>
+<td>Still assumes a roughly unimodal distribution; threshold choices are
+heuristic.</td>
+</tr>
+
+<tr>
+<td><strong>Cook’s Distance</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-cookd"></div>
+    <div class="colorbar-scale">
+      <span class="tick-cook-0">0</span>
+      <span class="tick-cook-05">0.5</span>
+      <span class="tick-cook-1">1</span>
+      <span class="tick-cook-2">2+</span>
+    </div>
+  </div>
+
+  <span class="good">&lt; 0.5</span> = typically low influence.<br><br>
+  <span class="moderate">0.5–1</span> = potentially influential, inspect.<br><br>
+  <span class="poor">&gt; 1</span> (especially much &gt;1) = highly influential point.
+</td>
+<td>Measure influence of each observation on regression fit.</td>
+<td>Combines leverage and residual size to approximate change in all fitted
+values when a point is removed.</td>
+<td>Large Cook’s D means the observation strongly affects estimates.</td>
+<td>One point with D=1.5 while others &lt; 0.1 indicates a dominating data
+point.</td>
+<td>Thresholds are rules of thumb; influential points may be valid data, not
+necessarily errors.</td>
+</tr>
+
+<tr>
+<td><strong>Mahalanobis Distance</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-mahal"></div>
+    <div class="colorbar-scale">
+      <span class="tick-mah-0">0</span>
+      <span class="tick-mah-975">χ²<sub>p,0.975</sub></span>
+      <span class="tick-mah-99">χ²<sub>p,0.99</sub></span>
+      <span class="tick-mah-ext">extreme</span>
+    </div>
+  </div>
+
+  For p dimensions:<br><br>
+  <span class="good">MD² ≤ χ²<sub>p,0.975</sub></span> = inside main cloud.<br><br>
+  <span class="moderate">Between χ²<sub>p,0.975</sub> and χ²<sub>p,0.99</sub></span> = potential multivariate outlier.<br><br>
+  <span class="poor">MD² &gt; χ²<sub>p,0.99</sub></span> = strong multivariate outlier.
+</td>
+<td>Detect multivariate outliers accounting for correlations between
+variables.</td>
+<td>
+\[
+MD(x) = \sqrt{(x-\mu)^\top \Sigma^{-1} (x-\mu)}.
+\]
+Squaring MD gives a χ² statistic under multivariate normality.</td>
+<td>Points with large MD² lie far from the multivariate mean in whitened
+space.</td>
+<td>Useful for anomaly detection in multi‑feature settings.</td>
+<td>Requires good estimates of μ and Σ; classical covariance is itself
+distorted by outliers; robust covariance estimators may be needed.</td>
+</tr>
+
+<tr>
+<td><strong>Kolmogorov–Smirnov Test</strong> (KS)</td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-pvalue-assump"></div>
+    <div class="colorbar-scale">
+      <span class="tick-p0">0</span>
+      <span class="tick-p005">0.05</span>
+      <span class="tick-p1">1.0</span>
+    </div>
+  </div>
+
+  Two‑sample KS for distribution shift:<br><br>
+  <span class="poor">p &lt; 0.05</span> → distributions differ significantly (potential shift / mismatch).<br><br>
+  <span class="good">p ≥ 0.05</span> → no strong evidence of difference.<br><br>
+  Larger D (0–1) = stronger discrepancy.
+</td>
+<td>Compare empirical distributions (e.g. train vs production) or sample
+vs theoretical distribution.</td>
+<td>KS statistic D = sup |F<sub>1</sub>(x) − F<sub>2</sub>(x)| over x.</td>
+<td>p‑value derived from D; sensitive to location and shape differences.</td>
+<td>Useful in monitoring feature distribution drift over time.</td>
+<td>More sensitive near median than in tails; assumes continuous data and
+independent samples.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+<!-- ===================================== -->
+<!-- 7. MODEL SELECTION CRITERIA           -->
+<!-- ===================================== -->
+<details>
+<summary>Model Selection Criteria</summary>
+<div class="table-responsive">
+<table>
+<thead>
+<tr>
+  <th>Metric</th>
+  <th>Decision Criterion</th>
+  <th>Purpose</th>
+  <th>Description</th>
+  <th>Working Mechanism</th>
+  <th>Example</th>
+  <th>Limitations</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td><strong>Akaike Information Criterion (AIC)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-delta"></div>
+    <div class="colorbar-scale">
+      <span class="tick-delta0">0</span>
+      <span class="tick-delta2">2</span>
+      <span class="tick-delta10">10</span>
+      <span class="tick-delta20">20+</span>
+    </div>
+  </div>
+
+  Compare ΔAIC relative to best (lowest).<br><br>
+  <span class="good">ΔAIC &lt; 2</span> = essentially equally good.<br><br>
+  <span class="moderate">2–10</span> = some to strong evidence against.<br><br>
+  <span class="poor">&gt; 10</span> = much worse than best model.
+</td>
+<td>Trade off fit vs complexity for out‑of‑sample prediction quality.</td>
+<td>
+\[
+\text{AIC} = 2k - 2\log(L),
+\]
+k = parameters, L = likelihood.</td>
+<td>Lower AIC preferred among models fit to same data/response.</td>
+<td>Models with ΔAIC &lt; 2 are often considered similarly plausible.</td>
+<td>Asymptotic; for small n, AICc is preferable. Not directly interpretable in
+absolute terms.</td>
+</tr>
+
+<tr>
+<td><strong>Bayesian Information Criterion (BIC)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-delta"></div>
+    <div class="colorbar-scale">
+      <span class="tick-delta0">0</span>
+      <span class="tick-delta2">2</span>
+      <span class="tick-delta10">10</span>
+      <span class="tick-delta20">20+</span>
+    </div>
+  </div>
+
+  ΔBIC vs best:<br><br>
+  <span class="good">&lt; 2</span> = weak evidence against.<br><br>
+  <span class="moderate">2–6</span> = positive evidence against.<br><br>
+  <span class="moderate">6–10</span> = strong.<br><br>
+  <span class="poor">&gt; 10</span> = very strong evidence against model.
+</td>
+<td>More heavily penalise complexity, tending to pick more parsimonious
+models as n grows.</td>
+<td>
+\[
+\text{BIC} = k \log(n) - 2\log(L).
+\]</td>
+<td>Approximate Bayes factor under certain priors; lower is better.</td>
+<td>BIC often selects smaller subset of predictors than AIC in large samples.</td>
+<td>Assumes true model is in candidate set; may underfit when prediction, not
+true model recovery, is goal.</td>
+</tr>
+
+<tr>
+<td><strong>Mallows’ C<sub>p</sub></strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-cp"></div>
+    <div class="colorbar-scale">
+      <span class="tick-cp-neg10">-10</span>
+      <span class="tick-cp-0">0</span>
+      <span class="tick-cp-pos10">+10</span>
+    </div>
+  </div>
+
+  For subset size p (predictors), good models have C<sub>p</sub> ≈ p+1.<br><br>
+  <span class="good">C<sub>p</sub> − (p+1) ≈ 0</span> = balanced bias–variance.<br><br>
+  <span class="poor">Far above p+1</span> = underfitting (missing predictors).<br><br>
+  <span class="poor">Far below p+1</span> = possible overfitting.
+</td>
+<td>Guide subset selection in linear regression.</td>
+<td>Compares residual SS of subset model to full model’s error variance.</td>
+<td>Plot C<sub>p</sub> vs p; models near diagonal line C<sub>p</sub> = p+1 are desirable.</td>
+<td>Helps choose among many subset models with similar R².</td>
+<td>Relies on full model as reference; computationally expensive for large
+predictor sets without heuristics.</td>
+</tr>
+
+<tr>
+<td><strong>Cross‑validated Deviance / Log‑Loss</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-error"></div>
+    <div class="colorbar-scale">
+      <span class="tick-err0">low</span>
+      <span class="tick-errmid">medium</span>
+      <span class="tick-errhi">high</span>
+    </div>
+  </div>
+
+  Lower is better.<br><br>
+  <span class="good">Lowest CV deviance among candidates</span> = preferred model.<br><br>
+  <span class="moderate">Differences &lt; 1–2%</span> = often negligible in practice.<br><br>
+  <span class="poor">Much larger deviance</span> = clearly worse predictive model.
+</td>
+<td>Directly compare predictive models using out‑of‑sample negative log‑likelihood.</td>
+<td>Compute mean deviance / log‑loss across CV folds.</td>
+<td>Penalises wrong confident predictions more strongly than Brier score.</td>
+<td>Standard for logistic / probabilistic models in ML competitions.</td>
+<td>Can be dominated by rare but very miscalibrated regions; needs context
+for what constitutes a big improvement.</td>
+</tr>
+
+<tr>
+<td><strong>Regularisation Strength (λ)</strong></td>
+<td>
+  <div class="colorbar-wrapper">
+    <div class="colorbar colorbar-biasvar"></div>
+    <div class="colorbar-scale">
+      <span class="tick-0">too small</span>
+      <span class="tick-05">balanced</span>
+      <span class="tick-10">too large</span>
+    </div>
+  </div>
+
+  <span class="poor">Very small λ</span> → unregularised, risk of overfitting.<br><br>
+  <span class="good">λ chosen by CV</span> → good bias–variance compromise.<br><br>
+  <span class="poor">Very large λ</span> → coefficients shrunk too much (underfitting).
+</td>
+<td>Control complexity of models like ridge, lasso, elastic‑net.</td>
+<td>Penalise large coefficients (L2) or enforce sparsity (L1) to improve
+generalisation.</td>
+<td>Typically chosen via cross‑validated performance curves over λ.</td>
+<td>L1 (lasso) can produce sparse models; L2 (ridge) stabilises coefficients
+with multicollinearity.</td>
+<td>Interpretation depends on scaling; different λ scales across algorithms and
+implementations.</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</details>
+
+</body>
+</html>
