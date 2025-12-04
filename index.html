@@ -712,6 +712,60 @@ body.dark .poor {
             overflow: hidden;
             background: white;
         }
+        /* ====== ADDED: COLOR LEGEND STYLING ====== */
+        .color-legend {
+          margin: 2em 0;
+          padding: 1.2em;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+          border-left: 5px solid #4CAF50;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .legend-title {
+          margin-top: 0;
+          color: #2c3e50;
+          font-size: 1.2em;
+        }
+        .legend-items {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5em;
+          margin-top: 0.8em;
+        }
+        .legend-item {
+          display: flex;
+          align-items: center;
+        }
+        .legend-color-box {
+          width: 22px;
+          height: 22px;
+          border-radius: 4px;
+          margin-right: 10px;
+          flex-shrink: 0;
+        }
+        .legend-note {
+          margin-top: 0.8em;
+          font-size: 0.9em;
+          color: #666;
+          font-style: italic;
+          padding-top: 0.8em;
+          border-top: 1px dashed #ddd;
+        }
+        body.dark .color-legend {
+          background-color: #1e1e1e;
+          border-left-color: #81c784;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+        
+        body.dark .legend-title {
+          color: #fff;
+        }
+        
+        body.dark .legend-note {
+          color: #ccc;
+          border-top-color: #444;
+        }
+
 </style>
 
 <script>
@@ -849,6 +903,34 @@ document.addEventListener('DOMContentLoaded', function () {
     </li>
   </ol>
 </details>
+
+
+
+<!-- ====== ADDED: COLOR LEGEND ====== -->
+<section class="color-legend">
+  <h3 class="legend-title">📊 How to Read the Color Bars</h3>
+  <p>The colors indicate the qualitative interpretation of a metric's value, following a consistent rule:</p>
+  <div class="legend-items">
+    <div class="legend-item">
+      <div class="legend-color-box" style="background-color: #c8e6c9;"></div>
+      <span><strong>Green</strong>: A <strong>desirable</strong> or <strong>good</strong> result for the metric's purpose.</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color-box" style="background-color: #fff9c4;"></div>
+      <span><strong>Yellow</strong>: A <strong>moderate</strong>, acceptable, or cautionary result.</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color-box" style="background-color: #ffccbc;"></div>
+      <span><strong>Red</strong>: An <strong>undesirable</strong>, poor, or problematic result.</span>
+    </div>
+  </div>
+  <p class="legend-note">
+    <em>Key Context: "Desirable" depends on context. For a p-value testing an effect (e.g., "is there a difference?"), a <strong>low value</strong> (significant) is good (green). For a p-value checking an assumption (e.g., "are residuals normal?"), a <strong>high value</strong> (no violation) is good (green). Correlation bars now show strength (absolute value) from weak to strong.
+    </em>
+  </p>
+</section>
+
+
 
 <!-- ===================================== -->
 <!-- 1. PERFORMANCE (CLASSIFICATION)      -->
