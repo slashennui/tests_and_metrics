@@ -862,6 +862,48 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
 </header>
 
+
+
+<!-- Spotify playlist (scaled down) -->
+<div class="spotify-wrapper">
+  <iframe
+    src="https://open.spotify.com/embed/playlist/5qggnZgnAAPIa50DQSKe3a?utm_source=generator&theme=0"
+    frameborder="0"
+    allowfullscreen
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy"
+  ></iframe>
+</div>
+
+<style>
+  .spotify-wrapper {
+    /* overall footprint in your layout */
+    width: 260px;          /* adjust as you like */
+    height: 115px;         /* must be iframe-height * scale */
+    overflow: hidden;
+    margin-left: auto;  /* RIGHT align */
+    margin-right: 0;
+  }
+
+  .spotify-wrapper iframe {
+    width: 100%;
+    height: 152px;          /* Spotify’s default */
+    transform: scale(0.75); /* make it smaller */
+    transform-origin: top left;
+    border-radius: 12px;
+  }
+
+  /* Optional: make it a bit wider on large screens */
+  @media (min-width: 900px) {
+    .spotify-wrapper {
+      width: 320px;
+      height: 114px; /* 152 * 0.75 */
+    }
+  }
+</style>
+
+
+
 <!-- ===================================== -->
 <!-- 0. METRIC SELECTION GUIDE            -->
 <!-- ===================================== -->
@@ -929,6 +971,9 @@ document.addEventListener('DOMContentLoaded', function () {
     </em>
   </p>
 </section>
+
+
+
 
 
 
@@ -1954,6 +1999,1098 @@ than differences in means.<br><br>
 <details open>
 <summary>Robustness &amp; Resampling</summary>
 <div class="table-responsive">
+  
+  
+  
+  
+  
+  
+  
+    <section id="robustness-playground">
+  <style>
+    #robustness-playground {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #111827;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    #robustness-playground h2 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+
+    #robustness-playground p.desc {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    #robustness-playground .rp-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      #robustness-playground .rp-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #robustness-playground .rp-card {
+      background: #020617;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      border: 1px solid #1f2937;
+    }
+
+    #robustness-playground label {
+      font-size: 0.8rem;
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #9ca3af;
+    }
+
+    #robustness-playground textarea {
+      width: 100%;
+      min-height: 70px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 0.5rem;
+      font-family: "Fira Code", Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+      resize: vertical;
+    }
+
+    #robustness-playground .rp-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.7rem;
+      align-items: center;
+    }
+
+    #robustness-playground button {
+      border-radius: 6px;
+      border: 1px solid #4b5563;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    #robustness-playground button:hover {
+      background: #1f2937;
+    }
+
+    #robustness-playground input[type="range"] {
+      width: 180px;
+    }
+
+    #robustness-playground .rp-slider-label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    #robustness-playground .rp-slider-value {
+      font-weight: 600;
+      color: #facc15;
+      margin-left: 0.25rem;
+    }
+
+    #robustness-playground .rp-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    #robustness-playground .rp-metric {
+      padding: 0.35rem 0.45rem;
+      border-radius: 6px;
+      background: #020617;
+      border: 1px solid #111827;
+    }
+
+    #robustness-playground .rp-metric span.label {
+      display: block;
+      color: #9ca3af;
+      font-size: 0.75rem;
+    }
+
+    #robustness-playground .rp-metric span.value {
+      font-weight: 600;
+    }
+
+    #robustness-playground .rp-metric span.robust {
+      color: #4ade80;
+    }
+
+    #robustness-playground .rp-metric span.sensitive {
+      color: #fb7185;
+    }
+
+    #robustness-playground svg {
+      width: 100%;
+      max-width: 700px;
+      height: 140px;
+      background: #020617;
+      border-radius: 8px;
+      border: 1px solid #111827;
+    }
+
+    #robustness-playground .rp-hint {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+  </style>
+
+  <h2>Robustness Playground: Mean vs Median & Outliers</h2>
+  <p class="desc">
+    Type any numbers, then drag the outlier slider. Watch how the <strong>mean</strong> swings
+    while the <strong>median</strong> and <strong>IQR</strong> stay more stable. This is what “robustness to outliers”
+    looks like in practice.
+  </p>
+
+  <div class="rp-layout">
+    <!-- Controls -->
+    <div class="rp-card">
+      <label for="rp-data-input">Data points (comma or space separated):</label>
+      <textarea id="rp-data-input"></textarea>
+
+      <div class="rp-controls-row">
+        <button id="rp-example-btn" type="button">Load example</button>
+        <button id="rp-apply-btn" type="button">Apply data</button>
+
+        <div class="rp-slider-label">
+          Extra outlier:
+          <input id="rp-outlier-slider" type="range" min="-40" max="40" step="1" value="0">
+          <span id="rp-outlier-value" class="rp-slider-value">0</span>
+        </div>
+      </div>
+
+      <p class="rp-hint">
+        Try: <em>1, 2, 3, 4, 5</em> then add an outlier like <em>+30</em>.  
+        The mean moves a lot; the median barely moves.<p><br>
+        The "Robustness Playground" is a visual tool proving that the median is generally a better measure of the "typical" center for data that might contain errors or extreme values, because it resists the pull of outliers much better than the mean.
+
+
+Robustness in statistics means that a measurement (like the median) remains relatively unchanged even if a few data points are very unusual or extreme (outliers).
+
+Non-robust measurements (like the mean) are highly sensitive to these extreme values and can be pulled significantly in one direction.
+
+      </p>
+    </div>
+
+    <!-- Metrics + Plot -->
+    <div class="rp-card">
+      <div class="rp-metrics" id="rp-metrics">
+        <!-- filled by JS -->
+      </div>
+      <svg id="rp-plot"></svg>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.getElementById('robustness-playground');
+      if (!root) return;
+
+      const dataInput = root.querySelector('#rp-data-input');
+      const exampleBtn = root.querySelector('#rp-example-btn');
+      const applyBtn = root.querySelector('#rp-apply-btn');
+      const outlierSlider = root.querySelector('#rp-outlier-slider');
+      const outlierValueSpan = root.querySelector('#rp-outlier-value');
+      const metricsContainer = root.querySelector('#rp-metrics');
+      const svg = root.querySelector('#rp-plot');
+
+      function parseData(text) {
+        if (!text) return [];
+        return text
+          .split(/[\s,;]+/)
+          .map(s => s.trim())
+          .filter(s => s.length > 0)
+          .map(Number)
+          .filter(v => Number.isFinite(v));
+      }
+
+      function computeStats(values) {
+        const n = values.length;
+        if (!n) return null;
+
+        const sorted = [...values].sort((a, b) => a - b);
+        const mean = sorted.reduce((a, b) => a + b, 0) / n;
+
+        const mid = Math.floor(n / 2);
+        const median = n % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+
+        const q1 = sorted[Math.floor(n * 0.25)];
+        const q3 = sorted[Math.floor(n * 0.75)];
+        const iqr = q3 - q1;
+
+        const trimmedSorted = sorted.slice(Math.floor(n * 0.1), Math.ceil(n * 0.9));
+        const trimmedMean = trimmedSorted.reduce((a, b) => a + b, 0) / trimmedSorted.length;
+
+        return { n, sorted, mean, median, q1, q3, iqr, trimmedMean };
+      }
+
+      function updateMetrics(stats) {
+        metricsContainer.innerHTML = '';
+        if (!stats) {
+          metricsContainer.innerHTML = '<div class="rp-metric"><span class="label">Status</span><span class="value">No valid data</span></div>';
+          return;
+        }
+        const items = [
+          ['Count', stats.n.toString(), ''],
+          ['Mean', stats.mean.toFixed(2), 'sensitive'],
+          ['Median', stats.median.toFixed(2), 'robust'],
+          ['Trimmed mean (10%)', stats.trimmedMean.toFixed(2), 'robust'],
+          ['Q1 / Q3', `${stats.q1.toFixed(2)} / ${stats.q3.toFixed(2)}`, 'robust'],
+          ['IQR', stats.iqr.toFixed(2), 'robust']
+        ];
+
+        for (const [label, value, tone] of items) {
+          const div = document.createElement('div');
+          div.className = 'rp-metric';
+          div.innerHTML = `
+            <span class="label">${label}</span>
+            <span class="value ${tone === 'robust' ? 'robust' : tone === 'sensitive' ? 'sensitive' : ''}">${value}</span>
+          `;
+          metricsContainer.appendChild(div);
+        }
+      }
+
+      function drawPlot(stats) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        const width = svg.clientWidth || 600;
+        const height = svg.clientHeight || 140;
+        const padding = 35;
+
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        if (!stats || stats.sorted.length === 0) return;
+
+        const data = stats.sorted;
+        const min = Math.min(...data, stats.mean, stats.median);
+        const max = Math.max(...data, stats.mean, stats.median);
+        const spread = max - min || 1;
+
+        function xScale(v) {
+          return padding + ((v - min) / spread) * (width - 2 * padding);
+        }
+
+        const baselineY = height / 2;
+
+        // Baseline
+        const baseLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        baseLine.setAttribute('x1', padding);
+        baseLine.setAttribute('x2', width - padding);
+        baseLine.setAttribute('y1', baselineY);
+        baseLine.setAttribute('y2', baselineY);
+        baseLine.setAttribute('stroke', '#4b5563');
+        baseLine.setAttribute('stroke-width', '1');
+        svg.appendChild(baseLine);
+
+        // Points
+        data.forEach(v => {
+          const cx = xScale(v);
+          const cy = baselineY + (Math.random() - 0.5) * 14; // small jitter
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', cx);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', 4);
+          circle.setAttribute('fill', '#60a5fa');
+          svg.appendChild(circle);
+        });
+
+        function drawLine(value, color, label) {
+          const x = xScale(value);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', x);
+          line.setAttribute('x2', x);
+          line.setAttribute('y1', baselineY - 30);
+          line.setAttribute('y2', baselineY + 30);
+          line.setAttribute('stroke', color);
+          line.setAttribute('stroke-width', '2');
+          svg.appendChild(line);
+
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x + 3);
+          text.setAttribute('y', baselineY - 34);
+          text.setAttribute('fill', color);
+          text.setAttribute('font-size', '10');
+          text.textContent = label;
+          svg.appendChild(text);
+        }
+
+        drawLine(stats.mean, '#f97373', 'mean');
+        drawLine(stats.median, '#4ade80', 'median');
+      }
+
+      function updateAll() {
+        const baseValues = parseData(dataInput.value);
+        const outlier = Number(outlierSlider.value || 0);
+        const values = baseValues.slice();
+        if (outlier !== 0) values.push(outlier);
+
+        const stats = computeStats(values);
+        updateMetrics(stats);
+        drawPlot(stats);
+      }
+
+      exampleBtn.addEventListener('click', () => {
+        dataInput.value = '1, 2, 2.5, 3, 3.5, 4, 4.5, 5';
+        outlierSlider.value = 0;
+        outlierValueSpan.textContent = '0';
+        updateAll();
+      });
+
+      applyBtn.addEventListener('click', () => {
+        updateAll();
+      });
+
+      outlierSlider.addEventListener('input', () => {
+        outlierValueSpan.textContent = outlierSlider.value;
+        updateAll();
+      });
+
+      // Initial state
+      dataInput.value = '1, 2, 2.5, 3, 3.5, 4, 4.5, 5';
+      updateAll();
+    })();
+  </script>
+</section>
+
+  
+  
+  
+  
+  
+  
+  
+  <section id="resampling-stability-playground">
+  <style>
+    #resampling-stability-playground {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #0b1120;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+      border: 1px solid #1e293b;
+    }
+    #resampling-stability-playground h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1.2rem;
+    }
+    #resampling-stability-playground p.rsp-desc {
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+    #resampling-stability-playground .rsp-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    @media (max-width: 900px) {
+      #resampling-stability-playground .rsp-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    #resampling-stability-playground .rsp-card {
+      background: #020617;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      border: 1px solid #1e293b;
+    }
+    #resampling-stability-playground label {
+      display: block;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.25rem;
+    }
+    #resampling-stability-playground .rsp-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-bottom: 0.6rem;
+      align-items: center;
+    }
+    #resampling-stability-playground input[type="range"] {
+      width: 160px;
+    }
+    #resampling-stability-playground .rsp-slider-label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    #resampling-stability-playground .rsp-slider-value {
+      font-weight: 600;
+      color: #facc15;
+      min-width: 2.6em;
+      text-align: right;
+    }
+    #resampling-stability-playground button {
+      border-radius: 6px;
+      border: 1px solid #4b5563;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    #resampling-stability-playground button:hover {
+      background: #1f2937;
+    }
+    #resampling-stability-playground .rsp-note {
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    #resampling-stability-playground .rsp-metrics {
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #resampling-stability-playground .rsp-metrics th,
+    #resampling-stability-playground .rsp-metrics td {
+      padding: 0.25rem 0.35rem;
+      border-bottom: 1px solid #111827;
+      text-align: right;
+      white-space: nowrap;
+    }
+    #resampling-stability-playground .rsp-metrics th:first-child,
+    #resampling-stability-playground .rsp-metrics td:first-child {
+      text-align: left;
+    }
+    #resampling-stability-playground .rsp-metrics th {
+      font-weight: 600;
+      color: #9ca3af;
+    }
+    #resampling-stability-playground .rsp-tag {
+      display: inline-block;
+      padding: 0.1rem 0.3rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid #4b5563;
+      color: #e5e7eb;
+    }
+    #resampling-stability-playground .rsp-tag-strong {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+    #resampling-stability-playground .rsp-tag-weak {
+      border-color: #fb7185;
+      color: #fb7185;
+    }
+    #resampling-stability-playground svg {
+      width: 100%;
+      max-width: 580px;
+      height: 180px;
+      background: #020617;
+      border-radius: 8px;
+      border: 1px solid #111827;
+    }
+    #resampling-stability-playground .rsp-legend {
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    #resampling-stability-playground .rsp-legend span.box {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 0.25rem;
+      border-radius: 2px;
+      
+      
+          #resampling-stability-playground .rsp-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    #resampling-stability-playground .rsp-info-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    #resampling-stability-playground .rsp-info-card h4 {
+      margin: 0.4rem 0 0.2rem;
+      font-size: 0.85rem;
+    }
+
+    #resampling-stability-playground .rsp-info-card p,
+    #resampling-stability-playground .rsp-info-card ul {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: #9ca3af;
+      margin: 0 0 0.4rem;
+      padding-left: 0;
+    }
+
+    #resampling-stability-playground .rsp-info-card ul {
+      list-style: disc;
+      padding-left: 1.2rem;
+    }
+
+    body:not(.dark) #resampling-stability-playground .rsp-info-card p,
+    body:not(.dark) #resampling-stability-playground .rsp-info-card ul {
+      color: #4b5563;
+    }
+
+      
+      
+      
+      
+    }
+
+    /* Light mode override – looks like your mean/median section */
+    body:not(.dark) #resampling-stability-playground {
+      background: #f9fafb;
+      color: #111827;
+      border-color: #e5e7eb;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.08);
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-card {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-desc,
+    body:not(.dark) #resampling-stability-playground .rsp-note {
+      color: #4b5563;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-slider-label {
+      color: #4b5563;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-metrics th {
+      color: #6b7280;
+    }
+    body:not(.dark) #resampling-stability-playground svg {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-legend {
+      color: #6b7280;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-tag {
+      border-color: #9ca3af;
+      color: #374151;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-tag-strong {
+      border-color: #16a34a;
+      color: #166534;
+    }
+    body:not(.dark) #resampling-stability-playground .rsp-tag-weak {
+      border-color: #f97373;
+      color: #b91c1c;
+    }
+  </style>
+
+  <h2>Resampling Stability Playground (Bootstrap vs Jackknife)</h2>
+  <p class="rsp-desc">
+    This playground simulates a simple linear model with one true signal feature and one noise feature.
+    Play with sample size, noise, and signal strength, then compare how a single fit, bootstrap, and jackknife
+    disagree about the coefficient. Watch how <strong>CI width</strong> and <strong>sign stability</strong> change.
+  </p>
+
+    <div class="rsp-layout">
+    <!-- LEFT COLUMN: controls + explanation -->
+    <div class="rsp-left-col">
+      <!-- Controls -->
+      <div class="rsp-card">
+        <div class="rsp-row">
+          <div class="rsp-slider-label">
+            Sample size
+            <input id="rsp-n" type="range" min="30" max="250" step="10" value="100">
+            <span id="rsp-n-val" class="rsp-slider-value">100</span>
+          </div>
+        </div>
+
+        <div class="rsp-row">
+          <div class="rsp-slider-label">
+            Noise level (σ)
+            <input id="rsp-noise" type="range" min="0" max="3" step="0.2" value="1.0">
+            <span id="rsp-noise-val" class="rsp-slider-value">1.0</span>
+          </div>
+        </div>
+
+        <div class="rsp-row">
+          <div class="rsp-slider-label">
+            Signal strength (β₁)
+            <input id="rsp-signal" type="range" min="0.2" max="3" step="0.2" value="1.5">
+            <span id="rsp-signal-val" class="rsp-slider-value">1.5</span>
+          </div>
+        </div>
+
+        <div class="rsp-row">
+          <button type="button" id="rsp-resample-btn">Generate new data + resamples</button>
+          <span class="rsp-note">
+            Model: <em>y = β₀ + β₁·x₁ + ε</em> with an extra noise feature <em>x₂</em> (true β₂ = 0).
+          </span>
+        </div>
+
+        <p class="rsp-note">
+          Look for: when noise is high or n is small, <strong>single fit</strong> can be very misleading.
+          Bootstrap and jackknife show how uncertain the coefficient really is.
+        </p>
+      </div>
+
+      <!-- Explanation card -->
+      <div class="rsp-card rsp-info-card">
+        <h3>How to read this playground</h3>
+
+        <p>
+          This Resampling Stability Playground compares two resampling methods – <strong>Bootstrap</strong>
+          and <strong>Jackknife</strong> – for a simple linear model. It answers:
+          <em>“How stable is my estimated coefficient under resampling?”</em>
+        </p>
+
+        <h4>Purpose</h4>
+        <p>
+          The model is <em>y = β₀ + β₁·x₁ + ε</em> with one true signal feature (<em>x₁</em>) and one pure
+          noise feature (<em>x₂</em>, true β₂ = 0). By changing sample size, noise level, and signal
+          strength, you can see when estimates are stable vs. when they are fragile.
+        </p>
+
+        <h4>How to use the controls</h4>
+        <ul>
+          <li><strong>Sample size</strong> – more observations usually mean tighter intervals.</li>
+          <li><strong>Noise level</strong> – higher noise makes estimates wobble more.</li>
+          <li><strong>Signal strength</strong> – stronger β₁ is easier to detect reliably.</li>
+          <li><strong>Generate new data</strong> – redraws a fresh dataset and new resamples.</li>
+        </ul>
+
+        <h4>Reading the plot</h4>
+        <ul>
+          <li>The vertical green dashed line shows the <strong>true β₁</strong>.</li>
+          <li>The orange dot is the <strong>single-fit estimate</strong> on the full sample.</li>
+          <li>The blue bar is the <strong>Bootstrap 95% CI</strong> for β₁.</li>
+          <li>The purple bar is the <strong>Jackknife 95% CI</strong> for β₁.</li>
+        </ul>
+
+        <h4>Reading the table</h4>
+        <ul>
+          <li><strong>CI width</strong> – how wide the interval is (narrow = more precise).</li>
+          <li><strong>Sign stable</strong> – fraction of resamples that keep the same sign as the mean.</li>
+          <li>
+            Green “high stability” tags mean the method gives a tight CI and almost never flips sign;
+            red “low stability” tags mean the estimate is fragile.
+          </li>
+        </ul>
+
+        <p>
+          Use this to build intuition for <strong>robustness</strong>: when resampling methods agree
+          and intervals are narrow, your inference is much safer than when everything jumps around.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: plot + metrics -->
+    <div class="rsp-card">
+      <svg id="rsp-plot"></svg>
+      <div class="rsp-legend">
+        <span class="box" style="background:#38bdf8;"></span> Bootstrap 95% CI &nbsp;
+        <span class="box" style="background:#a855f7;"></span> Jackknife 95% CI &nbsp;
+        <span class="box" style="background:#f97316;"></span> Single-fit estimate
+      </div>
+
+      <table class="rsp-metrics" id="rsp-metrics-table"></table>
+
+      <p class="rsp-note">
+        <span class="rsp-tag rsp-tag-strong">High stability</span> = coefficient keeps sign and tight CI.<br>
+        <span class="rsp-tag rsp-tag-weak">Low stability</span> = sign flips often / very wide CI.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.getElementById('resampling-stability-playground');
+      if (!root) return;
+
+      const nSlider      = root.querySelector('#rsp-n');
+      const nVal         = root.querySelector('#rsp-n-val');
+      const noiseSlider  = root.querySelector('#rsp-noise');
+      const noiseVal     = root.querySelector('#rsp-noise-val');
+      const signalSlider = root.querySelector('#rsp-signal');
+      const signalVal    = root.querySelector('#rsp-signal-val');
+      const resampleBtn  = root.querySelector('#rsp-resample-btn');
+      const svg          = root.querySelector('#rsp-plot');
+      const metricsTable = root.querySelector('#rsp-metrics-table');
+
+      function randn() {
+        // Box–Muller
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
+
+      function generateData(n, noise, signal) {
+        const x1 = new Array(n);
+        const x2 = new Array(n);
+        const y  = new Array(n);
+        for (let i = 0; i < n; i++) {
+          const a = randn();
+          const b = randn();
+          x1[i] = a;
+          x2[i] = b;
+          y[i]  = signal * a + noise * randn(); // β0 = 0, β2 = 0
+        }
+        return { x1, x2, y };
+      }
+
+      function fitOLS(x1, x2, y) {
+        const n = y.length;
+        let sx1 = 0, sx2 = 0, sy = 0;
+        let sx1x1 = 0, sx2x2 = 0, sx1x2 = 0;
+        let sx1y = 0, sx2y = 0;
+
+        for (let i = 0; i < n; i++) {
+          const xi1 = x1[i], xi2 = x2[i], yi = y[i];
+          sx1 += xi1;
+          sx2 += xi2;
+          sy  += yi;
+          sx1x1 += xi1 * xi1;
+          sx2x2 += xi2 * xi2;
+          sx1x2 += xi1 * xi2;
+          sx1y  += xi1 * yi;
+          sx2y  += xi2 * yi;
+        }
+
+        const A = [
+          [n,     sx1,    sx2],
+          [sx1,   sx1x1,  sx1x2],
+          [sx2,   sx1x2,  sx2x2]
+        ];
+        const b = [sy, sx1y, sx2y];
+
+        const detA =
+          A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1]) -
+          A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0]) +
+          A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);
+
+        if (Math.abs(detA) < 1e-10) return { b0: NaN, b1: NaN, b2: NaN };
+
+        const inv = [[0,0,0],[0,0,0],[0,0,0]];
+        inv[0][0] = (A[1][1]*A[2][2]-A[1][2]*A[2][1]) / detA;
+        inv[0][1] = (A[0][2]*A[2][1]-A[0][1]*A[2][2]) / detA;
+        inv[0][2] = (A[0][1]*A[1][2]-A[0][2]*A[1][1]) / detA;
+        inv[1][0] = (A[1][2]*A[2][0]-A[1][0]*A[2][2]) / detA;
+        inv[1][1] = (A[0][0]*A[2][2]-A[0][2]*A[2][0]) / detA;
+        inv[1][2] = (A[0][2]*A[1][0]-A[0][0]*A[1][2]) / detA;
+        inv[2][0] = (A[1][0]*A[2][1]-A[1][1]*A[2][0]) / detA;
+        inv[2][1] = (A[0][1]*A[2][0]-A[0][0]*A[2][1]) / detA;
+        inv[2][2] = (A[0][0]*A[1][1]-A[0][1]*A[1][0]) / detA;
+
+        const beta = [0,0,0];
+        for (let i = 0; i < 3; i++) {
+          beta[i] = inv[i][0]*b[0] + inv[i][1]*b[1] + inv[i][2]*b[2];
+        }
+        return { b0: beta[0], b1: beta[1], b2: beta[2] };
+      }
+
+      function bootstrapCoefs(data, B) {
+        const { x1, x2, y } = data;
+        const n = y.length;
+        const coefs = [];
+        for (let b = 0; b < B; b++) {
+          const bx1 = new Array(n);
+          const bx2 = new Array(n);
+          const by  = new Array(n);
+          for (let i = 0; i < n; i++) {
+            const j = Math.floor(Math.random() * n);
+            bx1[i] = x1[j];
+            bx2[i] = x2[j];
+            by[i]  = y[j];
+          }
+          coefs.push(fitOLS(bx1, bx2, by));
+        }
+        return coefs;
+      }
+
+      function jackknifeCoefs(data) {
+        const { x1, x2, y } = data;
+        const n = y.length;
+        const coefs = [];
+        for (let leave = 0; leave < n; leave++) {
+          const jx1 = [];
+          const jx2 = [];
+          const jy  = [];
+          for (let i = 0; i < n; i++) {
+            if (i === leave) continue;
+            jx1.push(x1[i]);
+            jx2.push(x2[i]);
+            jy.push(y[i]);
+          }
+          coefs.push(fitOLS(jx1, jx2, jy));
+        }
+        return coefs;
+      }
+
+      function summarise(coefArray, key) {
+        const vals = coefArray.map(c => c[key]).filter(v => Number.isFinite(v));
+        if (!vals.length) return null;
+        vals.sort((a,b) => a-b);
+        const n = vals.length;
+        const mean = vals.reduce((a,b) => a+b, 0) / n;
+        const p = q => {
+          if (n === 1) return vals[0];
+          const idx = (n-1)*q;
+          const lo = Math.floor(idx), hi = Math.ceil(idx);
+          if (lo === hi) return vals[lo];
+          const w = idx - lo;
+          return vals[lo]*(1-w) + vals[hi]*w;
+        };
+        const lo = p(0.025);
+        const hi = p(0.975);
+        const width = hi - lo;
+        const signStable = vals.filter(v => Math.sign(v) === Math.sign(mean) && Math.sign(v) !== 0).length / n;
+        return { mean, lo, hi, width, signStable };
+      }
+
+      function clearSVG(s) {
+        while (s.firstChild) s.removeChild(s.firstChild);
+      }
+
+      function drawPlot(single, bootSum, jackSum, trueBeta) {
+        clearSVG(svg);
+        const width  = svg.clientWidth  || 560;
+        const height = svg.clientHeight || 180;
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        const leftPad  = 130;  // room for labels
+        const rightPad = 40;
+
+        const midYsingle = 40;
+        const midYboot   = 95;
+        const midYjack   = 150;
+
+        const values = [trueBeta];
+        if (bootSum) { values.push(bootSum.lo, bootSum.hi); }
+        if (jackSum) { values.push(jackSum.lo, jackSum.hi); }
+        if (single)  { values.push(single.b1); }
+
+        const min  = Math.min.apply(null, values) - 0.5;
+        const max  = Math.max.apply(null, values) + 0.5;
+        const span = (max - min) || 1;
+
+        const xScale = v =>
+          leftPad + ((v - min) / span) * (width - leftPad - rightPad);
+
+        function addLabel(y, text) {
+          const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+          t.setAttribute('x', leftPad - 10);
+          t.setAttribute('y', y + 4);
+          t.setAttribute('fill', '#9ca3af');
+          t.setAttribute('font-size','11');
+          t.setAttribute('text-anchor','end');
+          t.textContent = text;
+          svg.appendChild(t);
+        }
+        function drawCI(summary, y, color) {
+          if (!summary) return;
+          const x1 = xScale(summary.lo);
+          const x2 = xScale(summary.hi);
+
+          const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('x1', x1);
+          line.setAttribute('x2', x2);
+          line.setAttribute('y1', y);
+          line.setAttribute('y2', y);
+          line.setAttribute('stroke', color);
+          line.setAttribute('stroke-width', '6');
+          line.setAttribute('stroke-linecap', 'round');
+          svg.appendChild(line);
+
+          const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+          dot.setAttribute('cx', xScale(summary.mean));
+          dot.setAttribute('cy', y);
+          dot.setAttribute('r', 4);
+          dot.setAttribute('fill', '#e5e7eb');
+          dot.setAttribute('stroke', '#0f172a');
+          dot.setAttribute('stroke-width', '1');
+          svg.appendChild(dot);
+        }
+
+        // Axis
+        const axis = document.createElementNS('http://www.w3.org/2000/svg','line');
+        axis.setAttribute('x1', leftPad);
+        axis.setAttribute('x2', width - rightPad);
+        axis.setAttribute('y1', midYboot);
+        axis.setAttribute('y2', midYboot);
+        axis.setAttribute('stroke', '#4b5563');
+        axis.setAttribute('stroke-width', '1');
+        svg.appendChild(axis);
+
+        // True beta line across CI region only
+        const tbx = xScale(trueBeta);
+        const tb  = document.createElementNS('http://www.w3.org/2000/svg','line');
+        tb.setAttribute('x1', tbx);
+        tb.setAttribute('x2', tbx);
+        tb.setAttribute('y1', midYsingle - 10);
+        tb.setAttribute('y2', midYjack + 10);
+        tb.setAttribute('stroke', '#22c55e');
+        tb.setAttribute('stroke-dasharray', '3 3');
+        tb.setAttribute('stroke-width', '1');
+        tb.setAttribute('opacity', '0.8');
+        svg.appendChild(tb);
+
+        // Bands
+        drawCI({ mean: single.b1, lo: single.b1, hi: single.b1 }, midYsingle, '#f97316');
+        drawCI(bootSum, midYboot, '#38bdf8');
+        drawCI(jackSum, midYjack, '#a855f7');
+
+        // Labels
+        addLabel(midYsingle, 'Single fit (full sample)');
+        addLabel(midYboot,   'Bootstrap (B=80)');
+        addLabel(midYjack,   'Jackknife (leave-one-out)');
+
+        // Min / max ticks
+        const tMin = document.createElementNS('http://www.w3.org/2000/svg','text');
+        tMin.setAttribute('x', leftPad);
+        tMin.setAttribute('y', height - 8);
+        tMin.setAttribute('fill', '#6b7280');
+        tMin.setAttribute('font-size','10');
+        tMin.textContent = min.toFixed(1);
+        svg.appendChild(tMin);
+
+        const tMax = document.createElementNS('http://www.w3.org/2000/svg','text');
+        tMax.setAttribute('x', width - rightPad - 4);
+        tMax.setAttribute('y', height - 8);
+        tMax.setAttribute('fill', '#6b7280');
+        tMax.setAttribute('font-size','10');
+        tMax.setAttribute('text-anchor','end');
+        tMax.textContent = max.toFixed(1);
+        svg.appendChild(tMax);
+      }
+
+      function update() {
+        const n      = parseInt(nSlider.value, 10);
+        const noise  = parseFloat(noiseSlider.value);
+        const signal = parseFloat(signalSlider.value);
+
+        nVal.textContent      = n;
+        noiseVal.textContent  = noise.toFixed(1);
+        signalVal.textContent = signal.toFixed(1);
+
+        const data      = generateData(n, noise, signal);
+        const singleFit = fitOLS(data.x1, data.x2, data.y);
+        const boot      = bootstrapCoefs(data, 80);
+        const jack      = jackknifeCoefs(data);
+
+        const bootB1 = summarise(boot, 'b1');
+        const jackB1 = summarise(jack, 'b1');
+        const bootB2 = summarise(boot, 'b2');
+        const jackB2 = summarise(jack, 'b2');
+
+        drawPlot(singleFit, bootB1, jackB1, signal);
+
+        // ---- Metrics table ----
+        metricsTable.innerHTML = `
+          <tr>
+            <th>Coefficient</th>
+            <th>Single fit β̂</th>
+            <th colspan="2">Bootstrap (CI width, sign stability)</th>
+            <th colspan="2">Jackknife (CI width, sign stability)</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Width</th>
+            <th>Sign stable</th>
+            <th>Width</th>
+            <th>Sign stable</th>
+          </tr>
+        `;
+
+        function addRow(label, singleVal, bootSum, jackSum, trueVal) {
+          const fmt = v => (v === null || v === undefined || Number.isNaN(v)) ? '–' : v.toFixed(2);
+          const fmtPct = v => (v === null || v === undefined) ? '–' : Math.round(v*100) + '%';
+
+          const bootWidth  = bootSum ? bootSum.width      : null;
+          const jackWidth  = jackSum ? jackSum.width      : null;
+          const bootStable = bootSum ? bootSum.signStable : null;
+          const jackStable = jackSum ? jackSum.signStable : null;
+
+          const scale = Math.abs(trueVal) > 1e-6 ? Math.abs(trueVal) : 0.5;
+
+          const bootTag = (bootStable !== null && bootWidth !== null)
+            ? (bootStable > 0.9 && bootWidth < scale * 0.7 ? 'strong' : 'weak')
+            : null;
+
+          const jackTag = (jackStable !== null && jackWidth !== null)
+            ? (jackStable > 0.9 && jackWidth < scale * 0.7 ? 'strong' : 'weak')
+            : null;
+
+          metricsTable.innerHTML += `
+            <tr>
+              <td>${label}</td>
+              <td>${fmt(singleVal)}</td>
+              <td>${fmt(bootWidth)} ${
+                bootTag ? `<span class="rsp-tag rsp-tag-${bootTag}">${bootTag === 'strong' ? 'stable' : 'unstable'}</span>` : ''
+              }</td>
+              <td>${fmtPct(bootStable)}</td>
+              <td>${fmt(jackWidth)} ${
+                jackTag ? `<span class="rsp-tag rsp-tag-${jackTag}">${jackTag === 'strong' ? 'stable' : 'unstable'}</span>` : ''
+              }</td>
+              <td>${fmtPct(jackStable)}</td>
+            </tr>
+          `;
+        }
+
+        addRow(
+          'Signal feature β₁ (true = ' + signal.toFixed(1) + ')',
+          singleFit.b1, bootB1, jackB1, signal
+        );
+        addRow(
+          'Noise feature β₂ (true = 0)',
+          singleFit.b2, bootB2, jackB2, 0
+        );
+      }
+
+      resampleBtn.addEventListener('click', update);
+
+      // just keep sliders updating labels; recompute on button click
+      nSlider.addEventListener('input', () => { nVal.textContent = nSlider.value; });
+      noiseSlider.addEventListener('input', () => { noiseVal.textContent = parseFloat(noiseSlider.value).toFixed(1); });
+      signalSlider.addEventListener('input', () => { signalVal.textContent = parseFloat(signalSlider.value).toFixed(1); });
+
+      // initial draw
+      update();
+    })();
+  </script>
+</section>
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 <table>
 <thead>
 <tr>
@@ -3016,6 +4153,1390 @@ independent samples.<br><br>
 </div>
 </details>
 
+
+
+
+
+
+
+<!-- =========================================
+     Influence & Robustness Lab (Interactive)
+     Place this AFTER "Outlier & Distribution Metrics"
+     ========================================== -->
+<section id="influence-robustness-lab">
+  <style>
+    /* Shared lab layout / theming */
+    #influence-robustness-lab {
+      margin-top: 2rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #influence-robustness-lab h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+    }
+
+    #influence-robustness-lab h4 {
+      margin: 0.4rem 0 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    #influence-robustness-lab p {
+      margin: 0 0 0.4rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    #influence-robustness-lab details.lab-block {
+      border-radius: 0.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 0.75rem;
+      overflow: hidden;
+    }
+
+    #influence-robustness-lab summary.lab-summary {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      list-style: none;
+    }
+
+    #influence-robustness-lab summary.lab-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    #influence-robustness-lab summary.lab-summary::before {
+      content: "▸ ";
+      margin-right: 0.25rem;
+      display: inline-block;
+      transition: transform 0.15s ease;
+    }
+
+    #influence-robustness-lab details[open] > summary.lab-summary::before {
+      transform: rotate(90deg);
+    }
+
+    body:not(.dark) #influence-robustness-lab summary.lab-summary {
+      background: #f3f4f6;
+      color: #111827;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    #influence-robustness-lab .lab-inner {
+      padding: 0.9rem 1rem 1.1rem;
+      background: rgba(15, 23, 42, 0.98);
+    }
+
+    body:not(.dark) #influence-robustness-lab .lab-inner {
+      background: #ffffff;
+    }
+
+    .ir-note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    body:not(.dark) .ir-note {
+      color: #4b5563;
+    }
+
+    .ir-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 420px) minmax(320px, 520px);
+      gap: 1rem;
+    }
+
+    @media (max-width: 980px) {
+      .ir-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ir-card {
+      border-radius: 0.5rem;
+      padding: 0.75rem 0.9rem;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    body:not(.dark) .ir-card {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+    }
+
+    .ir-controls-row {
+      margin-bottom: 0.5rem;
+    }
+
+    .ir-slider-label {
+      font-size: 0.8rem;
+      margin-bottom: 0.15rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ir-slider-label span.ir-slider-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      margin-left: 0.35rem;
+      color: #e5e7eb;
+    }
+
+    body:not(.dark) .ir-slider-label span.ir-slider-value {
+      color: #111827;
+    }
+
+    .ir-controls-row input[type="range"] {
+      width: 100%;
+    }
+
+    .ir-btn-row {
+      margin-top: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ir-btn-row button {
+      border-radius: 999px;
+      border: none;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #0ea5e9;
+      color: white;
+      font-weight: 500;
+    }
+
+    .ir-btn-row button:hover {
+      background: #0284c7;
+    }
+
+    .ir-legend {
+      font-size: 0.78rem;
+      margin-top: 0.35rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .ir-legend span.swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-right: 0.25rem;
+    }
+
+    .ir-metric-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .ir-metric-table th,
+    .ir-metric-table td {
+      padding: 0.25rem 0.4rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ir-metric-table th:first-child,
+    .ir-metric-table td:first-child {
+      text-align: left;
+    }
+
+    .ir-metric-table thead th {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    body:not(.dark) .ir-metric-table thead th {
+      color: #111827;
+    }
+
+    .ir-tag {
+      display: inline-block;
+      padding: 0.05rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .ir-tag.bad {
+      border-color: #f97316;
+      color: #f97316;
+      background: rgba(248, 113, 113, 0.05);
+    }
+
+    .ir-tag.good {
+      border-color: #22c55e;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.06);
+    }
+
+    .ir-tag.neutral {
+      border-color: #6b7280;
+      color: #e5e7eb;
+      background: rgba(107, 114, 128, 0.08);
+    }
+
+    body:not(.dark) .ir-tag.neutral {
+      color: #111827;
+    }
+
+    /* SVG plots */
+    .ir-plot {
+      width: 100%;
+      height: 260px;
+    }
+
+    .ir-plot svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .ir-explain p,
+    .ir-explain ul {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: #9ca3af;
+    }
+
+    body:not(.dark) .ir-explain p,
+    body:not(.dark) .ir-explain ul {
+      color: #4b5563;
+    }
+
+    .ir-explain ul {
+      padding-left: 1.1rem;
+      margin-top: 0.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .ir-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .ir-kpi {
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .ir-kpi span.val {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      margin-left: 0.3rem;
+    }
+  </style>
+
+  <h3>Influence & Robustness Lab (Interactive Playgrounds)</h3>
+  <p class="ir-note">
+    These playgrounds show how single points, noise and multiple comparisons can quietly break your models,
+    even when headline metrics still look good.
+  </p>
+
+  <!-- Main wrapper collapsible for the whole lab (optional; you can remove if you want it always open) -->
+  <details class="lab-block" open>
+    <summary class="lab-summary">Influence & Robustness Lab – Open Playgrounds</summary>
+    <div class="lab-inner">
+
+      <!-- =========================
+           Playground 1: Outlier Impact 2.0
+           ========================== -->
+      <details class="lab-block" open>
+        <summary class="lab-summary">Outlier Impact 2.0 – How one point can twist a regression line</summary>
+        <div class="lab-inner">
+          <div class="ir-layout">
+            <!-- LEFT: controls + explanation -->
+            <div>
+              <div class="ir-card">
+                <h4>Controls</h4>
+
+                <div class="ir-controls-row">
+                  <div class="ir-slider-label">
+                    <span>Sample size (base points)</span>
+                    <span class="ir-slider-value" id="oi-n-val">30</span>
+                  </div>
+                  <input id="oi-n" type="range" min="10" max="80" step="5" value="30" />
+                </div>
+
+                <div class="ir-controls-row">
+                  <div class="ir-slider-label">
+                    <span>Noise level (σ)</span>
+                    <span class="ir-slider-value" id="oi-noise-val">1.0</span>
+                  </div>
+                  <input id="oi-noise" type="range" min="0" max="2.5" step="0.1" value="1.0" />
+                </div>
+
+                <div class="ir-controls-row">
+                  <div class="ir-slider-label">
+                    <span>Outlier height</span>
+                    <span class="ir-slider-value" id="oi-outlier-y-val">6.0</span>
+                  </div>
+                  <input id="oi-outlier-y" type="range" min="-6" max="8" step="0.2" value="6" />
+                </div>
+
+                <div class="ir-btn-row">
+                  <button type="button" id="oi-resample-btn">Regenerate base sample</button>
+                  <span class="ir-note">
+                    True model: <em>y = 1 + 1.2·x</em>. Outlier shares the same x-range, but you can move it
+                    far up or down.
+                  </span>
+                </div>
+              </div>
+
+              <div class="ir-card ir-explain">
+                <h4>How to read this playground</h4>
+                <p>
+                  This playground shows how a <strong>single outlier</strong> can dramatically change an
+                  ordinary least-squares regression line.
+                </p>
+                <p><strong>Purpose</strong></p>
+                <p>
+                  We simulate a simple linear model and compare two fits: one
+                  <strong>without</strong> the outlier (baseline) and one <strong>with</strong> the outlier.
+                  If a single point can flip the slope or change it a lot, your model is fragile.
+                </p>
+                <p><strong>How to use the controls</strong></p>
+                <ul>
+                  <li><strong>Sample size</strong> – more points ⟹ harder to twist the line.</li>
+                  <li><strong>Noise level</strong> – more noise hides the clean relationship.</li>
+                  <li><strong>Outlier height</strong> – drag far up/down and watch the orange line tilt.</li>
+                  <li><strong>Regenerate</strong> – new random base cloud with same settings.</li>
+                </ul>
+                <p><strong>Interpretation</strong></p>
+                <ul>
+                  <li>Blue dots: base data. Red dot: outlier. Blue line: fit without outlier.</li>
+                  <li>Orange line: fit including outlier.</li>
+                  <li>
+                    In the table, <strong>Δ slope</strong> and the tag
+                    <span class="ir-tag bad">fragile</span>/<span class="ir-tag good">stable</span> tell you
+                    how influential the point is.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- RIGHT: plot + table -->
+            <div class="ir-card">
+              <div class="ir-plot">
+                <svg id="oi-svg"></svg>
+              </div>
+              <div class="ir-legend">
+                <span><span class="swatch" style="background:#38bdf8;"></span> Base points</span>
+                <span><span class="swatch" style="background:#ef4444;"></span> Outlier</span>
+                <span><span class="swatch" style="background:#0ea5e9;"></span> Fit without outlier</span>
+                <span><span class="swatch" style="background:#f97316;"></span> Fit with outlier</span>
+              </div>
+
+              <table class="ir-metric-table" id="oi-table">
+                <thead>
+                  <tr>
+                    <th>Model</th>
+                    <th>Slope</th>
+                    <th>Intercept</th>
+                    <th>R²</th>
+                    <th>Δ slope</th>
+                    <th>Stability</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+
+              <p class="ir-note" style="margin-top:0.35rem;">
+                If one point can flip the conclusion, you don’t have a stable finding – you have an
+                <strong>anecdote</strong> dressed up as a model.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- =========================
+           Playground 2: Cook's Distance & Leverage
+           ========================== -->
+      <details class="lab-block">
+        <summary class="lab-summary">Cook’s Distance & Leverage – Influence of a single high-leverage point</summary>
+        <div class="lab-inner">
+          <div class="ir-layout">
+            <div>
+              <div class="ir-card">
+                <h4>Controls</h4>
+                <div class="ir-controls-row">
+                  <div class="ir-slider-label">
+                    <span>Leverage (x position)</span>
+                    <span class="ir-slider-value" id="cd-x-val">2.5</span>
+                  </div>
+                  <input id="cd-x" type="range" min="0" max="4" step="0.1" value="2.5" />
+                </div>
+
+                <div class="ir-controls-row">
+                  <div class="ir-slider-label">
+                    <span>Residual size (vertical offset)</span>
+                    <span class="ir-slider-value" id="cd-resid-val">2.0</span>
+                  </div>
+                  <input id="cd-resid" type="range" min="0" max="4" step="0.1" value="2.0" />
+                </div>
+
+                <div class="ir-btn-row">
+                  <button type="button" id="cd-resample-btn">Regenerate base sample</button>
+                  <span class="ir-note">
+                    Base model: same <em>y = 1 + 1.2·x</em> with noise. The purple point is the
+                    high-leverage candidate.
+                  </span>
+                </div>
+              </div>
+
+              <div class="ir-card ir-explain">
+                <h4>How to read this playground</h4>
+                <p>
+                  Cook’s Distance combines two ideas:
+                  <strong>leverage</strong> (how unusual x is) and <strong>residual</strong> (how badly the
+                  point is fit). A point with both high leverage and large residual is highly influential.
+                </p>
+                <p><strong>What you see</strong></p>
+                <ul>
+                  <li>Blue dots: regular data used to fit the baseline regression line.</li>
+                  <li>Purple dot: candidate point at the chosen x-position and residual.</li>
+                  <li>
+                    The table shows its Cook’s Distance and a qualitative flag
+                    (<span class="ir-tag good">OK</span> vs
+                    <span class="ir-tag bad">influential</span>).
+                  </li>
+                </ul>
+                <p><strong>Heuristics</strong></p>
+                <ul>
+                  <li>Rough rule: Cook’s D &gt; 1 is clearly influential; D &gt; 0.5 is worth attention.</li>
+                  <li>
+                    High leverage with tiny residual can still be dangerous if a future small mistake there
+                    would flip the slope.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ir-card">
+              <div class="ir-plot">
+                <svg id="cd-svg"></svg>
+              </div>
+              <div class="ir-legend">
+                <span><span class="swatch" style="background:#38bdf8;"></span> Base points</span>
+                <span><span class="swatch" style="background:#a855f7;"></span> Candidate point</span>
+                <span><span class="swatch" style="background:#0ea5e9;"></span> Baseline fit</span>
+                <span><span class="swatch" style="background:#f97316;"></span> Fit with candidate</span>
+              </div>
+
+              <table class="ir-metric-table">
+                <thead>
+                  <tr>
+                    <th>Quantity</th>
+                    <th>Value</th>
+                    <th>Interpretation</th>
+                  </tr>
+                </thead>
+                <tbody id="cd-table-body">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+
+              <p class="ir-note" style="margin-top:0.35rem;">
+                Use this playground to feel that leverage (far-out x) without residual is mild, residual
+                without leverage is local – but the combination gives large Cook’s Distance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- =========================
+           Playground 3: Noise Injection
+           ========================== -->
+      <details class="lab-block">
+        <summary class="lab-summary">Noise Injection Playground – How noise quietly kills stability</summary>
+        <div class="lab-inner">
+          <div class="ir-layout">
+            <div class="ir-card">
+              <h4>Noise controls</h4>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span>Gaussian feature noise</span>
+                  <span class="ir-slider-value" id="ni-gauss-val">0.3</span>
+                </div>
+                <input id="ni-gauss" type="range" min="0" max="1" step="0.05" value="0.3" />
+              </div>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span>Random label flips</span>
+                  <span class="ir-slider-value" id="ni-label-val">0.05</span>
+                </div>
+                <input id="ni-label" type="range" min="0" max="0.4" step="0.01" value="0.05" />
+              </div>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span>Feature noise (jitter)</span>
+                  <span class="ir-slider-value" id="ni-feature-val">0.2</span>
+                </div>
+                <input id="ni-feature" type="range" min="0" max="1" step="0.05" value="0.2" />
+              </div>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span># Irrelevant features</span>
+                  <span class="ir-slider-value" id="ni-irrelevant-val">5</span>
+                </div>
+                <input id="ni-irrelevant" type="range" min="0" max="30" step="1" value="5" />
+              </div>
+
+              <p class="ir-note">
+                This is a pedagogical model: we don’t fit an actual classifier, but apply a simple response
+                surface that mimics how noise hurts cross-validated performance.
+              </p>
+            </div>
+
+            <div class="ir-card">
+              <h4>Effect on performance & stability</h4>
+              <div class="ir-grid-2">
+                <div>
+                  <div class="ir-kpi">
+                    Baseline accuracy (clean data)
+                    <span class="val" id="ni-acc-base">0.90</span>
+                  </div>
+                  <div class="ir-kpi">
+                    Expected train accuracy
+                    <span class="val" id="ni-acc-train">0.90</span>
+                  </div>
+                  <div class="ir-kpi">
+                    Expected CV accuracy
+                    <span class="val" id="ni-acc-cv">0.86</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="ir-kpi">
+                    Variance of CV scores
+                    <span class="val" id="ni-var">0.01</span>
+                  </div>
+                  <div class="ir-kpi">
+                    Stability index (0–1)
+                    <span class="val" id="ni-stab">0.80</span>
+                  </div>
+                  <div class="ir-kpi">
+                    Verdict
+                    <span id="ni-verdict" class="ir-tag neutral">moderate robustness</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ir-explain" style="margin-top:0.6rem;">
+                <p><strong>How to read this playground</strong></p>
+                <ul>
+                  <li>
+                    Increase noise and watch <strong>train accuracy stay high</strong> while
+                    <strong>CV accuracy drops</strong> and variance inflates.
+                  </li>
+                  <li>
+                    Many irrelevant features increase overfitting pressure even if the core signal is
+                    unchanged.
+                  </li>
+                  <li>
+                    The stability index is a compact score combining CV accuracy and variability: low values
+                    mean your model is too dependent on random quirks.
+                  </li>
+                </ul>
+                <p class="ir-note">
+                  Moral: always think in terms of “signal vs noise”. Robust models maintain high CV accuracy
+                  and low instability even when noise rises.
+
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- =========================
+           Playground 4: Bonferroni + VIF Intuition
+           ========================== -->
+      <details class="lab-block">
+        <summary class="lab-summary">Bonferroni & VIF Intuition – Multiple tests and collinearity</summary>
+        <div class="lab-inner">
+          <div class="ir-grid-2">
+            <!-- Bonferroni -->
+            <div class="ir-card">
+              <h4>Bonferroni Correction – Family-wise error</h4>
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span># of independent tests (m)</span>
+                  <span class="ir-slider-value" id="bf-m-val">20</span>
+                </div>
+                <input id="bf-m" type="range" min="1" max="200" step="1" value="20" />
+              </div>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span>Per-test α (uncorrected)</span>
+                  <span class="ir-slider-value" id="bf-alpha-val">0.05</span>
+                </div>
+                <input id="bf-alpha" type="range" min="0.001" max="0.10" step="0.001" value="0.05" />
+              </div>
+
+              <div class="ir-kpi">
+                FWER before correction
+                <span class="val" id="bf-fwer-raw">0.64</span>
+              </div>
+              <div class="ir-kpi">
+                Bonferroni α<sub>corr</sub> = α / m
+                <span class="val" id="bf-alpha-corr">0.0025</span>
+              </div>
+              <div class="ir-kpi">
+                ≈ FWER after correction
+                <span class="val" id="bf-fwer-corr">0.05</span>
+              </div>
+              <div class="ir-kpi">
+                Verdict
+                <span id="bf-verdict" class="ir-tag neutral">reasonable</span>
+              </div>
+
+              <div class="ir-explain" style="margin-top:0.5rem;">
+                <p>
+                  Every extra test is another chance to see “significance” by luck. Bonferroni shrinks the
+                  per-test α so the family-wise error rate stays near your target (e.g. 5%).
+                </p>
+                <p class="ir-note">
+                  Try m = 1 vs m = 100 with α = 0.05 and feel how uncorrected FWER explodes.
+                </p>
+              </div>
+            </div>
+
+            <!-- VIF -->
+            <div class="ir-card">
+              <h4>VIF Intuition – How correlation inflates variance</h4>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span>Correlation between similar features (ρ)</span>
+                  <span class="ir-slider-value" id="vif-rho-val">0.7</span>
+                </div>
+                <input id="vif-rho" type="range" min="0" max="0.99" step="0.01" value="0.70" />
+              </div>
+
+              <div class="ir-controls-row">
+                <div class="ir-slider-label">
+                  <span># of similarly correlated features (k)</span>
+                  <span class="ir-slider-value" id="vif-k-val">3</span>
+                </div>
+                <input id="vif-k" type="range" min="1" max="10" step="1" value="3" />
+              </div>
+
+              <div class="ir-kpi">
+                Approx. R² when regressing one feature on the others
+                <span class="val" id="vif-r2">0.66</span>
+              </div>
+              <div class="ir-kpi">
+                VIF = 1 / (1 − R²)
+                <span class="val" id="vif-val">2.94</span>
+              </div>
+              <div class="ir-kpi">
+                Interpretation
+                <span id="vif-verdict" class="ir-tag good">acceptable</span>
+              </div>
+
+              <div class="ir-explain" style="margin-top:0.5rem;">
+                <p>
+                  VIF tells you how much the variance of a coefficient is inflated by collinearity with other
+                  predictors.
+                </p>
+                <ul>
+                  <li>VIF ≈ 1 – almost no collinearity.</li>
+                  <li>VIF 5–10 – concerning; coefficients unstable and hard to interpret.</li>
+                  <li>VIF &gt; 10 – strong collinearity, rethink your design/features.</li>
+                </ul>
+                <p class="ir-note">
+                  Increase ρ or k and watch VIF explode while the underlying signal hasn’t changed at all.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <script>
+    // ============================
+    // Playground 1: Outlier Impact
+    // ============================
+    (function () {
+      const svg = document.getElementById("oi-svg");
+      const nSlider = document.getElementById("oi-n");
+      const noiseSlider = document.getElementById("oi-noise");
+      const outlierYSlider = document.getElementById("oi-outlier-y");
+      const nVal = document.getElementById("oi-n-val");
+      const noiseVal = document.getElementById("oi-noise-val");
+      const outlierYVal = document.getElementById("oi-outlier-y-val");
+      const resampleBtn = document.getElementById("oi-resample-btn");
+      const tableBody = document.querySelector("#oi-table tbody");
+
+      let baseData = [];
+      const TRUE_B0 = 1;
+      const TRUE_B1 = 1.2;
+      const X_MIN = -3;
+      const X_MAX = 3;
+      const OUTLIER_X = 2.4;
+      let width = 480,
+        height = 260;
+      const margin = { top: 10, right: 12, bottom: 28, left: 32 };
+
+      function updateSize() {
+        const bbox = svg.getBoundingClientRect();
+        if (bbox.width > 0) width = bbox.width;
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      }
+      updateSize();
+      window.addEventListener("resize", updateSize);
+
+      function randn() {
+        let u = 0,
+          v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      }
+
+      function linearFit(xs, ys) {
+        const n = xs.length;
+        let sx = 0,
+          sy = 0,
+          sxx = 0,
+          sxy = 0;
+        for (let i = 0; i < n; i++) {
+          const x = xs[i],
+            y = ys[i];
+          sx += x;
+          sy += y;
+          sxx += x * x;
+          sxy += x * y;
+        }
+        const xbar = sx / n;
+        const ybar = sy / n;
+        const denom = sxx - n * xbar * xbar;
+        const b1 = denom === 0 ? 0 : (sxy - n * xbar * ybar) / denom;
+        const b0 = ybar - b1 * xbar;
+        let ssTot = 0,
+          ssRes = 0;
+        for (let i = 0; i < n; i++) {
+          const yhat = b0 + b1 * xs[i];
+          const diff = ys[i] - yhat;
+          ssRes += diff * diff;
+          const dy = ys[i] - ybar;
+          ssTot += dy * dy;
+        }
+        const r2 = ssTot === 0 ? 0 : 1 - ssRes / ssTot;
+        return { b0, b1, r2 };
+      }
+
+      function generateBaseData() {
+        const n = +nSlider.value;
+        const noise = +noiseSlider.value;
+        baseData = [];
+        for (let i = 0; i < n; i++) {
+          const x = X_MIN + ((X_MAX - X_MIN) * (i + 0.5)) / n + randn() * 0.1;
+          const y = TRUE_B0 + TRUE_B1 * x + randn() * noise;
+          baseData.push({ x, y });
+        }
+      }
+
+      function getOutlier() {
+        return { x: OUTLIER_X, y: +outlierYSlider.value };
+      }
+
+      function computeDomain() {
+        const ys = baseData.map((d) => d.y);
+        ys.push(getOutlier().y);
+        const minY = Math.min(...ys, -6);
+        const maxY = Math.max(...ys, 8);
+        return { xMin: X_MIN - 0.2, xMax: X_MAX + 0.2, yMin: minY - 0.5, yMax: maxY + 0.5 };
+      }
+
+      function scale(domain) {
+        const { xMin, xMax, yMin, yMax } = domain;
+        const innerW = width - margin.left - margin.right;
+        const innerH = height - margin.top - margin.bottom;
+        const sx = (x) => margin.left + ((x - xMin) / (xMax - xMin || 1)) * innerW;
+        const sy = (y) => margin.top + innerH - ((y - yMin) / (yMax - yMin || 1)) * innerH;
+        return { sx, sy };
+      }
+
+      function clearSvg() {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+      }
+
+      function drawAxes(domain, sx, sy) {
+        const innerH = height - margin.top - margin.bottom;
+        const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        axis.setAttribute("x1", margin.left);
+        axis.setAttribute("x2", width - margin.right);
+        axis.setAttribute("y1", margin.top + innerH);
+        axis.setAttribute("y2", margin.top + innerH);
+        axis.setAttribute("stroke", "rgba(148,163,184,0.7)");
+        axis.setAttribute("stroke-width", "1");
+        svg.appendChild(axis);
+        [-2, 0, 2].forEach((val) => {
+          if (val < domain.xMin || val > domain.xMax) return;
+          const x = sx(val);
+          const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          tick.setAttribute("x1", x);
+          tick.setAttribute("x2", x);
+          tick.setAttribute("y1", margin.top + innerH);
+          tick.setAttribute("y2", margin.top + innerH + 4);
+          tick.setAttribute("stroke", "rgba(148,163,184,0.7)");
+          tick.setAttribute("stroke-width", "1");
+          svg.appendChild(tick);
+          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          label.textContent = val.toString();
+          label.setAttribute("x", x);
+          label.setAttribute("y", margin.top + innerH + 16);
+          label.setAttribute("text-anchor", "middle");
+          label.setAttribute("font-size", "9");
+          label.setAttribute("fill", "rgba(148,163,184,0.9)");
+          svg.appendChild(label);
+        });
+      }
+
+      function drawLine(b0, b1, domain, sx, sy, color) {
+        const x1 = domain.xMin;
+        const x2 = domain.xMax;
+        const y1 = b0 + b1 * x1;
+        const y2 = b0 + b1 * x2;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", sx(x1));
+        line.setAttribute("y1", sy(y1));
+        line.setAttribute("x2", sx(x2));
+        line.setAttribute("y2", sy(y2));
+        line.setAttribute("stroke", color);
+        line.setAttribute("stroke-width", "2");
+        svg.appendChild(line);
+      }
+
+      function drawCircle(x, y, sx, sy, color, r) {
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", sx(x));
+        c.setAttribute("cy", sy(y));
+        c.setAttribute("r", r);
+        c.setAttribute("fill", color);
+        svg.appendChild(c);
+      }
+
+      function updateTable(baseFit, withFit) {
+        const delta = withFit.b1 - baseFit.b1;
+        tableBody.innerHTML = "";
+        const fmt = (v) => v.toFixed(3);
+
+        function addRow(name, fit, deltaSlope, isBase) {
+          const tr = document.createElement("tr");
+          const nameTd = document.createElement("td");
+          nameTd.textContent = name;
+          tr.appendChild(nameTd);
+
+          ["b1", "b0", "r2"].forEach((key) => {
+            const td = document.createElement("td");
+            td.textContent = fmt(fit[key]);
+            tr.appendChild(td);
+          });
+
+          const dTd = document.createElement("td");
+          dTd.textContent = isBase ? "–" : fmt(deltaSlope);
+          tr.appendChild(dTd);
+
+          const sTd = document.createElement("td");
+          if (isBase) {
+            sTd.textContent = "reference";
+          } else {
+            const tag = document.createElement("span");
+            tag.className = "ir-tag " + (Math.abs(deltaSlope) < 0.15 ? "good" : "bad");
+            tag.textContent = Math.abs(deltaSlope) < 0.15 ? "stable" : "fragile";
+            sTd.appendChild(tag);
+          }
+          tr.appendChild(sTd);
+          tableBody.appendChild(tr);
+        }
+
+        addRow("Baseline (no outlier)", baseFit, 0, true);
+        addRow("With outlier", withFit, delta, false);
+      }
+
+      function redraw() {
+        nVal.textContent = nSlider.value;
+        noiseVal.textContent = noiseSlider.value;
+        outlierYVal.textContent = outlierYSlider.value;
+
+        const outlier = getOutlier();
+        const xsBase = baseData.map((d) => d.x);
+        const ysBase = baseData.map((d) => d.y);
+        const baseFit = linearFit(xsBase, ysBase);
+        const xsWith = xsBase.concat(outlier.x);
+        const ysWith = ysBase.concat(outlier.y);
+        const withFit = linearFit(xsWith, ysWith);
+
+        const domain = computeDomain();
+        const { sx, sy } = scale(domain);
+        clearSvg();
+        drawAxes(domain, sx, sy);
+        baseData.forEach((d) => drawCircle(d.x, d.y, sx, sy, "#38bdf8", 3));
+        drawCircle(outlier.x, outlier.y, sx, sy, "#ef4444", 4);
+        drawLine(baseFit.b0, baseFit.b1, domain, sx, sy, "#0ea5e9");
+        drawLine(withFit.b0, withFit.b1, domain, sx, sy, "#f97316");
+        updateTable(baseFit, withFit);
+      }
+
+      function init() {
+        generateBaseData();
+        redraw();
+      }
+
+      nSlider.addEventListener("input", () => {
+        generateBaseData();
+        redraw();
+      });
+      noiseSlider.addEventListener("input", () => {
+        generateBaseData();
+        redraw();
+      });
+      outlierYSlider.addEventListener("input", redraw);
+      resampleBtn.addEventListener("click", () => {
+        generateBaseData();
+        redraw();
+      });
+
+      init();
+    })();
+
+    // ======================================
+    // Playground 2: Cook's Distance Explorer
+    // ======================================
+    (function () {
+      const svg = document.getElementById("cd-svg");
+      const xSlider = document.getElementById("cd-x");
+      const residSlider = document.getElementById("cd-resid");
+      const xVal = document.getElementById("cd-x-val");
+      const residVal = document.getElementById("cd-resid-val");
+      const resampleBtn = document.getElementById("cd-resample-btn");
+      const tableBody = document.getElementById("cd-table-body");
+
+      const TRUE_B0 = 1;
+      const TRUE_B1 = 1.2;
+      const X_MIN = -3;
+      const X_MAX = 3;
+      let baseData = [];
+      let width = 480,
+        height = 260;
+      const margin = { top: 10, right: 12, bottom: 28, left: 32 };
+
+      function updateSize() {
+        const bbox = svg.getBoundingClientRect();
+        if (bbox.width > 0) width = bbox.width;
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      }
+      updateSize();
+      window.addEventListener("resize", updateSize);
+
+      function randn() {
+        let u = 0,
+          v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      }
+
+      function generateBaseData() {
+        baseData = [];
+        const n = 25;
+        const noise = 1.0;
+        for (let i = 0; i < n; i++) {
+          const x = X_MIN + ((X_MAX - X_MIN) * (i + 0.5)) / n + randn() * 0.1;
+          const y = TRUE_B0 + TRUE_B1 * x + randn() * noise;
+          baseData.push({ x, y });
+        }
+      }
+
+      function linearFit(xs, ys) {
+        const n = xs.length;
+        let sx = 0,
+          sy = 0,
+          sxx = 0,
+          sxy = 0;
+        for (let i = 0; i < n; i++) {
+          const x = xs[i],
+            y = ys[i];
+          sx += x;
+          sy += y;
+          sxx += x * x;
+          sxy += x * y;
+        }
+        const xbar = sx / n;
+        const ybar = sy / n;
+        const denom = sxx - n * xbar * xbar;
+        const b1 = denom === 0 ? 0 : (sxy - n * xbar * ybar) / denom;
+        const b0 = ybar - b1 * xbar;
+        let ssRes = 0;
+        for (let i = 0; i < n; i++) {
+          const yhat = b0 + b1 * xs[i];
+          const diff = ys[i] - yhat;
+          ssRes += diff * diff;
+        }
+        const sigma2 = ssRes / (n - 2);
+        return { b0, b1, sigma2, xbar, sxx, n };
+      }
+
+      function cookDistanceForPoint(cand, fitBase) {
+        const { b0, b1, sigma2, xbar, sxx, n } = fitBase;
+        const p = 2; // intercept + slope
+        const yhat = b0 + b1 * cand.x;
+        const e = cand.y - yhat;
+        const h = 1 / n + ((cand.x - xbar) ** 2) / (sxx - n * xbar * xbar || 1e-6);
+        const D = (e * e / (p * sigma2)) * (h / (1 - h) ** 2);
+        return { D, e, h };
+      }
+
+      function computeDomain(cand) {
+        const ys = baseData.map((d) => d.y).concat(cand.y);
+        const minY = Math.min(...ys, -6);
+        const maxY = Math.max(...ys, 8);
+        return { xMin: X_MIN - 0.2, xMax: Math.max(X_MAX, cand.x) + 0.5, yMin: minY - 0.5, yMax: maxY + 0.5 };
+      }
+
+      function scale(domain) {
+        const { xMin, xMax, yMin, yMax } = domain;
+        const innerW = width - margin.left - margin.right;
+        const innerH = height - margin.top - margin.bottom;
+        const sx = (x) => margin.left + ((x - xMin) / (xMax - xMin || 1)) * innerW;
+        const sy = (y) => margin.top + innerH - ((y - yMin) / (yMax - yMin || 1)) * innerH;
+        return { sx, sy };
+      }
+
+      function clearSvg() {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+      }
+
+      function drawAxes(domain, sx) {
+        const innerH = height - margin.top - margin.bottom;
+        const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        axis.setAttribute("x1", margin.left);
+        axis.setAttribute("x2", width - margin.right);
+        axis.setAttribute("y1", margin.top + innerH);
+        axis.setAttribute("y2", margin.top + innerH);
+        axis.setAttribute("stroke", "rgba(148,163,184,0.7)");
+        axis.setAttribute("stroke-width", "1");
+        svg.appendChild(axis);
+        [-2, 0, 2, 4].forEach((val) => {
+          if (val < domain.xMin || val > domain.xMax) return;
+          const x = sx(val);
+          const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          tick.setAttribute("x1", x);
+          tick.setAttribute("x2", x);
+          tick.setAttribute("y1", margin.top + innerH);
+          tick.setAttribute("y2", margin.top + innerH + 4);
+          tick.setAttribute("stroke", "rgba(148,163,184,0.7)");
+          tick.setAttribute("stroke-width", "1");
+          svg.appendChild(tick);
+        });
+      }
+
+      function drawLine(b0, b1, domain, sx, sy, color) {
+        const x1 = domain.xMin;
+        const x2 = domain.xMax;
+        const y1 = b0 + b1 * x1;
+        const y2 = b0 + b1 * x2;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", sx(x1));
+        line.setAttribute("y1", sy(y1));
+        line.setAttribute("x2", sx(x2));
+        line.setAttribute("y2", sy(y2));
+        line.setAttribute("stroke", color);
+        line.setAttribute("stroke-width", "2");
+        svg.appendChild(line);
+      }
+
+      function drawCircle(x, y, sx, sy, color, r) {
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", sx(x));
+        c.setAttribute("cy", sy(y));
+        c.setAttribute("r", r);
+        c.setAttribute("fill", color);
+        svg.appendChild(c);
+      }
+
+      function redraw() {
+        xVal.textContent = (+xSlider.value).toFixed(1);
+        residVal.textContent = (+residSlider.value).toFixed(1);
+
+        const baseXs = baseData.map((d) => d.x);
+        const baseYs = baseData.map((d) => d.y);
+        const fitBase = linearFit(baseXs, baseYs);
+
+        const candX = X_MAX + +xSlider.value; // move to the right
+        const cleanY = TRUE_B0 + TRUE_B1 * candX;
+        const candY = cleanY + (Math.sign(Math.random() - 0.5) || 1) * +residSlider.value;
+        const cand = { x: candX, y: candY };
+
+        const domain = computeDomain(cand);
+        const { sx, sy } = scale(domain);
+        clearSvg();
+        drawAxes(domain, sx);
+        baseData.forEach((d) => drawCircle(d.x, d.y, sx, sy, "#38bdf8", 3));
+        drawCircle(cand.x, cand.y, sx, sy, "#a855f7", 4);
+        drawLine(fitBase.b0, fitBase.b1, domain, sx, sy, "#0ea5e9");
+
+        const xsWith = baseXs.concat(cand.x);
+        const ysWith = baseYs.concat(cand.y);
+        const fitWith = linearFit(xsWith, ysWith);
+        drawLine(fitWith.b0, fitWith.b1, domain, sx, sy, "#f97316");
+
+        const info = cookDistanceForPoint(cand, fitBase);
+        const fmt = (v) => v.toFixed(3);
+        tableBody.innerHTML = "";
+        const rows = [
+          ["Leverage h", fmt(info.h), info.h > 0.3 ? "high leverage" : "ordinary"],
+          ["Residual e", fmt(info.e), Math.abs(info.e) > 2 ? "large residual" : "moderate"],
+          [
+            "Cook's Distance D",
+            fmt(info.D),
+            info.D > 1
+              ? "strongly influential"
+              : info.D > 0.5
+              ? "influential"
+              : "not strongly influential"
+          ]
+        ];
+
+        rows.forEach((r, i) => {
+          const tr = document.createElement("tr");
+          const q = document.createElement("td");
+          q.textContent = r[0];
+          const v = document.createElement("td");
+          v.textContent = r[1];
+          const interp = document.createElement("td");
+          const tag = document.createElement("span");
+          tag.className =
+            "ir-tag " +
+            (i === 2
+              ? info.D > 0.5
+                ? "bad"
+                : "good"
+              : "neutral");
+          tag.textContent = r[2];
+          interp.appendChild(tag);
+          tr.appendChild(q);
+          tr.appendChild(v);
+          tr.appendChild(interp);
+          tableBody.appendChild(tr);
+        });
+      }
+
+      function init() {
+        generateBaseData();
+        redraw();
+      }
+
+      xSlider.addEventListener("input", redraw);
+      residSlider.addEventListener("input", redraw);
+      resampleBtn.addEventListener("click", () => {
+        generateBaseData();
+        redraw();
+      });
+
+      init();
+    })();
+
+    // ===============================
+    // Playground 3: Noise Injection
+    // ===============================
+    (function () {
+      const gauss = document.getElementById("ni-gauss");
+      const label = document.getElementById("ni-label");
+      const feat = document.getElementById("ni-feature");
+      const irr = document.getElementById("ni-irrelevant");
+
+      const gaussVal = document.getElementById("ni-gauss-val");
+      const labelVal = document.getElementById("ni-label-val");
+      const featVal = document.getElementById("ni-feature-val");
+      const irrVal = document.getElementById("ni-irrelevant-val");
+
+      const accBase = document.getElementById("ni-acc-base");
+      const accTrain = document.getElementById("ni-acc-train");
+      const accCv = document.getElementById("ni-acc-cv");
+      const varCv = document.getElementById("ni-var");
+      const stab = document.getElementById("ni-stab");
+      const verdict = document.getElementById("ni-verdict");
+
+      const BASE_ACC = 0.9;
+
+      function update() {
+        const g = +gauss.value;
+        const lf = +label.value;
+        const f = +feat.value;
+        const k = +irr.value;
+
+        gaussVal.textContent = g.toFixed(2);
+        labelVal.textContent = lf.toFixed(2);
+        featVal.textContent = f.toFixed(2);
+        irrVal.textContent = k.toString();
+
+        accBase.textContent = BASE_ACC.toFixed(2);
+
+        const train = Math.min(0.99, BASE_ACC + 0.15 * f - 0.2 * lf);
+        const cv =
+          BASE_ACC -
+          0.18 * g -
+          0.4 * lf -
+          0.15 * f -
+          0.01 * Math.min(30, k) / 30;
+
+        const varScore = 0.01 + 0.03 * g + 0.06 * lf + 0.04 * f + 0.03 * Math.min(30, k) / 30;
+        const stabScore = Math.max(0, Math.min(1, cv - varScore));
+
+        accTrain.textContent = Math.max(0, Math.min(1, train)).toFixed(2);
+        accCv.textContent = Math.max(0, Math.min(1, cv)).toFixed(2);
+        varCv.textContent = Math.max(0, varScore).toFixed(3);
+        stab.textContent = stabScore.toFixed(2);
+
+        verdict.classList.remove("good", "bad", "neutral");
+        if (stabScore > 0.75 && cv > 0.8) {
+          verdict.classList.add("good");
+          verdict.textContent = "robust";
+        } else if (stabScore < 0.45 || cv < 0.7) {
+          verdict.classList.add("bad");
+          verdict.textContent = "fragile / overfit risk";
+        } else {
+          verdict.classList.add("neutral");
+          verdict.textContent = "moderate robustness";
+        }
+      }
+
+      [gauss, label, feat, irr].forEach((el) => el.addEventListener("input", update));
+      update();
+    })();
+
+    // ===================================
+    // Playground 4: Bonferroni & VIF
+    // ===================================
+    (function () {
+      // Bonferroni
+      const mSlider = document.getElementById("bf-m");
+      const aSlider = document.getElementById("bf-alpha");
+      const mVal = document.getElementById("bf-m-val");
+      const aVal = document.getElementById("bf-alpha-val");
+      const fwerRawEl = document.getElementById("bf-fwer-raw");
+      const aCorrEl = document.getElementById("bf-alpha-corr");
+      const fwerCorrEl = document.getElementById("bf-fwer-corr");
+      const verdict = document.getElementById("bf-verdict");
+
+      function updateBonf() {
+        const m = +mSlider.value;
+        const a = +aSlider.value;
+        mVal.textContent = m.toString();
+        aVal.textContent = a.toFixed(3);
+
+        const fwerRaw = 1 - Math.pow(1 - a, m);
+        const aCorr = a / m;
+        const fwerCorr = Math.min(1, m * aCorr); // ≈ a
+
+        fwerRawEl.textContent = fwerRaw.toFixed(3);
+        aCorrEl.textContent = aCorr.toFixed(4);
+        fwerCorrEl.textContent = fwerCorr.toFixed(3);
+
+        verdict.classList.remove("good", "bad", "neutral");
+        if (fwerRaw > 0.5 && m > 20) {
+          verdict.classList.add("bad");
+          verdict.textContent = "FWER out of control";
+        } else if (aCorr < 0.0005 && m > 100) {
+          verdict.classList.add("neutral");
+          verdict.textContent = "very conservative";
+        } else {
+          verdict.classList.add("good");
+          verdict.textContent = "reasonable";
+        }
+      }
+
+      mSlider.addEventListener("input", updateBonf);
+      aSlider.addEventListener("input", updateBonf);
+      updateBonf();
+
+      // VIF
+      const rhoSlider = document.getElementById("vif-rho");
+      const kSlider = document.getElementById("vif-k");
+      const rhoVal = document.getElementById("vif-rho-val");
+      const kVal = document.getElementById("vif-k-val");
+      const r2El = document.getElementById("vif-r2");
+      const vifEl = document.getElementById("vif-val");
+      const vifVerdict = document.getElementById("vif-verdict");
+
+      function updateVIF() {
+        const rho = +rhoSlider.value;
+        const k = +kSlider.value;
+        rhoVal.textContent = rho.toFixed(2);
+        kVal.textContent = k.toString();
+
+        // crude cartoon: effective R^2 grows with rho^2 and k, capped at 0.99
+        const r2 = Math.min(0.99, rho * rho * k);
+        const vif = 1 / (1 - r2);
+
+        r2El.textContent = r2.toFixed(2);
+        vifEl.textContent = vif.toFixed(2);
+
+        vifVerdict.classList.remove("good", "bad", "neutral");
+        if (vif < 3) {
+          vifVerdict.classList.add("good");
+          vifVerdict.textContent = "acceptable";
+        } else if (vif < 10) {
+          vifVerdict.classList.add("neutral");
+          vifVerdict.textContent = "concerning";
+        } else {
+          vifVerdict.classList.add("bad");
+          vifVerdict.textContent = "severe collinearity";
+        }
+      }
+
+      rhoSlider.addEventListener("input", updateVIF);
+      kSlider.addEventListener("input", updateVIF);
+      updateVIF();
+    })();
+  </script>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- ===================================== -->
 <!-- 7. MODEL SELECTION CRITERIA           -->
 <!-- ===================================== -->
@@ -3706,5 +6227,24 @@ exp.show_in_notebook()
 </div>
 
   </details>
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </body>
 </html>
+
+
