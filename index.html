@@ -339,6 +339,96 @@ tbody tr:nth-child(even) {
   );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Cutting-edge metrics badges ===== */
+
+.cutting-list {
+  margin-top: 0.75rem;
+}
+
+.cutting-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.cutting-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.3;
+  border: 1px solid transparent;
+}
+
+.cutting-badge--prod {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.cutting-badge--practice {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.cutting-badge--research {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.dark-mode .cutting-badge--prod {
+  background: rgba(22, 163, 74, 0.15);
+  border-color: rgba(22, 163, 74, 0.4);
+  color: #bbf7d0;
+}
+
+.dark-mode .cutting-badge--practice {
+  background: rgba(202, 138, 4, 0.15);
+  border-color: rgba(202, 138, 4, 0.4);
+  color: #facc15;
+}
+
+.dark-mode .cutting-badge--research {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.45);
+  color: #bfdbfe;
+}
+
+.cutting-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Wrapper + numeric scale under color bars */
 .colorbar-wrapper { margin-bottom: 8px; }
 .colorbar-scale {
@@ -7535,6 +7625,129 @@ implementations.<br><br>
 </div>
 </details>
 
+
+
+
+
+
+
+
+
+<!-- ================================
+     Cutting-Edge ML Metrics (2020–2025)
+     ================================ -->
+<details class="metric-section">
+  <summary>Cutting-Edge ML Metrics (2020–2025)</summary>
+
+  <section class="ref-card">
+   
+    <p class="ref-description">
+      Modern machine-learning research uses metrics that go beyond classical AUC, RMSE, and p-values.
+      These tools measure calibration quality, distribution shift, risk ranking, uncertainty, robustness,
+      fairness, and high-dimensional model stability.
+    </p>
+
+    <!-- Optional tiny legend for the coloured badges -->
+
+    <ul class="ref-list cutting-list">
+      <li>
+        <div class="cutting-header">
+          <strong>Advanced Calibration Metrics</strong>
+          <span class="cutting-badge cutting-badge--practice">research → practice</span>
+        </div>
+        ACE (Adaptive Calibration Error), TCE (Thresholded Calibration Error),
+        Squared-ECE, Adaptive Reliability Error.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Skill Scores</strong>
+          <span class="cutting-badge cutting-badge--prod">common in production</span>
+        </div>
+        Brier Skill Score (BSS) — compares your model to a naïve baseline to give calibration improvement.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Modern Ranking &amp; Risk Metrics</strong>
+          <span class="cutting-badge cutting-badge--practice">research → practice</span>
+        </div>
+        C-index, Somers’ D, IDI (Integrated Discrimination Improvement),
+        NRI (Net Reclassification Improvement).
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Bayesian / Predictive Model Selection</strong>
+          <span class="cutting-badge cutting-badge--practice">research → practice</span>
+        </div>
+        WAIC, PSIS-LOO, Expected Log Predictive Density (ELPD), Pareto-k diagnostics.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Distribution Shift Diagnostics</strong>
+          <span class="cutting-badge cutting-badge--practice">research → practice</span>
+        </div>
+        PSI (Population Stability Index), KL Divergence, Maximum Mean Discrepancy (MMD),
+        Wasserstein Distance.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Uncertainty Diagnostics</strong>
+          <span class="cutting-badge cutting-badge--research">primarily research</span>
+        </div>
+        Negative Log-Likelihood (NLL), epistemic vs aleatoric variance decomposition,
+        Expected Sharpness.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Robustness &amp; Stability</strong>
+          <span class="cutting-badge cutting-badge--research">primarily research</span>
+        </div>
+        Model Stability Index (MSI), permutation effect-size curves, influence-function diagnostics.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Fairness / Ethical ML Metrics</strong>
+          <span class="cutting-badge cutting-badge--practice">research → practice</span>
+        </div>
+        Equalized Odds, Demographic Parity, Predictive Parity,
+        Calibration Within Groups.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Interaction-Aware Interpretability</strong>
+          <span class="cutting-badge cutting-badge--research">primarily research</span>
+        </div>
+        SHAP Interaction Values — modern extension of SHAP for modelling non-linear pairwise effects.
+      </li>
+
+      <li>
+        <div class="cutting-header">
+          <strong>Leakage Diagnostics</strong>
+          <span class="cutting-badge cutting-badge--research">primarily research</span>
+        </div>
+        Target Leakage Test (permutation with shuffled labels),
+        Cross-fold Correlation Leakage Index.
+      </li>
+    </ul>
+  </section>
+</details>
+
+
+
+
+
+
+
+
+
+
 <!-- ===================================== -->
 <!-- 8. MODEL INTERPRETABILITY & EXPLAINS  -->
 <!-- ===================================== -->
@@ -8367,7 +8580,9 @@ exp.show_in_notebook()
       "ACE (Adaptive Calibration Error)": "A calibration error that uses adaptive bins instead of fixed ones, reducing bias in the estimate.",
       "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
       "Adam optimization": "An extension of stochastic gradient descent that keeps running averages of gradients and squared gradients to give each parameter its own adaptive learning rate.",
+      "Adaptive Reliability Error": "A modern calibration metric that uses adaptive binning and proper scoring-rule ideas to measure miscalibration more reliably, especially when data are sparse in some probability ranges.",
       "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
+      "Aleatoric uncertainty": "Uncertainty that comes from inherent randomness or noise in the data-generating process; it cannot be reduced even with infinite data.",
       "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null hypothesis.",
       "Anderson–Darling test": "A statistical test that checks whether data follow a specific distribution, giving more weight to deviations in the tails than tests like KS.",
       "ANOVA (Analysis of Variance)": "A family of tests that compare means across multiple groups by checking whether between-group variation is larger than expected from within-group noise.",
@@ -8432,6 +8647,7 @@ exp.show_in_notebook()
       "Covariance": "A measure of how two variables vary together. Positive covariance means they tend to increase or decrease together.",
       "Cox proportional hazards model": "A regression model for time-to-event outcomes. Estimates hazard ratios without making assumptions about the baseline hazard. Assumes proportional hazards over time.",
       "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
+      "Cross-fold Correlation Leakage Index": "A heuristic diagnostic that checks how strongly predictions or residuals correlate across cross-validation folds to detect potential data leakage or dependence between folds.",
       "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
       "Cumulative distribution function (CDF)": "Function that gives the probability that a random variable is less than or equal to a given value.",
     
@@ -8467,11 +8683,13 @@ exp.show_in_notebook()
       "Effect size": "How big a difference or relationship is, not just whether it is statistically significant. In test contexts, it complements the p-value.",
       "EBIC (Extended BIC)": "An extension of BIC with additional penalty for high-dimensional models (many predictors).",
       "ELPD (Expected Log Predictive Density)": "A Bayesian model-comparison measure based on out-of-sample predictive accuracy; higher is better.",
+      "Epistemic uncertainty": "Uncertainty that comes from limited knowledge or data about the model or process; in principle it can be reduced with more or better data.",
       "Equalized odds": "Fairness requirement that true positive and false positive rates be similar across protected groups.",
       "ETL": "Extract, Transform, Load – pipelines that pull data from sources, clean/transform it, and load it into a destination system.",
       "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
       "Event (in survival analysis)": "The outcome of interest occurring in time-to-event data — for example death, relapse, churn, equipment failure.",
       "Expected counts": "Theoretical cell counts a chi-square test uses to see how far observed counts deviate from what chance alone would produce.",
+      "Expected Sharpness": "A probabilistic-forecast metric that prefers predictions which are both well calibrated and concentrated (sharp) rather than overly diffuse.",
     
       // ---------- F ----------
       "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
@@ -8535,6 +8753,7 @@ exp.show_in_notebook()
       // ---------- K ----------
       "Kaplan–Meier estimator": "A non-parametric method for estimating the survival function — the probability of an event (such as death) not occurring up to each time point. Handles right-censored data where some individuals' outcomes are not yet observed. Often visualised as a stepwise survival curve and used to compare groups.",
       "Kaplan–Meier curve": "A non-parametric estimate of the survival function. Produces a step-shaped curve showing the fraction still event-free over time.",
+      "KL divergence": "A measure of how one probability distribution differs from another reference distribution; often used to quantify distribution shift or model misspecification.",
       "K-Means": "A clustering algorithm that partitions data into k clusters by alternating assignment and centroid updates.",
       "Keras": "A high-level neural-network API in Python that runs on backends like TensorFlow.",
       "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
@@ -8593,6 +8812,7 @@ exp.show_in_notebook()
       "NaN": "Stands for ‘Not a Number’: a special value representing missing or undefined numeric results.",
       "Natural Language Processing (NLP)": "Techniques that allow computers to process and analyse human language data.",
       "Negative log-likelihood": "Loss equal to minus the log of the predicted probability of the observed outcomes; lower is better.",
+      "Net Reclassification Improvement (NRI)": "A risk-model metric that measures how much a new model improves the correct movement of individuals between risk categories compared with a reference model.",
       "Nominal variable": "A categorical variable whose categories have no natural order (for example city names).",
       "Non-parametric": "Methods that make few assumptions about distribution shape or functional form, often using ranks or resampling.",
       "Normal distribution": "The classic bell-shaped continuous distribution; many methods assume data or residuals are approximately normal.",
@@ -8619,6 +8839,7 @@ exp.show_in_notebook()
       "Paired t-test": "A t-test that compares the mean difference between paired or matched observations (for example before–after measurements).",
       "Pandas": "A Python library providing DataFrame objects and tools for data wrangling and analysis.",
       "Parameters": "Model quantities learned from data (for example regression coefficients, neural-network weights).",
+      "Pareto-k diagnostics": "Diagnostics used with PSIS-LOO; large k values flag influential observations where the importance-sampling approximation may be unreliable.",
       "Pattern recognition": "Finding and classifying recurring patterns in data, often using machine-learning methods.",
       "Percentile": "A value below which a given percentage of observations fall (for example 90th percentile is higher than 90% of the data).",
       "Pie chart": "A circular chart divided into slices that represent parts of a whole.",
@@ -8631,6 +8852,7 @@ exp.show_in_notebook()
       "Pre-trained model": "A model already trained on a large related dataset and reused as a starting point for a new task.",
       "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
       "Precision and recall": "Paired metrics: precision focuses on quality of positive predictions; recall focuses on finding all true positives.",
+      "Predictive parity": "A fairness criterion where the positive predictive value (precision) is similar across groups; if the model predicts positive, the chance of being truly positive is similar in each group.",
       "Predictor variable": "A feature used to explain or predict the outcome (synonym of independent variable).",
       "Principal Component Analysis (PCA)": "A dimensionality reduction method that transforms correlated variables into a smaller set of uncorrelated components.",
       "Proportional hazards assumption": "The assumption in a Cox model that hazard ratios between groups remain constant over time. Violations can invalidate inference.",
@@ -8670,6 +8892,7 @@ exp.show_in_notebook()
       "Sample size effect (tests)": "The phenomenon that large samples make tiny effects statistically significant, while small samples may miss real effects.",
       "Scala": "A JVM language that combines object-oriented and functional programming.",
       "Semi-supervised learning": "Learning from a mix of labelled and unlabelled data.",
+      "SHAP interaction values": "An extension of SHAP that decomposes a prediction into main effects and pairwise interaction effects between features, capturing non-linear interactions.",
       "SHAP values": "Feature-attribution method based on Shapley values that decomposes a prediction into contributions of each feature.",
       "Shapiro–Wilk test": "A powerful normality test for small to medium samples. Very sensitive to even mild deviations with large n.",
       "Significance (statistical)": "Shorthand for ‘statistically significant’; usually means the p-value is below alpha. It does not guarantee a large or important effect.",
@@ -8691,13 +8914,15 @@ exp.show_in_notebook()
       "Supervised learning": "Learning a mapping from inputs to outputs using labelled data.",
       "Support Vector Machine (SVM)": "A classifier that finds a hyperplane with maximum margin between classes, possibly in a transformed feature space.",
       "Survival analysis": "Statistical methods for modelling time until an event occurs (death, failure, recovery). Often involves censoring, Kaplan–Meier curves, and hazard models like Cox regression. It handles censoring, where for some subjects we only know that the event has not yet happened by the end of follow-up.",
-      "Survival analysis / time-to-event methods": "Kaplan–Meier curve, Cox proportional hazards model, hazard ratio, censoring, log-rank test.",
+      "Survival analysis / time-to-event methods": "Kaplan–Meier curve, Log-rank test, Cox proportional hazards model, Hazard ratio, Censoring, C-index, Time-dependent AUC, Brier score (time-dependent), RMST, Competing risks",
       "Survival function": "The probability of being event-free beyond time t. Estimated using Kaplan–Meier or parametric survival models.",
       "Survival / Time-to-Event Performance": "Kaplan–Meier, C-index, Brier over time, Cox model",  
+      "Squared ECE": "A variant of Expected Calibration Error that uses squared differences between predicted and observed frequencies, putting extra weight on larger miscalibration.",
     
       // ---------- T ----------
       "Tail behaviour": "How the extreme values (tails) of a distribution behave. Heavy tails mean more extreme outliers than a normal distribution would predict.",
       "Target": "The outcome the model is trying to predict. Also called label, response or dependent variable.",
+      "Target leakage test": "A diagnostic in which target labels are shuffled and the model is retrained; if performance remains high, it suggests that leaked target information is present in the features or pipeline.",
       "Time-series tests": "Durbin–Watson test, Ljung–Box test",
       "TCE (Thresholded Calibration Error)": "Calibration metric that focuses on predictions above a chosen confidence threshold, highlighting miscalibration where the model is most confident.",
       "TensorFlow": "An open-source library from Google for numerical computation and building machine-learning models, especially deep learning.",
@@ -9070,3 +9295,5 @@ window.addEventListener("scroll", () => {
   
 </body>
 </html>
+
+
