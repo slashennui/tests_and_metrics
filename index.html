@@ -1132,6 +1132,15 @@ body.dark-mode .ref-table td {
 
 
 
+.metrics-table-compact {
+  font-size: 0.85rem;
+}
+
+.metrics-table-compact th,
+.metrics-table-compact td {
+  padding: 0.3rem 0.5rem;
+  vertical-align: top;
+}
 
 
 
@@ -1998,27 +2007,41 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
   }
 </style>
 
-<!-- ===== Simple JS to toggle the section ===== -->
+<!-- ===== Simple JS to toggle collapsible sections ===== -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const btn = document.getElementById('condensed-ref-toggle');
-    const content = document.getElementById('condensed-reference');
 
-    // start collapsed
-    content.style.display = 'none';
+    function setupCollapsible(btnId, contentId, labelText) {
+      const btn = document.getElementById(btnId);
+      const content = document.getElementById(contentId);
+      if (!btn || !content) return;
 
-    btn.addEventListener('click', () => {
-      const isHidden = content.style.display === 'none';
-      content.style.display = isHidden ? 'block' : 'none';
-      btn.textContent = (isHidden ? '▼ ' : '▸ ') +
-        'Data Science Model Evaluation – Condensed Reference Sheet';
-    });
+      // start collapsed
+      content.style.display = 'none';
+      btn.textContent = '▸ ' + labelText;
+
+      btn.addEventListener('click', () => {
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? 'block' : 'none';
+        btn.textContent = (isHidden ? '▼ ' : '▸ ') + labelText;
+      });
+    }
+
+    // 1) existing condensed reference sheet
+    setupCollapsible(
+      'condensed-ref-toggle',
+      'condensed-reference',
+      'Data Science Model Evaluation – Condensed Reference Sheet'
+    );
+
+    // 2) new Statistical Tests & Assumptions section
+    setupCollapsible(
+      'stat-tests-toggle',
+      'stat-tests-section',
+      'Statistical Tests & Assumptions – Quick Reference'
+    );
   });
 </script>
-
-
-
-
 
 
 
@@ -3074,6 +3097,358 @@ than differences in means.<br><br>
   <li><strong>KS test:</strong> detect distribution shift between training and production feature distributions.</li>
 </ul>
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============================
+     Statistical Tests & Assumptions (Collapsible)
+     ============================ -->
+
+<section id="stat-tests-wrapper">
+  <button id="stat-tests-toggle" class="ref-toggle-btn" type="button">
+    ▸ Statistical Tests & Assumptions – Quick Reference
+  </button>
+
+  <div id="stat-tests-section" class="ref-section">
+    <div class="ref-header">
+      <h2>Statistical Tests & Assumptions – Quick Reference</h2>
+      <p class="ref-subtitle">
+        What each test is asking, when to use it, and what can go wrong.
+      </p>
+    </div>
+
+    <!-- Big picture -->
+    <section class="ref-card">
+      <h3>Big picture</h3>
+      <ul class="ref-list">
+        <li>
+          <strong>Every test asks a question.</strong><br>
+          “Are these means equal?”, “Are these variances equal?”, “Do these two
+          distributions look the same?”, “Is there autocorrelation?”.
+        </li>
+        <li>
+          <strong>p-value is not the effect size.</strong><br>
+          A tiny p-value can correspond to a tiny, unimportant effect if the sample is huge.
+        </li>
+        <li>
+          <strong>Assumptions matter.</strong><br>
+          Many tests assume things like normal residuals, equal variances, or
+          independent observations. If those are badly violated, the p-values
+          can be misleading.
+        </li>
+        <li>
+          <strong>Multiple testing inflates false positives.</strong><br>
+          If you run many tests, you need FWER/FDR control (Bonferroni, Holm, BH).
+        </li>
+      </ul>
+    </section>
+
+    <!-- Normality & distribution shape -->
+    <section class="ref-card">
+      <h3>Distribution shape & normality</h3>
+      <p>
+        These tests check whether data or residuals look like they come from a
+        particular distribution (usually normal). They are sensitive to
+        <strong>sample size</strong> and to <strong>outliers</strong>.
+      </p>
+
+      <table class="metrics-table metrics-table-compact">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Main question</th>
+            <th>Typical use</th>
+            <th>Notes &amp; pitfalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Shapiro–Wilk</strong></td>
+            <td>“Do these data look roughly normal?”</td>
+            <td>Small to medium samples (<em>n</em> &lt; ~2000)</td>
+            <td>
+              Powerful for normality; very sensitive to even small deviations in
+              large samples. Always combine with <em>plots</em> (QQ-plot, histogram).
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Kolmogorov–Smirnov (KS)</strong></td>
+            <td>
+              “Is the sample distribution different from a reference distribution
+              (or from another sample)?”
+            </td>
+            <td>
+              Comparing one sample to a known distribution, or two independent samples.
+            </td>
+            <td>
+              Works for continuous data; most sensitive near the centre, less in the tails.
+              With estimated parameters, classical p-values need corrections.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Anderson–Darling</strong></td>
+            <td>“Do these data follow a given distribution, especially in the tails?”</td>
+            <td>Checking normality with more tail focus than KS.</td>
+            <td>
+              Gives more weight to tails than KS. As with other tests, large <em>n</em>
+              ⇒ tiny deviations become “significant”.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Equality of variances -->
+    <section class="ref-card">
+      <h3>Equality of variances</h3>
+      <p>
+        Many tests (for example classical t-test, ANOVA) assume
+        <strong>similar variances across groups</strong>. These tests check that.
+      </p>
+
+      <table class="metrics-table metrics-table-compact">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Main question</th>
+            <th>Data type</th>
+            <th>Notes &amp; pitfalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Levene’s test</strong></td>
+            <td>“Do these groups have equal variances?”</td>
+            <td>Continuous outcome, groups categorical</td>
+            <td>
+              More robust to non-normal data than classical tests. A small p-value
+              suggests at least one group has a different variance.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Brown–Forsythe</strong></td>
+            <td>Levene’s test variant using medians instead of means.</td>
+            <td>Continuous outcome, heavy tails or outliers</td>
+            <td>
+              Even more robust when distributions are skewed. Often preferred if
+              outliers are expected.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Comparing means -->
+    <section class="ref-card">
+      <h3>Comparing means</h3>
+      <p>
+        These tests compare group averages. Non-parametric alternatives use
+        <strong>ranks</strong> instead of assuming normality.
+      </p>
+
+      <table class="metrics-table metrics-table-compact">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Main question</th>
+            <th>Design</th>
+            <th>Notes &amp; pitfalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>t-test (independent)</strong></td>
+            <td>“Are the means of two independent groups equal?”</td>
+            <td>Two groups, continuous outcome</td>
+            <td>
+              Assumes normal residuals and (often) equal variances. For unequal
+              variances, use Welch’s t-test.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>t-test (paired)</strong></td>
+            <td>“Is the mean difference between paired measurements zero?”</td>
+            <td>Before/after, matched pairs</td>
+            <td>
+              Applied to <em>differences</em>. Assumes differences are roughly normal.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>One-way ANOVA</strong></td>
+            <td>“Are all group means equal?”</td>
+            <td>3+ groups, continuous outcome</td>
+            <td>
+              Global test; if significant, follow with post-hoc comparisons
+              (and multiple-testing correction). Assumes normal residuals &
+              equal variances.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Mann–Whitney U</strong></td>
+            <td>“Do two groups differ in their typical values (medians/ranks)?”</td>
+            <td>Two independent groups, ranked/continuous outcome</td>
+            <td>
+              Non-parametric alternative to the independent t-test. Tests
+              <em>distribution shift</em>, not strictly medians.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Kruskal–Wallis</strong></td>
+            <td>“Do 3+ groups differ in their distributions (ranks)?”</td>
+            <td>3+ independent groups, ranked/continuous outcome</td>
+            <td>
+              Non-parametric analogue of one-way ANOVA. If significant, follow
+              with pairwise rank tests + multiple-testing correction.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Categorical & independence -->
+    <section class="ref-card">
+      <h3>Categorical data & independence</h3>
+      <p>
+        These tests work on <strong>counts</strong> in contingency tables and
+        ask whether patterns could be explained by chance alone.
+      </p>
+
+      <table class="metrics-table metrics-table-compact">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Main question</th>
+            <th>Typical table</th>
+            <th>Notes &amp; pitfalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Chi-square test of independence</strong></td>
+            <td>“Are two categorical variables independent?”</td>
+            <td>R × C contingency table (for example treatment × outcome)</td>
+            <td>
+              Expected counts should not be too small (rules of thumb apply).
+              Large samples make tiny deviations “significant”.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Chi-square goodness-of-fit</strong></td>
+            <td>“Do observed category frequencies match a specified distribution?”</td>
+            <td>1 × C table (observed vs expected counts)</td>
+            <td>
+              Used to compare observed counts to a theoretical or historical pattern.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Fisher’s exact test</strong></td>
+            <td>“Is there association in a 2×2 table?”</td>
+            <td>2 × 2 table with small counts</td>
+            <td>
+              Exact test, no large-sample approximation. Useful when any
+              expected count is small (&lt;5).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Time series & autocorrelation -->
+    <section class="ref-card">
+      <h3>Time-series residuals & autocorrelation</h3>
+      <p>
+        For time-ordered data, errors often correlate over time. These tests
+        check whether residuals look “independent” or show systematic patterns.
+      </p>
+
+      <table class="metrics-table metrics-table-compact">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Main question</th>
+            <th>Typical use</th>
+            <th>Notes &amp; pitfalls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Durbin–Watson</strong></td>
+            <td>“Is there first-order autocorrelation in regression residuals?”</td>
+            <td>Linear regression on time-ordered data</td>
+            <td>
+              Values near 2 ≈ no autocorrelation; near 0 ≈ strong positive
+              autocorrelation; near 4 ≈ strong negative. Not designed for
+              complex time-series models.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Ljung–Box</strong></td>
+            <td>“Are a set of autocorrelations jointly zero?”</td>
+            <td>
+              Checking whether residuals from a time-series model look like white noise.
+            </td>
+            <td>
+              Tests several lags at once. A small p-value suggests remaining
+              structure in residuals (model underfits dynamics).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Summary bullets -->
+    <section class="ref-card">
+      <h3>Summary: how to think about tests</h3>
+      <ul class="ref-list">
+        <li>
+          <strong>Always pair tests with plots.</strong> QQ-plots, residual plots
+          and histograms often tell the story faster than p-values.
+        </li>
+        <li>
+          <strong>Large samples detect tiny issues.</strong> A “significant”
+          deviation may be practically irrelevant.
+        </li>
+        <li>
+          <strong>Small samples lack power.</strong> A non-significant result
+          does not prove that assumptions are perfect or effects are zero.
+        </li>
+        <li>
+          <strong>Use non-parametric tests</strong> when normality or equal
+          variances are clearly violated and sample sizes are moderate.
+        </li>
+        <li>
+          <strong>Remember multiple testing.</strong> Running many tests on the
+          same data requires FWER/FDR control, otherwise false positives
+          accumulate fast.
+        </li>
+      </ul>
+    </section>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- ===================================== -->
 <!-- 3. ROBUSTNESS & RESAMPLING            -->
@@ -5523,15 +5898,12 @@ independent samples.<br><br>
     }
   </style>
 
-  <h3>Influence & Robustness Lab (Interactive Playgrounds)</h3>
-  <p class="ir-note">
-    These playgrounds show how single points, noise and multiple comparisons can quietly break your models,
-    even when headline metrics still look good.
-  </p>
-
   <!-- Main wrapper collapsible for the whole lab (optional; you can remove if you want it always open) -->
   <details class="lab-block" open>
-    <summary class="lab-summary">Influence & Robustness Lab – Open Playgrounds</summary>
+    <summary class="lab-summary">Influence & Robustness Lab (Interactive Playgrounds) <p class="ir-note">
+      &nbsp;&nbsp;&nbsp;&nbsp;These playgrounds show how single points, noise and multiple comparisons can quietly break your models,
+    even when headline metrics still look good.
+  </p></summary>
     <div class="lab-inner">
 
       <!-- =========================
@@ -7861,230 +8233,358 @@ exp.show_in_notebook()
 <script>
 (function () {
   /* ========= 1. GLOSSARY TERMS (A–Z) ========= */
-  const GLOSSARY = {
-    "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
-    "Adam optimization": "An extension of stochastic gradient descent that keeps running averages of gradients and squared gradients to give each parameter its own adaptive learning rate.",
-    "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
-    "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null hypothesis.",
-    "Apache Spark": "A distributed computing framework for big data that supports SQL, streaming, machine learning and works with Python, R, Scala and Java.",
-    "Autoregression": "A time-series model where the current value is predicted from its own past values (lags) using a regression equation.",
-    "Bagging": "Short for bootstrap aggregating: train many models on different bootstrap samples and average or vote their predictions to reduce variance.",
-    "Backpropagation": "The algorithm used in neural networks to propagate the loss gradient backwards through layers and update weights.",
-    "Bar chart": "A simple plot that shows counts or summary values for different categories using bars with lengths proportional to the values.",
-    "Bayes’ theorem": "A rule for updating the probability of a hypothesis given new evidence: posterior ∝ likelihood × prior.",
-    "Bayesian statistics": "An approach that treats unknown quantities as random variables with priors and updates them using Bayes’ theorem when new data arrive.",
-    "Bias": "Systematic deviation from the truth. High-bias models are too simple and miss real structure (underfitting).",
-    "Bias–variance tradeoff": "Simple models: high bias, low variance. Complex models: low bias, high variance. Good models balance both to minimise total error.",
-    "Big data": "Datasets that are too large or fast for traditional tools and require distributed storage and processing.",
-    "Binary variable": "A variable that only takes two values such as 0/1, yes/no or true/false.",
-    "Binomial distribution": "A distribution for the number of ‘successes’ in a fixed number of independent trials with constant success probability.",
-    "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (for example confidence intervals) or stability of a statistic or model.",
-    "Boosting": "An ensemble method that trains models sequentially, each focusing on errors of the previous ones, and combines them to improve performance.",
-    "Box plot": "A visual summary of a distribution showing median, quartiles, range and potential outliers.",
-    "Brier score": "A metric for probabilistic predictions between 0 and 1: the mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
-    "Business analytics": "Using data, statistics and modelling to understand performance and support business decisions.",
-    "Business intelligence": "Tools and processes that collect, integrate and visualise data to support reporting and high-level decision making.",
-    "Categorical variable": "A variable whose values are labels or categories (for example city, colour).",
-    "Classification": "A supervised learning problem where the target is a category label, such as yes/no or disease type.",
-    "Classification threshold": "The probability cutoff used to turn a predicted probability into a class label (for example ≥0.5 → positive).",
-    "Clustering": "An unsupervised learning task that groups similar observations together without using labels.",
-    "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
-    "Coefficient": "A number that multiplies a feature in a model. It describes how the prediction changes when that feature increases by one unit, holding others fixed.",
-    "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
-    "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
-    "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (for example 95%). Narrow intervals indicate more precision.",
-    "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
-    "Continuous variable": "A numeric variable that, in principle, can take infinitely many values in a range (for example height).",
-    "Convergence": "When an iterative algorithm’s updates get smaller and its output stabilises near a limiting value.",
-    "Convex function": "A function where the line segment between any two points on the graph lies above or on the graph. Convex functions make optimisation easier.",
-    "Correlation": "A scaled measure of linear association between two variables, between −1 and +1.",
-    "Cosine similarity": "Similarity between two vectors measured as the cosine of the angle between them; 1 = identical direction, 0 = orthogonal.",
-    "Cost function": "A formula that measures how wrong a model’s predictions are; training minimises this quantity.",
-    "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
-    "Covariance": "A measure of how two variables vary together. Positive covariance means they tend to increase or decrease together.",
-    "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
-    "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
-    "Data mining": "Exploring large datasets to find patterns, associations, clusters or predictive models.",
-    "Data science": "Combining statistics, programming and domain knowledge to extract insight and value from data.",
-    "Data transformation": "Converting variables into a new form (for example log transform, standardise) to make patterns clearer or meet model assumptions.",
-    "Database": "An organised collection of data, usually managed with a query language such as SQL.",
-    "Dataframe": "A 2-D table-like data structure (rows = observations, columns = variables) used in tools like pandas and R.",
-    "Dataset": "A collection of data, typically structured as rows (cases) and columns (variables).",
-    "Dashboard": "A visual display (charts, tables, indicators) that summarises key metrics for monitoring.",
-    "DBSCAN": "A density-based clustering algorithm that groups points that have many neighbours within a distance and marks sparse points as noise.",
-    "Decision boundary": "The surface in feature space where a classifier switches from predicting one class to another.",
-    "Decision tree": "A model that splits data into branches based on feature values, ending in leaf nodes with predictions.",
-    "Deep learning": "Machine learning using deep neural networks with many layers that can learn complex patterns from large datasets.",
-    "Decile": "One of ten cut-points that divide ordered data into ten equal-sized groups.",
-    "Degree of freedom": "Roughly, the number of independent pieces of information that can vary when estimating a parameter.",
-    "Dependent variable": "The outcome or target whose variation we try to explain or predict using other variables.",
-    "Descriptive statistics": "Numbers that summarise data’s centre and spread, such as mean, median, variance and IQR.",
-    "Dimensionality reduction": "Techniques that reduce the number of features while preserving as much information as possible (for example PCA).",
-    "Dplyr": "An R package that provides a grammar of data manipulation (filter, select, mutate, summarise).",
-    "Dummy variable": "A 0/1 variable created from a category to indicate presence (1) or absence (0) of that category.",
-    "Early stopping": "Stopping training when performance on a validation set stops improving, to avoid overfitting.",
-    "EDA": "Exploratory Data Analysis – visually and statistically exploring data to understand structure, distributions, and potential problems.",
-    "Effect size": "How big a difference or relationship is, not just whether it is statistically significant.",
-    "ETL": "Extract, Transform, Load – pipelines that pull data from sources, clean/transform it, and load it into a destination system.",
-    "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
-    "Factor analysis": "A technique that explains many observed variables using a smaller number of underlying latent factors.",
-    "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
-    "False Discovery Rate (FDR)": "Expected proportion of false positives among the tests we call “significant”. Often controlled with Benjamini–Hochberg.",
-    "False negative (FN)": "A case that is actually positive but was predicted negative. In hypothesis testing this corresponds to a Type II error.",
-    "False positive (FP)": "A case that is actually negative but was predicted positive. In hypothesis testing this corresponds to a Type I error.",
-    "Feature": "An input variable used by the model to make predictions. Also called predictor or independent variable.",
-    "Feature hashing": "Mapping tokens to indices using a hash function to create fixed-length feature vectors without an explicit vocabulary.",
-    "Feature reduction": "Reducing the number of features while trying to keep most of the useful information.",
-    "Feature selection": "Choosing a subset of informative features and dropping irrelevant or redundant ones.",
-    "Feature space": "The multidimensional space defined by all features; each observation is a point in this space.",
-    "Few-shot learning": "Training models to generalise from only a handful of labelled examples per class.",
-    "Flume": "A tool for collecting, aggregating and moving large volumes of log data into systems like Hadoop.",
-    "Frequentist statistics": "Classical statistics that interprets probability as long-run relative frequency and uses sampling distributions and p-values.",
-    "F-Score": "A generic name for F-measures that combine precision and recall, such as F1.",
-    "Gated Recurrent Unit (GRU)": "A type of recurrent neural network cell with update and reset gates, simpler than LSTM but with similar goals.",
-    "ggplot2": "A popular R package for creating layered, grammar-of-graphics plots.",
-    "Go": "A compiled, statically typed language from Google designed for simple, efficient concurrent systems.",
-    "Goodness of fit": "How well a model’s predictions match observed data; often summarised by metrics like R² or residual patterns.",
-    "Gradient descent": "An optimisation method that iteratively moves parameters in the direction that reduces the cost function the fastest.",
-    "Hadoop": "An open-source ecosystem for distributed storage (HDFS) and processing (MapReduce, Spark) of large datasets.",
-    "Hidden Markov Model": "A probabilistic model where a sequence of hidden states generates observable outputs; used in speech, sequence labelling, etc.",
-    "Hierarchical clustering": "A clustering method that builds a tree of clusters by repeatedly merging or splitting groups.",
-    "Histogram": "A plot that shows the distribution of a numeric variable by counting observations in value bins.",
-    "Hive": "A data warehouse system on top of Hadoop that lets you query large datasets with SQL-like syntax.",
-    "Holdout sample": "A part of the data kept aside from training and used only to evaluate model performance.",
-    "Holt–Winters forecasting": "An exponential smoothing method for time series that handles both trend and seasonality.",
-    "Hyperparameter": "A setting chosen before training (for example learning rate, number of trees) that controls how a model is fit.",
-    "Hyperplane": "A flat subspace of one dimension less than the surrounding space; used as a decision surface in methods like SVM.",
-    "Hypothesis": "A tentative claim about a population or process that can be tested with data.",
-    "IQR": "Interquartile range – the distance between the 25th and 75th percentiles; a robust measure of spread.",
-    "Imputation": "Filling in missing values using statistics (mean, median, mode) or models (for example kNN, regression).",
-    "Inferential statistics": "Using sample data to draw conclusions or test hypotheses about a larger population.",
-    "Iteration": "One pass or update step in an iterative algorithm during training or optimisation.",
-    "Jackknife": "A resampling method that leaves out one observation (or group) at a time to estimate variance and influence.",
-    "Julia": "A high-performance dynamic language designed for numerical and scientific computing.",
-    "Keras": "A high-level neural-network API in Python that runs on backends like TensorFlow.",
-    "K-Means": "A clustering algorithm that partitions data into k clusters by alternating assignment and centroid updates.",
-    "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
-    "Kurtosis": "A measure of tail heaviness relative to a normal distribution: high kurtosis = more extreme outliers.",
-    "Labeled data": "Data where each example has a known target label, needed for supervised learning.",
-    "Lasso regression": "Regression with L1 regularisation, which can shrink some coefficients exactly to zero and perform feature selection.",
-    "Leverage": "How unusual a point’s predictor values are; high-leverage points can strongly pull the regression line.",
-    "Line chart": "A chart that connects data points with lines to show trends over time or ordered values.",
-    "Linear model": "A model where the prediction is a linear combination of inputs plus noise.",
-    "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
-    "Log loss": "A loss function for probabilistic classification that heavily penalises confident but wrong predictions.",
-    "Logistic regression": "A model for binary outcomes; it predicts log-odds that are converted to probabilities between 0 and 1.",
-    "Long Short-Term Memory (LSTM)": "A recurrent neural network architecture with gates that help remember or forget information over long sequences.",
-    "MAE": "Mean Absolute Error – the average absolute difference between predicted and actual values; easy to read as a ‘typical error’.",
-    "Machine learning": "Using algorithms that learn patterns from data to make predictions or decisions without explicit rules.",
-    "Mahout": "An Apache project providing scalable machine-learning algorithms, especially on Hadoop.",
-    "MapReduce": "A programming model for distributed data processing using map and reduce steps over large datasets.",
-    "Market basket analysis": "Finding products that are often purchased together to drive recommendations or bundling.",
-    "Market mix modeling": "Using regression-style models to decompose sales into contributions from price, promotion, distribution, etc.",
-    "Matthews correlation coefficient (MCC)": "A balanced measure for binary classification using all four confusion-matrix cells; works well with imbalanced data.",
-    "Maximum likelihood estimation": "Choosing parameter values that make the observed data most probable under the model.",
-    "Mean": "The simple average: add up all values and divide by how many you have.",
-    "Median": "The middle value when the data is sorted. Half the values are above and half below; less sensitive to outliers than the mean.",
-    "MIS": "Management Information System – systems that gather and report data to support organisational decision making.",
-    "ML-as-a-Service (MLaaS)": "Cloud services that provide ready-made machine-learning tools and APIs.",
-    "Mode": "The value that occurs most frequently in a dataset.",
-    "Model selection": "Choosing between candidate models or configurations based on criteria like AIC, BIC, CV error or holdout performance.",
-    "Monte Carlo simulation": "Using repeated random sampling from distributions to approximate how a complex system behaves.",
-    "MSE": "Mean Squared Error – the average of squared errors between predictions and actual values; penalises large errors strongly.",
-    "Multi-class classification": "Classification problems with more than two possible target classes.",
-    "Multicollinearity": "Strong correlation between predictors, making coefficient estimates unstable and hard to interpret.",
-    "Multivariate analysis": "Analysing relationships among several variables at the same time.",
-    "Multivariate regression": "Regression with multiple dependent variables predicted jointly from a set of predictors.",
-    "Naive Bayes": "A simple probabilistic classifier that applies Bayes’ theorem assuming features are conditionally independent given the class.",
-    "NaN": "Stands for ‘Not a Number’: a special value representing missing or undefined numeric results.",
-    "Natural Language Processing (NLP)": "Techniques that allow computers to process and analyse human language data.",
-    "Nominal variable": "A categorical variable whose categories have no natural order (for example city names).",
-    "Non-parametric": "Methods that make few assumptions about distribution shape or functional form, often using ranks or resampling.",
-    "Normal distribution": "The classic bell-shaped continuous distribution; many methods assume data or residuals are approximately normal.",
-    "Normalization": "Rescaling features to a common scale (for example 0–1) to make them comparable.",
-    "Norms": "Functions that measure vector size, such as L1 (sum of absolute values) or L2 (Euclidean length).",
-    "NoSQL": "Databases that store data in non-tabular forms such as key–value, document, column or graph stores.",
-    "Numpy": "A core Python library for fast numerical computing and n-dimensional arrays.",
-    "Noise": "Random variation in the data that is not explained by the model or features.",
-    "Noise feature": "A feature with no real relationship to the target; often added to test robustness or overfitting.",
-    "Normality test": "A statistical test (for example Shapiro–Wilk, Kolmogorov–Smirnov on residuals) that checks whether data follow a normal distribution.",
-    "One hot encoding": "Representing a categorical variable as multiple 0/1 columns, one per category.",
-    "One shot learning": "Training a classifier that can recognise a class from a single labelled example.",
-    "Oozie": "A workflow scheduler for Hadoop that coordinates and runs jobs like MapReduce, Hive or Pig in sequence or on a schedule.",
-    "Ordinal variable": "A categorical variable with an inherent order (for example low, medium, high).",
-    "Outlier": "An observation that is unusual compared to the rest of the data. It can strongly affect many statistics.",
-    "Overfitting": "The model fits the noise and quirks of the training data but performs poorly on new data.",
-    "Pandas": "A Python library providing DataFrame objects and tools for data wrangling and analysis.",
-    "Parameters": "Model quantities learned from data (for example regression coefficients, neural-network weights).",
-    "Pattern recognition": "Finding and classifying recurring patterns in data, often using machine-learning methods.",
-    "Percentile": "A value below which a given percentage of observations fall (for example 90th percentile is higher than 90% of the data).",
-    "Pie chart": "A circular chart divided into slices that represent parts of a whole.",
-    "Pig": "A scripting platform on Hadoop that lets you write data-flow jobs in a higher-level language instead of Java MapReduce.",
-    "Polynomial regression": "Regression where the predictors include powers of a variable (for example x, x², x³) to model curves.",
-    "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
-    "PR AUC": "Area under the precision–recall curve; more informative than ROC AUC when the positive class is rare.",
-    "Pre-trained model": "A model already trained on a large related dataset and reused as a starting point for a new task.",
-    "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
-    "Precision and recall": "Paired metrics: precision focuses on quality of positive predictions; recall focuses on finding all true positives.",
-    "Predictor variable": "A feature used to explain or predict the outcome (synonym of independent variable).",
-    "Principal Component Analysis (PCA)": "A dimensionality reduction method that transforms correlated variables into a smaller set of uncorrelated components.",
-    "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data are hard to explain under ‘no effect’.",
-    "Python": "A widely used high-level programming language, very popular for data science and machine learning.",
-    "PyTorch": "A deep-learning framework in Python that uses dynamic computation graphs and is widely used in research.",
-    "Quartile": "Values that split ordered data into four equal parts (Q1, Q2/median, Q3).",
-    "R": "An open-source language and environment for statistical computing, graphics and data analysis.",
-    "Range": "The difference between the largest and smallest value in a dataset.",
-    "Recommendation engine": "A system that suggests items (products, movies, etc.) likely to interest a user based on behaviour or similarity.",
-    "Recall (Sensitivity)": "Of all true positives in the data, how many did we catch? Focuses on avoiding false negatives.",
-    "Regression": "Supervised learning where the target is numeric (for example price, weight).",
-    "Regression spline": "A regression model that fits piecewise polynomials joined smoothly at knots, allowing flexible curves.",
-    "Regularisation": "Adding a penalty to large coefficients to reduce variance and overfitting (examples: Lasso/L1, Ridge/L2).",
-    "Reinforcement learning": "An agent learns to take actions in an environment to maximise long-term reward through trial and error.",
-    "Residual": "The difference between the observed value and the model’s predicted value. Residual patterns help diagnose model problems.",
-    "Response variable": "Another term for dependent variable or target; the outcome we model.",
-    "Ridge regression": "Regression with L2 regularisation that shrinks coefficients toward zero but rarely to exactly zero.",
-    "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
-    "Robustness": "How resistant a method or metric is to outliers, noise and assumption violations.",
-    "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across thresholds (0.5 = random, 1.0 = perfect).",
-    "Root Mean Squared Error (RMSE)": "Same as RMSE; included for people searching by the long name.",
-    "Rotational invariance": "A property where results do not change when the coordinate system is rotated.",
-    "Sample size": "How many observations are in the dataset or in the part of the data being analysed.",
-    "Scala": "A JVM language that combines object-oriented and functional programming.",
-    "Semi-supervised learning": "Learning from a mix of labelled and unlabelled data.",
-    "Significance (statistical)": "Shorthand for ‘statistically significant’; usually means the p-value is below alpha. It does not guarantee a large or important effect.",
-    "Signal": "The real underlying pattern or effect in the data that we care about.",
-    "Skewness": "How asymmetric a distribution is: positive skew has a longer right tail; negative skew has a longer left tail.",
-    "SMOTE": "Synthetic Minority Oversampling Technique – creates synthetic minority-class examples to rebalance imbalanced datasets.",
-    "Spatial–temporal reasoning": "Reasoning about how things change across both space and time, often important in advanced AI systems.",
-    "Specificity": "Of all true negatives, how many did we correctly predict as negative?",
-    "Squared error": "The square of the difference between predicted and actual values; used in MSE and related metrics.",
-    "Stability": "How consistent a coefficient, metric or decision is under resampling or small data changes.",
-    "Standard deviation": "The square root of variance. Roughly, a typical distance from the mean in the same units as the data.",
-    "Standard error": "The standard deviation of a statistic’s sampling distribution; measures how precisely the statistic estimates the population value.",
-    "Standardization": "Rescaling features to have mean 0 and standard deviation 1 (z-scores).",
-    "Statistics": "The discipline that studies how to collect, analyse, present and interpret data.",
-    "Stochastic Gradient Descent": "Gradient descent that updates parameters using one or a few training examples at a time.",
-    "Sum of squared errors (SSE)": "The sum of all squared errors between predictions and actual values; basis for MSE and RMSE.",
-    "Supervised learning": "Learning a mapping from inputs to outputs using labelled data.",
-    "Support Vector Machine (SVM)": "A classifier that finds a hyperplane with maximum margin between classes, possibly in a transformed feature space.",
-    "Target": "The outcome the model is trying to predict. Also called label, response or dependent variable.",
-    "TensorFlow": "An open-source library from Google for numerical computation and building machine-learning models, especially deep learning.",
-    "t-test": "A statistical test that compares means between groups or against a reference value and reports a t-statistic and a p-value.",
-    "Tokenization": "Splitting text into tokens (words, subwords, etc.) as a first step in many NLP pipelines.",
-    "Torch": "A machine-learning library (and its successor PyTorch) that provides many deep-learning building blocks.",
-    "Train–test split": "Dividing the data into a training set (to fit the model) and a test set (to evaluate how it generalises).",
-    "True negative (TN)": "A case that is actually negative and was predicted negative.",
-    "True positive (TP)": "A case that is actually positive and was predicted positive.",
-    "Type I error": "Rejecting a true null hypothesis. In practice: a false alarm or false positive.",
-    "Type II error": "Failing to reject a false null hypothesis. In practice: a missed effect or false negative.",
-    "Underfitting": "The model is too simple to capture the structure in the data and performs poorly even on training data.",
-    "Univariate analysis": "Analysing the distribution or relationship of a single variable (for example histogram of one feature).",
-    "Unsupervised learning": "Learning patterns or structure from data without labelled outcomes (for example clustering).",
-    "Variance": "How much values or estimates spread around their mean; high variance means a lot of variability or instability.",
-    "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity; large values flag problems.",
-    "Z-test": "A hypothesis test that uses the normal distribution to assess how far a statistic is from the null value in standard-deviation units.",
-    "Zookeeper": "A coordination service for distributed systems that manages configuration, naming and synchronisation."
-  };
+    const GLOSSARY = {
+      // ---------- A ----------
+      "ACE (Adaptive Calibration Error)": "A calibration error that uses adaptive bins instead of fixed ones, reducing bias in the estimate.",
+      "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
+      "Adam optimization": "An extension of stochastic gradient descent that keeps running averages of gradients and squared gradients to give each parameter its own adaptive learning rate.",
+      "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
+      "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null hypothesis.",
+      "Anderson–Darling test": "A statistical test that checks whether data follow a specific distribution, giving more weight to deviations in the tails than tests like KS.",
+      "ANOVA (Analysis of Variance)": "A family of tests that compare means across multiple groups by checking whether between-group variation is larger than expected from within-group noise.",
+      "Apache Spark": "A distributed computing framework for big data that supports SQL, streaming, machine learning and works with Python, R, Scala and Java.",
+      "Area under the Curve (AUC)": "Generic term for the area under a performance curve (ROC, Precision–Recall). Summarises performance across thresholds.",
+      "Autocorrelation": "Correlation of a series with itself at different time lags. In time series, residual autocorrelation violates independence assumptions.",
+      "Autoregression": "A time-series model where the current value is predicted from its own past values (lags) using a regression equation.",
+    
+      // ---------- B ----------
+      "Backpropagation": "The algorithm used in neural networks to propagate the loss gradient backwards through layers and update weights.",
+      "Bagging": "Short for bootstrap aggregating: train many models on different bootstrap samples and average or vote their predictions to reduce variance.",
+      "Bar chart": "A simple plot that shows counts or summary values for different categories using bars with lengths proportional to the values.",
+      "Bayes’ theorem": "A rule for updating the probability of a hypothesis given new evidence: posterior ∝ likelihood × prior.",
+      "Bayesian statistics": "An approach that treats unknown quantities as random variables with priors and updates them using Bayes’ theorem when new data arrive.",
+      "BIC (Bayesian Information Criterion)": "A model-selection score that penalises model complexity. Lower BIC indicates a better trade-off between fit and simplicity.",
+      "Bias": "Systematic deviation from the truth. High-bias models are too simple and miss real structure (underfitting).",
+      "Bias–variance tradeoff": "Simple models: high bias, low variance. Complex models: low bias, high variance. Good models balance both to minimise total error.",
+      "Big data": "Datasets that are too large or fast for traditional tools and require distributed storage and processing.",
+      "Binary variable": "A variable that only takes two values such as 0/1, yes/no or true/false.",
+      "Binomial distribution": "A distribution for the number of ‘successes’ in a fixed number of independent trials with constant success probability.",
+      "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (for example confidence intervals) or stability of a statistic or model.",
+      "Boosting": "An ensemble method that trains models sequentially, each focusing on errors of the previous ones, and combines them to improve performance.",
+      "Box plot": "A visual summary of a distribution showing median, quartiles, range and potential outliers.",
+      "Brier score": "A metric for probabilistic predictions between 0 and 1: the mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
+      "Brier Skill Score (BSS)": "Compares a model’s Brier score to that of a baseline (for example predicting the base rate). Positive values mean improvement over the baseline.",
+      "Brown–Forsythe test": "A robust variant of Levene’s test that uses medians instead of means to check equality of variances; more robust when distributions are skewed or heavy-tailed.",
+      "Business analytics": "Using data, statistics and modelling to understand performance and support business decisions.",
+      "Business intelligence": "Tools and processes that collect, integrate and visualise data to support reporting and high-level decision making.",
+    
+      // ---------- C ----------
+      "C-index (Concordance Index)": "A rank-based performance measure (often in survival analysis) similar to ROC AUC; probability that a randomly chosen case with the event gets a higher predicted risk.",
+      "Calibration": "How well predicted probabilities match observed frequencies (for example, among predictions of 0.7, about 70% are actually positive).",
+      "Calibration within groups": "Calibration checked separately in subgroups (for example by gender or age) to test whether probabilities are fair and well calibrated for everyone.",
+      "CART (Classification and Regression Trees)": "A popular decision-tree algorithm used for both classification and regression.",
+      "Categorical variable": "A variable whose values are labels or categories (for example city, colour).",
+      "Chi-square goodness-of-fit": "A test that checks whether observed category counts match expected frequencies from a theoretical or historical distribution.",
+      "Chi-square test of independence": "A test that checks whether two categorical variables are independent using a contingency table.",
+      "Class imbalance": "When one class is much more common than the others; can make accuracy and some other metrics misleading.",
+      "Classification": "A supervised learning problem where the target is a category label, such as yes/no or disease type.",
+      "Classification threshold": "The probability cutoff used to turn a predicted probability into a class label (for example ≥0.5 → positive).",
+      "Clustering": "An unsupervised learning task that groups similar observations together without using labels.",
+      "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
+      "Coefficient": "A number that multiplies a feature in a model. It describes how the prediction changes when that feature increases by one unit, holding others fixed.",
+      "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
+      "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
+      "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (for example 95%). Narrow intervals indicate more precision.",
+      "Contingency table": "A table of counts for combinations of categories (for example treatment × outcome) used in chi-square and Fisher’s exact tests.",
+      "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
+      "Continuous variable": "A numeric variable that, in principle, can take infinitely many values in a range (for example height).",
+      "Convergence": "When an iterative algorithm’s updates get smaller and its output stabilises near a limiting value.",
+      "Convex function": "A function where the line segment between any two points on the graph lies above or on the graph. Convex functions make optimisation easier.",
+      "Correlation": "A scaled measure of linear association between two variables, between −1 and +1.",
+      "Cosine similarity": "Similarity between two vectors measured as the cosine of the angle between them; 1 = identical direction, 0 = orthogonal.",
+      "Cost function": "A formula that measures how wrong a model’s predictions are; training minimises this quantity.",
+      "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
+      "Covariance": "A measure of how two variables vary together. Positive covariance means they tend to increase or decrease together.",
+      "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
+      "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
+      "Cumulative distribution function (CDF)": "Function that gives the probability that a random variable is less than or equal to a given value.",
+    
+      // ---------- D ----------
+      "Dashboard": "A visual display (charts, tables, indicators) that summarises key metrics for monitoring.",
+      "Data leakage": "When information from the future or from the target leaks into the features, making performance look better than it really is.",
+      "Data mining": "Exploring large datasets to find patterns, associations, clusters or predictive models.",
+      "Data pipeline": "An end-to-end sequence of steps that moves data from raw sources through cleaning and feature creation to model predictions.",
+      "Data science": "Combining statistics, programming and domain knowledge to extract insight and value from data.",
+      "Data transformation": "Converting variables into a new form (for example log transform, standardise) to make patterns clearer or meet model assumptions.",
+      "Database": "An organised collection of data, usually managed with a query language such as SQL.",
+      "Dataframe": "A 2-D table-like data structure (rows = observations, columns = variables) used in tools like pandas and R.",
+      "Dataset": "A collection of data, typically structured as rows (cases) and columns (variables).",
+      "DBSCAN": "A density-based clustering algorithm that groups points that have many neighbours within a distance and marks sparse points as noise.",
+      "Decile": "One of ten cut-points that divide ordered data into ten equal-sized groups.",
+      "Decision boundary": "The surface in feature space where a classifier switches from predicting one class to another.",
+      "Decision tree": "A model that splits data into branches based on feature values, ending in leaf nodes with predictions.",
+      "Deep learning": "Machine learning using deep neural networks with many layers that can learn complex patterns from large datasets.",
+      "Degree of freedom": "Roughly, the number of independent pieces of information that can vary when estimating a parameter.",
+      "Demographic parity": "Fairness criterion where the share of positive predictions is similar across groups (for example genders).",
+      "Dependent variable": "The outcome or target whose variation we try to explain or predict using other variables.",
+      "Descriptive statistics": "Numbers that summarise data’s centre and spread, such as mean, median, variance and IQR.",
+      "Dimensionality reduction": "Techniques that reduce the number of features while preserving as much information as possible (for example PCA).",
+      "Distribution": "A description of how values are spread out (for example normal, skewed, heavy-tailed). Many statistical methods assume a specific distribution.",
+      "Dplyr": "An R package that provides a grammar of data manipulation (filter, select, mutate, summarise).",
+      "Durbin–Watson test": "A test of first-order autocorrelation in regression residuals. Values near 2 ≈ no autocorrelation; near 0 ≈ strong positive; near 4 ≈ strong negative.",
+      "Dropout": "A neural-network regularisation technique that randomly drops units during training to reduce overfitting.",
+      "Dummy variable": "A 0/1 variable created from a category to indicate presence (1) or absence (0) of that category.",
+    
+      // ---------- E ----------
+      "Early stopping": "Stopping training when performance on a validation set stops improving, to avoid overfitting.",
+      "EDA": "Exploratory Data Analysis – visually and statistically exploring data to understand structure, distributions, and potential problems.",
+      "Effect size": "How big a difference or relationship is, not just whether it is statistically significant. In test contexts, it complements the p-value.",
+      "EBIC (Extended BIC)": "An extension of BIC with additional penalty for high-dimensional models (many predictors).",
+      "ELPD (Expected Log Predictive Density)": "A Bayesian model-comparison measure based on out-of-sample predictive accuracy; higher is better.",
+      "Equalized odds": "Fairness requirement that true positive and false positive rates be similar across protected groups.",
+      "ETL": "Extract, Transform, Load – pipelines that pull data from sources, clean/transform it, and load it into a destination system.",
+      "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
+      "Expected counts": "Theoretical cell counts a chi-square test uses to see how far observed counts deviate from what chance alone would produce.",
+    
+      // ---------- F ----------
+      "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
+      "F-Score": "A generic name for F-measures that combine precision and recall, such as F1.",
+      "Factor analysis": "A technique that explains many observed variables using a smaller number of underlying latent factors.",
+      "Fairness metric": "Any metric that quantifies how similarly a model treats different groups (for example equalized odds or demographic parity).",
+      "False Discovery Rate (FDR)": "Expected proportion of false positives among the tests we call “significant”. Often controlled with Benjamini–Hochberg.",
+      "False negative (FN)": "A case that is actually positive but was predicted negative. In hypothesis testing this corresponds to a Type II error.",
+      "False positive (FP)": "A case that is actually negative but was predicted positive. In hypothesis testing this corresponds to a Type I error.",
+      "Feature": "An input variable used by the model to make predictions. Also called predictor or independent variable.",
+      "Feature hashing": "Mapping tokens to indices using a hash function to create fixed-length feature vectors without an explicit vocabulary.",
+      "Feature importance": "Any method that quantifies how much each feature contributes to predictions (for example permutation importance or SHAP).",
+      "Feature reduction": "Reducing the number of features while trying to keep most of the useful information.",
+      "Feature selection": "Choosing a subset of informative features and dropping irrelevant or redundant ones.",
+      "Feature space": "The multidimensional space defined by all features; each observation is a point in this space.",
+      "Few-shot learning": "Training models to generalise from only a handful of labelled examples per class.",
+      "Fisher’s exact test": "An exact test for 2×2 contingency tables, especially when expected counts are small. It avoids large-sample approximations.",
+      "Flume": "A tool for collecting, aggregating and moving large volumes of log data into systems like Hadoop.",
+      "Frequentist statistics": "Classical statistics that interprets probability as long-run relative frequency and uses sampling distributions and p-values.",
+    
+      // ---------- G ----------
+      "Gated Recurrent Unit (GRU)": "A type of recurrent neural network cell with update and reset gates, simpler than LSTM but with similar goals.",
+      "ggplot2": "A popular R package for creating layered, grammar-of-graphics plots.",
+      "Go": "A compiled, statically typed language from Google designed for simple, efficient concurrent systems.",
+      "Goodness of fit": "How well a model’s predictions match observed data; often summarised by metrics like R² or residual patterns.",
+      "Gradient boosting": "An ensemble method that sequentially fits models to the residuals of previous models (XGBoost, LightGBM).",
+      "Gradient descent": "An optimisation method that iteratively moves parameters in the direction that reduces the cost function the fastest.",
+      "Grid search": "A systematic search over combinations of hyperparameters to find a good configuration.",
+    
+      // ---------- H ----------
+      "Hadoop": "An open-source ecosystem for distributed storage (HDFS) and processing (MapReduce, Spark) of large datasets.",
+      "Hidden layer": "A layer in a neural network that is neither input nor output; its activations are not directly observed.",
+      "Hidden Markov Model": "A probabilistic model where a sequence of hidden states generates observable outputs; used in speech, sequence labelling, etc.",
+      "Hierarchical clustering": "A clustering method that builds a tree of clusters by repeatedly merging or splitting groups.",
+      "Histogram": "A plot that shows the distribution of a numeric variable by counting observations in value bins.",
+      "Hive": "A data warehouse system on top of Hadoop that lets you query large datasets with SQL-like syntax.",
+      "Holdout sample": "A part of the data kept aside from training and used only to evaluate model performance.",
+      "Holm correction": "A stepwise multiple-testing method that controls family-wise error rate and is usually less conservative than plain Bonferroni.",
+      "Holt–Winters forecasting": "An exponential smoothing method for time series that handles both trend and seasonality.",
+      "Hyperparameter": "A setting chosen before training (for example learning rate, number of trees) that controls how a model is fit.",
+      "Hyperplane": "A flat subspace of one dimension less than the surrounding space; used as a decision surface in methods like SVM.",
+      "Hypothesis": "A tentative claim about a population or process that can be tested with data.",
+    
+      // ---------- I ----------
+      "IDI (Integrated Discrimination Improvement)": "A metric that compares how much two risk models improve separation between cases and controls.",
+      "IID (Independent and Identically Distributed)": "Assumption that observations are independent of each other and drawn from the same distribution.",
+      "Imputation": "Filling in missing values using statistics (mean, median, mode) or models (for example kNN, regression).",
+      "Independence (statistical)": "Assumption that observations do not influence each other. Violations (e.g. time dependence) can invalidate standard test results.",
+      "Inferential statistics": "Using sample data to draw conclusions or test hypotheses about a larger population.",
+      "Influence function": "A tool from robust statistics / ML that measures how small changes in a training point would change a model’s estimate.",
+      "Iteration": "One pass or update step in an iterative algorithm during training or optimisation.",
+      "IQR": "Interquartile range – the distance between the 25th and 75th percentiles; a robust measure of spread.",
+    
+      // ---------- J ----------
+      "Jackknife": "A resampling method that leaves out one observation (or group) at a time to estimate variance and influence.",
+      "Julia": "A high-performance dynamic language designed for numerical and scientific computing.",
+    
+      // ---------- K ----------
+      "K-Means": "A clustering algorithm that partitions data into k clusters by alternating assignment and centroid updates.",
+      "Keras": "A high-level neural-network API in Python that runs on backends like TensorFlow.",
+      "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
+      "Kolmogorov–Smirnov test": "A non-parametric test that compares a sample to a reference distribution or compares two samples to check for distributional differences.",
+      "Kruskal–Wallis test": "A non-parametric analogue of one-way ANOVA for 3+ groups based on ranks, useful when normality or equal-variance assumptions fail.",
+      "Kurtosis": "A measure of tail heaviness relative to a normal distribution: high kurtosis = more extreme outliers.",
+    
+      // ---------- L ----------
+      "L1 regularisation": "Regularisation using absolute values of coefficients (Lasso); encourages sparse models with some coefficients exactly zero.",
+      "L2 regularisation": "Regularisation using squared coefficients (Ridge); discourages large weights but rarely sets them exactly to zero.",
+      "Lag (time-series)": "How far apart two observations are in time. Autocorrelation is often described as a function of lag.",
+      "Labeled data": "Data where each example has a known target label, needed for supervised learning.",
+      "Lasso regression": "Regression with L1 regularisation, which can shrink some coefficients exactly to zero and perform feature selection.",
+      "Leverage": "How unusual a point’s predictor values are; high-leverage points can strongly pull the regression line.",
+      "Levene's test": "A statistical test for checking whether several groups have equal variances. More robust to non-normal data than classic variance-equality tests.",
+      "Line chart": "A chart that connects data points with lines to show trends over time or ordered values.",
+      "Linear model": "A model where the prediction is a linear combination of inputs plus noise.",
+      "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
+      "Ljung–Box test": "A test that checks whether a set of autocorrelations is jointly zero, used to see if time-series residuals resemble white noise.",
+      "Log loss": "A loss function for probabilistic classification that heavily penalises confident but wrong predictions.",
+      "Log-transformation": "Applying the logarithm to a variable to reduce skewness, stabilise variance, or make multiplicative patterns more linear.",
+      "Logistic regression": "A model for binary outcomes; it predicts log-odds that are converted to probabilities between 0 and 1.",
+      "Long Short-Term Memory (LSTM)": "A recurrent neural network architecture with gates that help remember or forget information over long sequences.",
+    
+      // ---------- M ----------
+      "MAE": "Mean Absolute Error – the average absolute difference between predicted and actual values; easy to read as a ‘typical error’.",
+      "Machine learning": "Using algorithms that learn patterns from data to make predictions or decisions without explicit rules.",
+      "Mahout": "An Apache project providing scalable machine-learning algorithms, especially on Hadoop.",
+      "MapReduce": "A programming model for distributed data processing using map and reduce steps over large datasets.",
+      "Mann–Whitney U test": "A non-parametric test that compares whether two independent groups differ in their typical (median/rank) values.",
+      "Market basket analysis": "Finding products that are often purchased together to drive recommendations or bundling.",
+      "Market mix modeling": "Using regression-style models to decompose sales into contributions from price, promotion, distribution, etc.",
+      "Matthews correlation coefficient (MCC)": "A balanced measure for binary classification using all four confusion-matrix cells; works well with imbalanced data.",
+      "Maximum likelihood estimation": "Choosing parameter values that make the observed data most probable under the model.",
+      "Mean": "The simple average: add up all values and divide by how many you have.",
+      "Median": "The middle value when the data is sorted. Half the values are above and half below; less sensitive to outliers than the mean.",
+      "MIS": "Management Information System – systems that gather and report data to support organisational decision making.",
+      "ML-as-a-Service (MLaaS)": "Cloud services that provide ready-made machine-learning tools and APIs.",
+      "Mode": "The value that occurs most frequently in a dataset.",
+      "Model drift": "Gradual degradation of model performance because the relationship between features and target changes over time.",
+      "Model selection": "Choosing between candidate models or configurations based on criteria like AIC, BIC, CV error or holdout performance.",
+      "Model stability index (MSI)": "A summary of how consistent model predictions are under small changes in data or training; higher MSI means more stable.",
+      "Monte Carlo simulation": "Using repeated random sampling from distributions to approximate how a complex system behaves.",
+      "MMD (Maximum Mean Discrepancy)": "A non-parametric distance between distributions used to detect distribution shift or for domain adaptation.",
+      "MSE": "Mean Squared Error – the average of squared errors between predictions and actual values; penalises large errors strongly.",
+      "Multi-class classification": "Classification problems with more than two possible target classes.",
+      "Multicollinearity": "Strong correlation between predictors, making coefficient estimates unstable and hard to interpret.",
+      "Multivariate analysis": "Analysing relationships among several variables at the same time.",
+      "Multivariate regression": "Regression with multiple dependent variables predicted jointly from a set of predictors.",
+      "Multiple testing": "Running many hypothesis tests on the same data. Greatly increases false positives unless controlled with FWER/FDR methods.",
+    
+      // ---------- N ----------
+      "Naive Bayes": "A simple probabilistic classifier that applies Bayes’ theorem assuming features are conditionally independent given the class.",
+      "NaN": "Stands for ‘Not a Number’: a special value representing missing or undefined numeric results.",
+      "Natural Language Processing (NLP)": "Techniques that allow computers to process and analyse human language data.",
+      "Negative log-likelihood": "Loss equal to minus the log of the predicted probability of the observed outcomes; lower is better.",
+      "Nominal variable": "A categorical variable whose categories have no natural order (for example city names).",
+      "Non-parametric": "Methods that make few assumptions about distribution shape or functional form, often using ranks or resampling.",
+      "Normal distribution": "The classic bell-shaped continuous distribution; many methods assume data or residuals are approximately normal.",
+      "Normality assumption": "The assumption that data or residuals follow a normal distribution. Many classical tests rely on this.",
+      "Normality test": "A statistical test (for example Shapiro–Wilk, Kolmogorov–Smirnov on residuals) that checks whether data follow a normal distribution.",
+      "Normalization": "Rescaling features to a common scale (for example 0–1) to make them comparable.",
+      "Norms": "Functions that measure vector size, such as L1 (sum of absolute values) or L2 (Euclidean length).",
+      "NoSQL": "Databases that store data in non-tabular forms such as key–value, document, column or graph stores.",
+      "Numpy": "A core Python library for fast numerical computing and n-dimensional arrays.",
+      "Noise": "Random variation in the data that is not explained by the model or features.",
+      "Noise feature": "A feature with no real relationship to the target; often added to test robustness or overfitting.",
+    
+      // ---------- O ----------
+      "One hot encoding": "Representing a categorical variable as multiple 0/1 columns, one per category.",
+      "One shot learning": "Training a classifier that can recognise a class from a single labelled example.",
+      "One-way ANOVA": "A specific ANOVA design that compares means across three or more independent groups using one categorical factor.",
+      "Oozie": "A workflow scheduler for Hadoop that coordinates and runs jobs like MapReduce, Hive or Pig in sequence or on a schedule.",
+      "Ordinal variable": "A categorical variable with an inherent order (for example low, medium, high).",
+      "Outlier": "An observation that is unusual compared to the rest of the data. It can strongly affect many statistics.",
+      "Overfitting": "The model fits the noise and quirks of the training data but performs poorly on new data.",
+    
+      // ---------- P ----------
+      "Paired t-test": "A t-test that compares the mean difference between paired or matched observations (for example before–after measurements).",
+      "Pandas": "A Python library providing DataFrame objects and tools for data wrangling and analysis.",
+      "Parameters": "Model quantities learned from data (for example regression coefficients, neural-network weights).",
+      "Pattern recognition": "Finding and classifying recurring patterns in data, often using machine-learning methods.",
+      "Percentile": "A value below which a given percentage of observations fall (for example 90th percentile is higher than 90% of the data).",
+      "Pie chart": "A circular chart divided into slices that represent parts of a whole.",
+      "Pig": "A scripting platform on Hadoop that lets you write data-flow jobs in a higher-level language instead of Java MapReduce.",
+      "Polynomial regression": "Regression where the predictors include powers of a variable (for example x, x², x³) to model curves.",
+      "Population Stability Index (PSI)": "A measure of distribution shift between two datasets (for example training vs production); larger PSI indicates more drift.",
+      "Post-hoc test": "A follow-up test performed after a significant global test (such as ANOVA) to determine which specific groups differ, usually with multiple-testing correction.",
+      "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
+      "PR AUC": "Area under the precision–recall curve; more informative than ROC AUC when the positive class is rare.",
+      "Pre-trained model": "A model already trained on a large related dataset and reused as a starting point for a new task.",
+      "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
+      "Precision and recall": "Paired metrics: precision focuses on quality of positive predictions; recall focuses on finding all true positives.",
+      "Predictor variable": "A feature used to explain or predict the outcome (synonym of independent variable).",
+      "Principal Component Analysis (PCA)": "A dimensionality reduction method that transforms correlated variables into a smaller set of uncorrelated components.",
+      "PSIS-LOO": "Pareto-smoothed importance-sampling leave-one-out cross-validation; an efficient approximation to full LOO with diagnostics.",
+      "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data are hard to explain under ‘no effect’.",
+      "Python": "A widely used high-level programming language, very popular for data science and machine learning.",
+      "PyTorch": "A deep-learning framework in Python that uses dynamic computation graphs and is widely used in research.",
+    
+      // ---------- Q ----------
+      "Q–Q plot": "A plot that compares quantiles of the data to quantiles of a reference distribution to visually assess distributional assumptions (for example normality).",
+      "Quartile": "Values that split ordered data into four equal parts (Q1, Q2/median, Q3).",
+    
+      // ---------- R ----------
+      "R": "An open-source language and environment for statistical computing, graphics and data analysis.",
+      "Range": "The difference between the largest and smallest value in a dataset.",
+      "Rank-based test": "A non-parametric test that uses the ordering (ranks) of values instead of the raw values, making it robust to outliers and non-normality.",
+      "Recommendation engine": "A system that suggests items (products, movies, etc.) likely to interest a user based on behaviour or similarity.",
+      "Recall (Sensitivity)": "Of all true positives in the data, how many did we catch? Focuses on avoiding false negatives.",
+      "Regression": "Supervised learning where the target is numeric (for example price, weight).",
+      "Regression spline": "A regression model that fits piecewise polynomials joined smoothly at knots, allowing flexible curves.",
+      "Regularisation": "Adding a penalty to large coefficients to reduce variance and overfitting (examples: Lasso/L1, Ridge/L2).",
+      "Reinforcement learning": "An agent learns to take actions in an environment to maximise long-term reward through trial and error.",
+      "Residual": "The difference between the observed value and the model’s predicted value. Residual patterns help diagnose model problems.",
+      "Residual diagnostics": "Plots and tests used to check whether residuals obey model assumptions (normality, equal variance, independence).",
+      "Residual plot": "A plot of residuals versus fitted values or time, used to check for patterns that violate model assumptions.",
+      "Response variable": "Another term for dependent variable or target; the outcome we model.",
+      "Ridge regression": "Regression with L2 regularisation that shrinks coefficients toward zero but rarely to exactly zero.",
+      "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
+      "Robustness": "How resistant a method or metric is to outliers, noise and assumption violations.",
+      "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across thresholds (0.5 = random, 1.0 = perfect).",
+      "Root Mean Squared Error (RMSE)": "Same as RMSE; included for people searching by the long name.",
+      "Rotational invariance": "A property where results do not change when the coordinate system is rotated.",
+    
+      // ---------- S ----------
+      "Sample size": "How many observations are in the dataset or in the part of the data being analysed.",
+      "Sample size effect (tests)": "The phenomenon that large samples make tiny effects statistically significant, while small samples may miss real effects.",
+      "Scala": "A JVM language that combines object-oriented and functional programming.",
+      "Semi-supervised learning": "Learning from a mix of labelled and unlabelled data.",
+      "SHAP values": "Feature-attribution method based on Shapley values that decomposes a prediction into contributions of each feature.",
+      "Shapiro–Wilk test": "A powerful normality test for small to medium samples. Very sensitive to even mild deviations with large n.",
+      "Significance (statistical)": "Shorthand for ‘statistically significant’; usually means the p-value is below alpha. It does not guarantee a large or important effect.",
+      "Signal": "The real underlying pattern or effect in the data that we care about.",
+      "Skewness": "How asymmetric a distribution is: positive skew has a longer right tail; negative skew has a longer left tail.",
+      "SMOTE": "Synthetic Minority Oversampling Technique – creates synthetic minority-class examples to rebalance imbalanced datasets.",
+      "Softmax": "Function that converts a vector of scores into a probability distribution over classes.",
+      "Somers’ D": "Rank-correlation measure related to the C-index, often used to assess risk models.",
+      "Spatial–temporal reasoning": "Reasoning about how things change across both space and time, often important in advanced AI systems.",
+      "Specificity": "Of all true negatives, how many did we correctly predict as negative?",
+      "Squared error": "The square of the difference between predicted and actual values; used in MSE and related metrics.",
+      "Stability": "How consistent a coefficient, metric or decision is under resampling or small data changes.",
+      "Standard deviation": "The square root of variance. Roughly, a typical distance from the mean in the same units as the data.",
+      "Standard error": "The standard deviation of a statistic’s sampling distribution; measures how precisely the statistic estimates the population value.",
+      "Standardization": "Rescaling features to have mean 0 and standard deviation 1 (z-scores).",
+      "Statistics": "The discipline that studies how to collect, analyse, present and interpret data.",
+      "Stochastic Gradient Descent": "Gradient descent that updates parameters using one or a few training examples at a time.",
+      "Sum of squared errors (SSE)": "The sum of all squared errors between predictions and actual values; basis for MSE and RMSE.",
+      "Supervised learning": "Learning a mapping from inputs to outputs using labelled data.",
+      "Support Vector Machine (SVM)": "A classifier that finds a hyperplane with maximum margin between classes, possibly in a transformed feature space.",
+    
+      // ---------- T ----------
+      "Tail behaviour": "How the extreme values (tails) of a distribution behave. Heavy tails mean more extreme outliers than a normal distribution would predict.",
+      "Target": "The outcome the model is trying to predict. Also called label, response or dependent variable.",
+      "TCE (Thresholded Calibration Error)": "Calibration metric that focuses on predictions above a chosen confidence threshold, highlighting miscalibration where the model is most confident.",
+      "TensorFlow": "An open-source library from Google for numerical computation and building machine-learning models, especially deep learning.",
+      "t-test": "A family of tests that compare means to a reference value or between groups, typically assuming normal residuals.",
+      "t-test (independent)": "A t-test comparing means of two independent groups. Assumes normal residuals and often equal variances (or use Welch’s version otherwise).",
+      "Tokenization": "Splitting text into tokens (words, subwords, etc.) as a first step in many NLP pipelines.",
+      "Torch": "A machine-learning library (and its successor PyTorch) that provides many deep-learning building blocks.",
+      "Train–test split": "Dividing the data into a training set (to fit the model) and a test set (to evaluate how it generalises).",
+      "True negative (TN)": "A case that is actually negative and was predicted negative.",
+      "True positive (TP)": "A case that is actually positive and was predicted positive.",
+      "Type I error": "Rejecting a true null hypothesis. In practice: a false alarm or false positive.",
+      "Type II error": "Failing to reject a false null hypothesis. In practice: a missed effect or false negative.",
+    
+      // ---------- U ----------
+      "UMAP": "A non-linear dimensionality-reduction method often used for 2D/3D visualisation of high-dimensional data.",
+      "Underfitting": "The model is too simple to capture the structure in the data and performs poorly even on training data.",
+      "Univariate analysis": "Analysing the distribution or relationship of a single variable (for example histogram of one feature).",
+      "Unsupervised learning": "Learning patterns or structure from data without labelled outcomes (for example clustering).",
+    
+      // ---------- V ----------
+      "Validation set": "A set of data held out from training and used to tune hyperparameters or choose between models.",
+      "Variance": "How much values or estimates spread around their mean; high variance means a lot of variability or instability.",
+      "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity; large values flag problems.",
+    
+      // ---------- W ----------
+      "WAIC": "Widely Applicable Information Criterion – a Bayesian model comparison score; lower WAIC usually means better out-of-sample prediction.",
+      "Wasserstein distance": "A distance between probability distributions that measures how much ‘mass’ must be moved to transform one into the other; used in optimal transport and robust ML.",
+      "Welch’s t-test": "A version of the independent t-test that does not assume equal variances across groups.",
+      "White-noise residuals": "Residuals that show no autocorrelation and roughly constant variance over time; a goal for well-specified time-series models.",
+    
+      // ---------- X ----------
+      "XGBoost": "A highly optimised implementation of gradient-boosted decision trees, widely used for tabular machine-learning problems.",
+    
+      // ---------- Z ----------
+      "Z-score": "A standardised value equal to (value − mean) / standard deviation; measures how many SDs a point is from the mean.",
+      "Z-test": "A hypothesis test that uses the normal distribution to assess how far a statistic is from the null value in standard-deviation units.",
+      "Zookeeper": "A coordination service for distributed systems that manages configuration, naming and synchronisation."
+    };
+
 
 
   /* ========= 2. BUILD UI ========= */
