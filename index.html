@@ -1151,6 +1151,23 @@ body.dark-mode .ref-table td {
 
 
 
+/* Inline glossary hits in the text */
+.glossary-inline-term {
+  border-bottom: 1px dotted rgba(15, 118, 110, 0.7); /* teal-ish underline */
+  cursor: help;
+  padding-bottom: 0.05rem;
+}
+
+/* Dark mode tweak */
+.dark-mode .glossary-inline-term {
+  border-bottom-color: rgba(45, 212, 191, 0.9);
+}
+
+
+
+
+
+
 
 
 
@@ -1310,7 +1327,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
+<main id="page-content">
 
 
 
@@ -2682,6 +2699,109 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
 </ul>
 
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Survival / Time-to-Event Performance -->
+<details class="metric-section">
+  <summary>Survival / Time-to-Event Performance</summary>
+  <div class="metric-section-body">
+    <p>
+      Use these metrics when the outcome is a <strong>time until an event</strong>
+      (death, relapse, failure, churn) and some observations are
+      <strong>censored</strong> (we only know the event has not happened yet by
+      the end of follow-up).
+    </p>
+
+    <h4>When to use</h4>
+    <ul>
+      <li>Outcomes like “time from diagnosis to death”, “time to device failure”, “time until customer churn”.</li>
+      <li>Many people are still event-free at the end of the study (right-censoring).</li>
+      <li>We care about <em>risk over time</em>, not just a yes/no label at a fixed date.</li>
+    </ul>
+
+    <h4>Key tools &amp; metrics</h4>
+    <ul>
+      <li>
+        <strong>Kaplan–Meier curve</strong> –
+        step-shaped curve showing the fraction still event-free over time. Great
+        for visualising survival patterns and comparing groups.
+      </li>
+      <li>
+        <strong>Log-rank test</strong> –
+        tests whether two or more Kaplan–Meier curves are systematically different
+        over time.
+      </li>
+      <li>
+        <strong>Cox proportional hazards model</strong> –
+        regression model for time-to-event data that estimates
+        <strong>hazard ratios</strong> for predictors.
+      </li>
+      <li>
+        <strong>C-index (concordance index)</strong> –
+        rank-based performance measure: probability that a person who experiences
+        the event earlier gets a higher predicted risk. (1 = perfect, 0.5 = random.)
+      </li>
+      <li>
+        <strong>Time-dependent ROC / AUC(t)</strong> –
+        ROC-style discrimination at specific time points (e.g. 1-year, 5-year AUC).
+      </li>
+      <li>
+        <strong>Brier score over time</strong> –
+        mean squared error of predicted event probabilities at a given time
+        horizon, adjusted for censoring. Lower is better.
+      </li>
+    </ul>
+
+    <h4>Common pitfalls</h4>
+    <ul>
+      <li>
+        <strong>Ignoring censoring</strong> –
+        treating censored cases as if the event never happened biases estimates.
+        Always use survival-aware methods (Kaplan–Meier, Cox, etc.).
+      </li>
+      <li>
+        <strong>Immortal-time bias</strong> –
+        giving people “risk-free” time because they must survive long enough
+        to receive a treatment or enter a group.
+      </li>
+      <li>
+        <strong>Competing risks</strong> –
+        if other events (e.g. death from another cause) prevent the event of
+        interest, standard survival curves can overstate risk unless competing-risk
+        methods are used.
+      </li>
+      <li>
+        <strong>Too short follow-up</strong> –
+        if few events occur, any metric (C-index, Brier, log-rank) will be noisy
+        and underpowered.
+      </li>
+    </ul>
+  </div>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- ===================================== -->
 <!-- 2. INFERENCE & HYPOTHESIS TESTING     -->
@@ -7921,6 +8041,15 @@ exp.show_in_notebook()
   
   
   
+ </main> 
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 <!-- ===========================
@@ -8251,6 +8380,7 @@ exp.show_in_notebook()
       "Backpropagation": "The algorithm used in neural networks to propagate the loss gradient backwards through layers and update weights.",
       "Bagging": "Short for bootstrap aggregating: train many models on different bootstrap samples and average or vote their predictions to reduce variance.",
       "Bar chart": "A simple plot that shows counts or summary values for different categories using bars with lengths proportional to the values.",
+      "Baseline hazard": "In the Cox model, the hazard pattern over time when all predictors are at zero. The model estimates how covariates shift this baseline risk.",
       "Bayes’ theorem": "A rule for updating the probability of a hypothesis given new evidence: posterior ∝ likelihood × prior.",
       "Bayesian statistics": "An approach that treats unknown quantities as random variables with priors and updates them using Bayes’ theorem when new data arrive.",
       "BIC (Bayesian Information Criterion)": "A model-selection score that penalises model complexity. Lower BIC indicates a better trade-off between fit and simplicity.",
@@ -8259,6 +8389,7 @@ exp.show_in_notebook()
       "Big data": "Datasets that are too large or fast for traditional tools and require distributed storage and processing.",
       "Binary variable": "A variable that only takes two values such as 0/1, yes/no or true/false.",
       "Binomial distribution": "A distribution for the number of ‘successes’ in a fixed number of independent trials with constant success probability.",
+      "Bonferroni correction": "A method used to counteract the problem (false positives/Type I errors) of multiple comparisons by adjusting the significance level (alpha) needed to consider a result statistically significant, typically by dividing the original alpha by the number of comparisons being made.",
       "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (for example confidence intervals) or stability of a statistic or model.",
       "Boosting": "An ensemble method that trains models sequentially, each focusing on errors of the previous ones, and combines them to improve performance.",
       "Box plot": "A visual summary of a distribution showing median, quartiles, range and potential outliers.",
@@ -8274,6 +8405,8 @@ exp.show_in_notebook()
       "Calibration within groups": "Calibration checked separately in subgroups (for example by gender or age) to test whether probabilities are fair and well calibrated for everyone.",
       "CART (Classification and Regression Trees)": "A popular decision-tree algorithm used for both classification and regression.",
       "Categorical variable": "A variable whose values are labels or categories (for example city, colour).",
+      "Categorical data tests": "Chi-square test of independence, Chi-square goodness-of-fit, Fisher’s exact test",
+      "Censoring (right-censoring)": "When the event has not occurred by the end of follow-up, so we only know the event time is greater than the observed time.",
       "Chi-square goodness-of-fit": "A test that checks whether observed category counts match expected frequencies from a theoretical or historical distribution.",
       "Chi-square test of independence": "A test that checks whether two categorical variables are independent using a contingency table.",
       "Class imbalance": "When one class is much more common than the others; can make accuracy and some other metrics misleading.",
@@ -8282,8 +8415,10 @@ exp.show_in_notebook()
       "Clustering": "An unsupervised learning task that groups similar observations together without using labels.",
       "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
       "Coefficient": "A number that multiplies a feature in a model. It describes how the prediction changes when that feature increases by one unit, holding others fixed.",
+      "Competing risks": "When multiple mutually exclusive events can occur (e.g., death from different causes). Standard survival methods may overestimate risk unless competing-risk models are used.",
       "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
       "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
+      "Concordance index (C-index)": "A discrimination metric for survival models: the probability that a subject who experiences the event earlier receives a higher predicted risk. 0.5 = random, 1.0 = perfect.",
       "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (for example 95%). Narrow intervals indicate more precision.",
       "Contingency table": "A table of counts for combinations of categories (for example treatment × outcome) used in chi-square and Fisher’s exact tests.",
       "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
@@ -8295,6 +8430,7 @@ exp.show_in_notebook()
       "Cost function": "A formula that measures how wrong a model’s predictions are; training minimises this quantity.",
       "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
       "Covariance": "A measure of how two variables vary together. Positive covariance means they tend to increase or decrease together.",
+      "Cox proportional hazards model": "A regression model for time-to-event outcomes. Estimates hazard ratios without making assumptions about the baseline hazard. Assumes proportional hazards over time.",
       "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
       "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
       "Cumulative distribution function (CDF)": "Function that gives the probability that a random variable is less than or equal to a given value.",
@@ -8334,6 +8470,7 @@ exp.show_in_notebook()
       "Equalized odds": "Fairness requirement that true positive and false positive rates be similar across protected groups.",
       "ETL": "Extract, Transform, Load – pipelines that pull data from sources, clean/transform it, and load it into a destination system.",
       "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
+      "Event (in survival analysis)": "The outcome of interest occurring in time-to-event data — for example death, relapse, churn, equipment failure.",
       "Expected counts": "Theoretical cell counts a chi-square test uses to see how far observed counts deviate from what chance alone would produce.",
     
       // ---------- F ----------
@@ -8366,6 +8503,8 @@ exp.show_in_notebook()
     
       // ---------- H ----------
       "Hadoop": "An open-source ecosystem for distributed storage (HDFS) and processing (MapReduce, Spark) of large datasets.",
+      "Hazard": "The instantaneous risk of an event occurring at time t, given survival until t. Not a probability but a rate.",
+      "Hazard ratio (HR)": "A multiplicative measure of how a predictor affects the hazard. HR > 1 increases risk; HR < 1 decreases risk.",
       "Hidden layer": "A layer in a neural network that is neither input nor output; its activations are not directly observed.",
       "Hidden Markov Model": "A probabilistic model where a sequence of hidden states generates observable outputs; used in speech, sequence labelling, etc.",
       "Hierarchical clustering": "A clustering method that builds a tree of clusters by repeatedly merging or splitting groups.",
@@ -8381,6 +8520,7 @@ exp.show_in_notebook()
       // ---------- I ----------
       "IDI (Integrated Discrimination Improvement)": "A metric that compares how much two risk models improve separation between cases and controls.",
       "IID (Independent and Identically Distributed)": "Assumption that observations are independent of each other and drawn from the same distribution.",
+      "Immortal-time bias": "A bias created when individuals must survive long enough to enter an exposure group, creating 'event-free' time that improperly benefits that group.",
       "Imputation": "Filling in missing values using statistics (mean, median, mode) or models (for example kNN, regression).",
       "Independence (statistical)": "Assumption that observations do not influence each other. Violations (e.g. time dependence) can invalidate standard test results.",
       "Inferential statistics": "Using sample data to draw conclusions or test hypotheses about a larger population.",
@@ -8393,6 +8533,8 @@ exp.show_in_notebook()
       "Julia": "A high-performance dynamic language designed for numerical and scientific computing.",
     
       // ---------- K ----------
+      "Kaplan–Meier estimator": "A non-parametric method for estimating the survival function — the probability of an event (such as death) not occurring up to each time point. Handles right-censored data where some individuals' outcomes are not yet observed. Often visualised as a stepwise survival curve and used to compare groups.",
+      "Kaplan–Meier curve": "A non-parametric estimate of the survival function. Produces a step-shaped curve showing the fraction still event-free over time.",
       "K-Means": "A clustering algorithm that partitions data into k clusters by alternating assignment and centroid updates.",
       "Keras": "A high-level neural-network API in Python that runs on backends like TensorFlow.",
       "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
@@ -8413,6 +8555,7 @@ exp.show_in_notebook()
       "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
       "Ljung–Box test": "A test that checks whether a set of autocorrelations is jointly zero, used to see if time-series residuals resemble white noise.",
       "Log loss": "A loss function for probabilistic classification that heavily penalises confident but wrong predictions.",
+      "Log-rank test": "A hypothesis test comparing two or more Kaplan–Meier curves. Tests whether survival differs systematically between groups.",
       "Log-transformation": "Applying the logarithm to a variable to reduce skewness, stabilise variance, or make multiplicative patterns more linear.",
       "Logistic regression": "A model for binary outcomes; it predicts log-odds that are converted to probabilities between 0 and 1.",
       "Long Short-Term Memory (LSTM)": "A recurrent neural network architecture with gates that help remember or forget information over long sequences.",
@@ -8428,6 +8571,7 @@ exp.show_in_notebook()
       "Matthews correlation coefficient (MCC)": "A balanced measure for binary classification using all four confusion-matrix cells; works well with imbalanced data.",
       "Maximum likelihood estimation": "Choosing parameter values that make the observed data most probable under the model.",
       "Mean": "The simple average: add up all values and divide by how many you have.",
+      "Means tests": "t-test, One-way ANOVA, Mann–Whitney U test, Kruskal–Wallis test",
       "Median": "The middle value when the data is sorted. Half the values are above and half below; less sensitive to outliers than the mean.",
       "MIS": "Management Information System – systems that gather and report data to support organisational decision making.",
       "ML-as-a-Service (MLaaS)": "Cloud services that provide ready-made machine-learning tools and APIs.",
@@ -8455,6 +8599,7 @@ exp.show_in_notebook()
       "Normality assumption": "The assumption that data or residuals follow a normal distribution. Many classical tests rely on this.",
       "Normality test": "A statistical test (for example Shapiro–Wilk, Kolmogorov–Smirnov on residuals) that checks whether data follow a normal distribution.",
       "Normalization": "Rescaling features to a common scale (for example 0–1) to make them comparable.",
+      "Normality / tests distribution shape": "Shapiro–Wilk test, Kolmogorov–Smirnov test, Anderson–Darling test, Q–Q plot",
       "Norms": "Functions that measure vector size, such as L1 (sum of absolute values) or L2 (Euclidean length).",
       "NoSQL": "Databases that store data in non-tabular forms such as key–value, document, column or graph stores.",
       "Numpy": "A core Python library for fast numerical computing and n-dimensional arrays.",
@@ -8488,6 +8633,7 @@ exp.show_in_notebook()
       "Precision and recall": "Paired metrics: precision focuses on quality of positive predictions; recall focuses on finding all true positives.",
       "Predictor variable": "A feature used to explain or predict the outcome (synonym of independent variable).",
       "Principal Component Analysis (PCA)": "A dimensionality reduction method that transforms correlated variables into a smaller set of uncorrelated components.",
+      "Proportional hazards assumption": "The assumption in a Cox model that hazard ratios between groups remain constant over time. Violations can invalidate inference.",
       "PSIS-LOO": "Pareto-smoothed importance-sampling leave-one-out cross-validation; an efficient approximation to full LOO with diagnostics.",
       "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data are hard to explain under ‘no effect’.",
       "Python": "A widely used high-level programming language, very popular for data science and machine learning.",
@@ -8511,6 +8657,7 @@ exp.show_in_notebook()
       "Residual diagnostics": "Plots and tests used to check whether residuals obey model assumptions (normality, equal variance, independence).",
       "Residual plot": "A plot of residuals versus fitted values or time, used to check for patterns that violate model assumptions.",
       "Response variable": "Another term for dependent variable or target; the outcome we model.",
+      "Restricted Mean Survival Time (RMST)": "Average survival time up to a specified horizon. A robust alternative to comparing medians or hazard ratios.",
       "Ridge regression": "Regression with L2 regularisation that shrinks coefficients toward zero but rarely to exactly zero.",
       "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
       "Robustness": "How resistant a method or metric is to outliers, noise and assumption violations.",
@@ -8543,12 +8690,20 @@ exp.show_in_notebook()
       "Sum of squared errors (SSE)": "The sum of all squared errors between predictions and actual values; basis for MSE and RMSE.",
       "Supervised learning": "Learning a mapping from inputs to outputs using labelled data.",
       "Support Vector Machine (SVM)": "A classifier that finds a hyperplane with maximum margin between classes, possibly in a transformed feature space.",
+      "Survival analysis": "Statistical methods for modelling time until an event occurs (death, failure, recovery). Often involves censoring, Kaplan–Meier curves, and hazard models like Cox regression. It handles censoring, where for some subjects we only know that the event has not yet happened by the end of follow-up.",
+      "Survival analysis / time-to-event methods": "Kaplan–Meier curve, Cox proportional hazards model, hazard ratio, censoring, log-rank test.",
+      "Survival function": "The probability of being event-free beyond time t. Estimated using Kaplan–Meier or parametric survival models.",
+      "Survival / Time-to-Event Performance": "Kaplan–Meier, C-index, Brier over time, Cox model",  
     
       // ---------- T ----------
       "Tail behaviour": "How the extreme values (tails) of a distribution behave. Heavy tails mean more extreme outliers than a normal distribution would predict.",
       "Target": "The outcome the model is trying to predict. Also called label, response or dependent variable.",
+      "Time-series tests": "Durbin–Watson test, Ljung–Box test",
       "TCE (Thresholded Calibration Error)": "Calibration metric that focuses on predictions above a chosen confidence threshold, highlighting miscalibration where the model is most confident.",
       "TensorFlow": "An open-source library from Google for numerical computation and building machine-learning models, especially deep learning.",
+      "Time-dependent AUC": "ROC-style discrimination computed at a specific time point (e.g., 1-year or 5-year event prediction).",
+      "Time-dependent covariates": "Predictors whose values change over time and can be incorporated into extended Cox models.",
+      "Time-to-event outcome": "A response variable measuring the time until an event occurs, possibly censored if the event has not been observed.",
       "t-test": "A family of tests that compare means to a reference value or between groups, typically assuming normal residuals.",
       "t-test (independent)": "A t-test comparing means of two independent groups. Assumes normal residuals and often equal variances (or use Welch’s version otherwise).",
       "Tokenization": "Splitting text into tokens (words, subwords, etc.) as a first step in many NLP pipelines.",
@@ -8569,6 +8724,7 @@ exp.show_in_notebook()
       "Validation set": "A set of data held out from training and used to tune hyperparameters or choose between models.",
       "Variance": "How much values or estimates spread around their mean; high variance means a lot of variability or instability.",
       "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity; large values flag problems.",
+      "Variance / spread": "Levene's test, Brown–Forsythe test",
     
       // ---------- W ----------
       "WAIC": "Widely Applicable Information Criterion – a Bayesian model comparison score; lower WAIC usually means better out-of-sample prediction.",
@@ -8584,6 +8740,24 @@ exp.show_in_notebook()
       "Z-test": "A hypothesis test that uses the normal distribution to assess how far a statistic is from the null value in standard-deviation units.",
       "Zookeeper": "A coordination service for distributed systems that manages configuration, naming and synchronisation."
     };
+
+
+
+
+
+
+
+    // Treat anything inside the floating glossary panel as "off-limits"
+    function isInsideGlossary(el) {
+      return !!el.closest('#glossary-panel');
+    }
+    
+    
+    
+    
+
+
+
 
 
 
@@ -8682,49 +8856,57 @@ exp.show_in_notebook()
     });
   }
 
-  /* ========= 6. TERMS ON THIS PART OF THE PAGE ========= */
-  function updateVisibleTerms() {
-    const textEls = document.querySelectorAll("p, li, td, th, summary, h1, h2, h3, h4, h5");
-    const viewportTop = 0;
-    const viewportBottom = window.innerHeight;
-    const seen = new Set();
+/* ========= 6. TERMS ON THIS PART OF THE PAGE ========= */
+function updateVisibleTerms() {
+  const textEls = document.querySelectorAll(
+    "p, li, td, th, summary, h1, h2, h3, h4, h5"
+  );
+  const viewportTop = 0;
+  const viewportBottom = window.innerHeight;
+  const seen = new Set();
 
-    textEls.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.bottom < viewportTop || rect.top > viewportBottom) return;
-      const t = (el.innerText || "").toLowerCase();
-      if (!t) return;
-      termNames.forEach(name => {
-        if (seen.has(name)) return;
-        const simple = name.toLowerCase();
-        if (t.includes(simple)) {
-          seen.add(name);
-        }
-      });
+  textEls.forEach(el => {
+    // NEW: ignore anything inside the floating glossary
+    if (isInsideGlossary(el)) return;
+
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom < viewportTop || rect.top > viewportBottom) return;
+
+    const t = (el.innerText || "").toLowerCase();
+    if (!t) return;
+
+    termNames.forEach(name => {
+      if (seen.has(name)) return;
+      const simple = name.toLowerCase();
+      if (t.includes(simple)) {
+        seen.add(name);
+      }
     });
+  });
 
-    currentList.innerHTML = "";
-    if (!seen.size) {
-      currentList.textContent = "Scroll the page – I’ll show terms here.";
-      return;
-    }
-
-    Array.from(seen)
-      .sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }))
-      .slice(0, 12)
-      .forEach(name => {
-        const btn = document.createElement("button");
-        btn.className = "glossary-chip";
-        btn.textContent = name;
-        btn.addEventListener("click", () => highlightTerm(name));
-        currentList.appendChild(btn);
-      });
+  currentList.innerHTML = "";
+  if (!seen.size) {
+    currentList.textContent = "Scroll the page – I’ll show terms here.";
+    return;
   }
 
-  updateVisibleTerms();
-  window.addEventListener("scroll", () => {
-    window.requestAnimationFrame(updateVisibleTerms);
-  });
+  Array.from(seen)
+    .sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }))
+    .slice(0, 12)
+    .forEach(name => {
+      const btn = document.createElement("button");
+      btn.className = "glossary-chip";
+      btn.textContent = name;
+      btn.addEventListener("click", () => highlightTerm(name));
+      currentList.appendChild(btn);
+    });
+}
+
+updateVisibleTerms();
+window.addEventListener("scroll", () => {
+  window.requestAnimationFrame(updateVisibleTerms);
+});
+
 })();
 </script>
 
@@ -8733,6 +8915,153 @@ exp.show_in_notebook()
   
   
   
+
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 1) Make sure we have the glossary + content container
+    if (typeof GLOSSARY === "undefined") return;
+
+    const contentRoot = document.getElementById("page-content");
+    if (!contentRoot) return;
+
+    // 2) Prepare term lookup (case-insensitive → canonical key)
+    const canonicalByLower = {};
+    Object.keys(GLOSSARY).forEach((key) => {
+      canonicalByLower[key.toLowerCase()] = key;
+    });
+
+    // Sort terms by length (longest first) to avoid partial matches
+    const sortedTerms = Object.keys(GLOSSARY).sort(
+      (a, b) => b.length - a.length
+    );
+
+    // Escape for regex
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    const pattern = sortedTerms.map(escapeRegex).join("|");
+    // Word-ish boundaries; good enough for UI text
+    const termRegex = new RegExp("\\b(" + pattern + ")\\b", "gi");
+
+    // 3) Decide where NOT to touch text
+    const SKIP_SELECTOR =
+      "script, style, code, pre, a, button, input, textarea, svg, " +
+      "aside#glossary-panel, .glossary-inline-term";
+
+    function shouldSkipNode(textNode) {
+      const parent = textNode.parentElement;
+      if (!parent) return false;
+      return Boolean(parent.closest(SKIP_SELECTOR));
+    }
+
+    // 4) Walk the DOM and wrap text matches
+    function walk(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.nodeValue;
+        if (!text || !text.trim()) return;
+        if (shouldSkipNode(node)) return;
+
+        termRegex.lastIndex = 0;
+        if (!termRegex.test(text)) return; // no match in this node
+
+        // Build a fragment with wrapped terms
+        const frag = document.createDocumentFragment();
+        let lastIndex = 0;
+        termRegex.lastIndex = 0;
+        let match;
+
+        while ((match = termRegex.exec(text)) !== null) {
+          const start = match.index;
+          const end = termRegex.lastIndex;
+          const matchedText = match[0];
+
+          // Add text before the term
+          if (start > lastIndex) {
+            frag.appendChild(
+              document.createTextNode(text.slice(lastIndex, start))
+            );
+          }
+
+          // Find canonical key for the matched text (case-insensitive)
+          const canonicalKey =
+            canonicalByLower[matchedText.toLowerCase()] || matchedText;
+
+          // Create inline span
+          const span = document.createElement("span");
+          span.className = "glossary-inline-term";
+          span.dataset.term = canonicalKey;
+          // Native browser tooltip – can be replaced later with fancy tooltip
+          if (GLOSSARY[canonicalKey]) {
+            span.title = GLOSSARY[canonicalKey];
+          }
+          span.textContent = matchedText;
+
+          frag.appendChild(span);
+          lastIndex = end;
+        }
+
+        // Remaining text after last match
+        if (lastIndex < text.length) {
+          frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        // Replace original text node
+        node.parentNode.replaceChild(frag, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        // Don’t recurse into the glossary panel or already-processed spans
+        if (
+          node.closest("aside#glossary-panel") ||
+          node.classList.contains("glossary-inline-term")
+        ) {
+          return;
+        }
+
+        let child = node.firstChild;
+        while (child) {
+          const next = child.nextSibling;
+          walk(child);
+          child = next;
+        }
+      }
+    }
+
+    walk(contentRoot);
+
+    // 5) (Optional but handy) – click on inline term opens glossary panel
+    document.addEventListener("click", function (e) {
+      const termSpan = e.target.closest(".glossary-inline-term");
+      if (!termSpan) return;
+
+      const termKey = termSpan.dataset.term;
+      const panel = document.getElementById("glossary-panel");
+      if (!panel) return;
+
+      // If you have a minimised state, expand it here
+      panel.classList.remove("glossary-minimised");
+
+      // If you have a search box in the glossary, you can auto-fill it:
+      const searchInput = document.getElementById("glossary-search-input");
+      if (searchInput) {
+        searchInput.value = termKey;
+        const event = new Event("input", { bubbles: true });
+        searchInput.dispatchEvent(event);
+      }
+
+      // Optional: if your glossary renders a list with term elements,
+      // you can also scroll to / highlight the specific entry there.
+      // (We can wire this once I see the exact glossary markup.)
+    });
+  });
+</script>
+
+
+
+
 
   
   
