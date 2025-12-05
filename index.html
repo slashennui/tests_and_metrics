@@ -1319,6 +1319,28 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]
               <td>Non-parametric alternative</td>
               <td>Exchangeability of labels</td>
             </tr>
+            <tr>
+              <td>Kolmogorov–Smirnov (KS)</td>
+              <td>
+                Compare a sample to a reference distribution (1-sample)
+                or compare two samples (2-sample)
+              </td>
+              <td>
+                Continuous data, specifies distribution under H₀.
+                Sensitive to differences in shape and location.
+              </td>
+            </tr>
+            <tr>
+              <td>Levene’s test</td>
+              <td>
+                Test equality of variances across groups
+                (do we trust “equal variance” for t-test / ANOVA?)
+              </td>
+              <td>
+                Groups independent. Works reasonably well
+                even when data are not normal.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -1492,11 +1514,25 @@ r2   = r2_score(y_true, y_pred)
 
       <h4>Statistical Tests</h4>
       <pre class="ref-code">
-from scipy import stats
-
-t_stat, p_value = stats.ttest_ind(group1, group2)
-chi2, p, dof, expected = stats.chi2_contingency(contingency_table)
+      from scipy import stats
+      
+      # t-test (two independent groups, equal variance assumed)
+      t_stat, p_value = stats.ttest_ind(group1, group2)
+      
+      # Chi-square test of independence for a contingency table
+      chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
+      
+      # Kolmogorov–Smirnov:
+      # 1-sample KS: does sample follow a normal distribution?
+      ks_stat, p_ks = stats.kstest(sample, 'norm')
+      
+      # 2-sample KS: are two samples from the same distribution?
+      ks2_stat, p_ks2 = stats.ks_2samp(sample1, sample2)
+      
+      # Levene’s test for equality of variances
+      lev_stat, p_lev = stats.levene(group1, group2, group3)
       </pre>
+
     </section>
 
     <!-- 9. Key Takeaways -->
@@ -7505,6 +7541,8 @@ exp.show_in_notebook()
     "Holm correction": "A stepwise improvement over Bonferroni that is slightly less conservative while still controlling the family-wise error rate.",
     "Interquartile range (IQR)": "The distance between the 25th and 75th percentiles. A robust measure of spread that ignores the most extreme values.",
     "Jackknife": "Resampling method that repeatedly leaves out one observation at a time to estimate variance and influence of each point.",
+    "Kolmogorov–Smirnov (KS) test": "A non-parametric test that compares distributions. In 1-sample form it checks whether a sample looks like a specified reference distribution (e.g. normal). In 2-sample form it checks whether two samples look like they come from the same distribution.",
+    "Levene’s test": "A test for checking whether several groups have similar variances. Often used before t-tests or ANOVA to decide whether the 'equal variance' assumption of those tests is reasonable.",
     "Leverage": "How unusual a point's predictor values are. High-leverage points sit far from the bulk of the data in feature space and can strongly pull the fit.",
     "Linear model": "A model where the prediction is a linear combination of inputs plus noise. Includes linear regression and (on the log-odds scale) logistic regression.",
     "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
