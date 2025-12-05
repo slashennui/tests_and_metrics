@@ -7273,10 +7273,19 @@ exp.show_in_notebook()
       </div>
     </section>
 
-    <details class="glossary-all" open>
-      <summary>All terms (A–Z)</summary>
-      <div id="glossary-terms" class="glossary-terms"></div>
-    </details>
+<details class="glossary-all" open>
+  <summary>
+    <div class="glossary-section-title">
+      <span>All terms (A–Z)</span>
+      <span class="glossary-categories">
+        Statistics Glossary · Machine Learning Glossary · Data Science Tools Glossary
+      </span>
+    </div>
+  </summary>
+
+  <div id="glossary-terms" class="glossary-terms"></div>
+</details>
+
   </div>
 
   <!-- Tiny icon when minimized -->
@@ -7508,91 +7517,194 @@ exp.show_in_notebook()
     #glossary-search-input {
       min-width: 110px;
     }
+    
+    
+        .glossary-all summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    
+    .glossary-all summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .glossary-section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-weight: 600;
+      gap: 0.5rem;
+    }
+    
+    .glossary-categories {
+      font-size: 0.78rem;
+      opacity: 0.75;
+      white-space: nowrap;
+    }
+    
+    /* Stack nicely on small screens */
+    @media (max-width: 700px) {
+      .glossary-section-title {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    
   }
 </style>
 
 <script>
 (function () {
-  /* ========= 1. GLOSSARY TERMS (A–Z via sorting later) ========= */
+  /* ========= 1. GLOSSARY TERMS (A–Z) ========= */
   const GLOSSARY = {
     "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
     "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
-    "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null.",
+    "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null hypothesis.",
+    "Area under the curve (AUC)": "Generic term for areas under curves like ROC or Precision–Recall. Higher AUC means better ranking of positives above negatives.",
+    "Autocorrelation": "Correlation of a time series with a lagged version of itself. High autocorrelation means the series depends strongly on its past values.",
+    "Bagging (Bootstrap aggregation)": "Ensemble method: train many models on bootstrap samples and average their predictions to reduce variance and improve stability.",
+    "Bayes’ theorem": "Formula that updates the probability of a hypothesis after seeing new evidence: posterior ∝ likelihood × prior.",
+    "Bayesian inference": "Approach that treats parameters as random with prior distributions and updates beliefs using Bayes’ theorem to get posterior distributions.",
     "Bias": "Systematic deviation from the truth. High-bias models are too simple and miss real structure (underfitting).",
     "Bias–variance tradeoff": "Simple models: high bias, low variance. Complex models: low bias, high variance. Good models balance both to minimise total error.",
+    "Big data": "Datasets so large or fast that they challenge traditional storage or processing tools.",
+    "Binomial distribution": "Distribution of the number of successes in a fixed number of independent yes/no trials with the same success probability.",
     "Bonferroni correction": "Simple multiple-testing correction: divide α by the number of tests. Very safe, but often conservative (harder to declare significance).",
-    "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (e.g. confidence intervals) or stability of a statistic or model.",
-    "Brier score": "A metric for probabilistic predictions between 0 and 1. It is the mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
-    "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for the agreement you would expect by chance alone. 0 = chance level, 1 = perfect agreement.",
-    "Coefficient": "A number that multiplies a feature in a model (for example, in regression). It describes how the prediction changes when that feature increases by one unit, holding other features fixed.",
+    "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty or stability of a statistic or model.",
+    "Box plot": "Simple visual of a distribution showing median, quartiles and potential outliers.",
+    "Brier score": "Metric for probabilistic predictions between 0 and 1. Mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
+    "Chi-square test": "Test that compares observed counts to expected counts under a null hypothesis, often used for categorical data.",
+    "Class imbalance": "When one class (e.g. negatives) is much more common than another (e.g. positives), making accuracy and some metrics misleading.",
+    "Coefficient": "A number that multiplies a feature in a model. It describes how the prediction changes when that feature increases by one unit, holding others fixed.",
+    "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for the agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
+    "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. The raw bookkeeping for classification performance.",
     "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (e.g. 95%). Narrow intervals indicate more precise estimates.",
-    "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
-    "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
-    "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets, to estimate performance on new data.",
+    "Confidence level": "The nominal probability associated with a confidence interval (e.g. 95%). It is about the method in the long run, not a probability that one specific interval contains the truth.",
+    "Correlation": "Standardised measure (between –1 and 1) of linear association between two variables.",
+    "Cost function (loss function)": "Formula that measures how wrong the model’s predictions are. Learning tries to minimise this quantity.",
+    "Covariance": "Measure of how two variables move together. Positive covariance means they tend to be above or below their means at the same time.",
+    "Cross-entropy loss": "Loss function for probabilistic classification (log-loss). Penalises confident wrong predictions heavily.",
+    "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
     "Dataset": "A collection of observations, typically rows = cases and columns = variables or features.",
-    "Effect size": "How big a difference or relationship is, not just whether it is statistically significant. Answers 'how much', not just 'is it non-zero'.",
+    "Decision tree": "Model that repeatedly splits data into groups based on feature values to make predictions.",
+    "Descriptive statistics": "Numbers that summarise data (mean, median, variance, percentiles, etc.) without making formal inferences.",
+    "Effect size": "How big a difference or relationship is, not just whether it is statistically significant. Answers 'how much', not just 'is it non-zero?'.",
+    "Ensemble model": "Model that combines predictions from several base models (e.g. bagging, boosting, random forest) for better performance.",
+    "ETL (Extract–Transform–Load)": "Pipeline of extracting data from sources, cleaning/transforming it, then loading it into a storage or analytics system.",
+    "Evaluation metric": "Any number used to score model quality (accuracy, AUC, RMSE, etc.). It defines what 'good' means for a particular task.",
     "Family-wise error rate (FWER / FWE)": "Probability of making at least one Type I error across a whole family of tests. It grows quickly when many tests are run.",
-    "Feature": "An input variable used by the model to make predictions. Also called predictor or independent variable.",
-    "Feature space": "The multi-dimensional space defined by all features. Each observation is a point in this space.",
-    "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
     "False Discovery Rate (FDR)": "Expected proportion of false positives among the tests we call 'significant'. Often controlled with Benjamini–Hochberg.",
-    "False negative (FN)": "A case that is actually positive but was predicted negative. In hypothesis testing this corresponds to a Type II error.",
-    "False positive (FP)": "A case that is actually negative but was predicted positive. In hypothesis testing this corresponds to a Type I error.",
-    "Holm correction": "A stepwise improvement over Bonferroni that is slightly less conservative while still controlling the family-wise error rate.",
-    "Interquartile range (IQR)": "The distance between the 25th and 75th percentiles. A robust measure of spread that ignores the most extreme values.",
+    "False negative (FN)": "A case that is actually positive but predicted negative. In hypothesis testing this corresponds to a Type II error.",
+    "False positive (FP)": "A case that is actually negative but predicted positive. In hypothesis testing this corresponds to a Type I error.",
+    "Feature": "An input variable used by the model to make predictions. Also called predictor or independent variable.",
+    "Feature engineering": "Creating, transforming or combining variables to give the model more useful information.",
+    "Feature scaling": "Rescaling features (e.g. standardisation or min–max) so that they are on comparable numerical ranges.",
+    "Feature selection": "Choosing a subset of features that are most useful for prediction or interpretation.",
+    "Feature space": "The multi-dimensional space defined by all features. Each observation is a point in this space.",
+    "Fold (in CV)": "One of the partitions in cross-validation used as a temporary test set while the others form the training set.",
+    "Frequentist statistics": "Traditional framework where parameters are fixed and randomness comes from data sampling. Most classical tests and CIs are frequentist.",
+    "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
+    "Goodness of fit": "How well a model’s predicted values match the observed data overall.",
+    "Gradient descent": "Algorithm that iteratively updates parameters in the direction that decreases the loss function.",
+    "Grid search": "Systematic search over a grid of hyperparameter values to find a good combination.",
+    "Holm correction": "Stepwise improvement over Bonferroni that is slightly less conservative while still controlling the family-wise error rate.",
+    "Hold-out set": "Data set aside (not used in training) to get an unbiased estimate of model performance.",
+    "Hyperparameter": "Setting chosen before training (e.g. learning rate, tree depth) that controls model complexity or training behaviour.",
+    "Hyperparameter tuning": "Process of searching for good hyperparameter values (grid search, random search, Bayesian optimisation, etc.).",
+    "Imbalanced classes": "Same idea as class imbalance: one class is much rarer than another, making some metrics misleading.",
+    "Imputation": "Filling in missing values with plausible replacements (mean, median, model-based, etc.).",
+    "Interquartile range (IQR)": "Distance between the 25th and 75th percentiles. Robust measure of spread that ignores extreme tails.",
     "Jackknife": "Resampling method that repeatedly leaves out one observation at a time to estimate variance and influence of each point.",
-    "Kolmogorov–Smirnov (KS) test": "A non-parametric test that compares distributions. In 1-sample form it checks whether a sample looks like a specified reference distribution (e.g. normal). In 2-sample form it checks whether two samples look like they come from the same distribution.",
-    "Levene’s test": "A test for checking whether several groups have similar variances. Often used before t-tests or ANOVA to decide whether the 'equal variance' assumption of those tests is reasonable.",
+    "K-fold cross-validation": "Cross-validation where the data is split into K equal-sized folds that take turns being the test set.",
+    "Kolmogorov–Smirnov test (KS test)": "Non-parametric test comparing a sample distribution to a reference distribution (or two samples) based on their maximum CDF difference.",
+    "Kurtosis": "Describes how heavy the tails of a distribution are compared to a normal distribution. High kurtosis means more extreme outliers than expected.",
+    "Lag": "Shift in time series when relating past values to later ones (e.g. value at time t–1).",
+    "Lasso (L1 regularisation)": "Regularisation technique that penalises the absolute values of coefficients and can shrink some exactly to zero, performing feature selection.",
+    "Learning rate": "Hyperparameter controlling the step size in gradient descent. Too high = divergence; too low = very slow learning.",
     "Leverage": "How unusual a point's predictor values are. High-leverage points sit far from the bulk of the data in feature space and can strongly pull the fit.",
-    "Linear model": "A model where the prediction is a linear combination of inputs plus noise. Includes linear regression and (on the log-odds scale) logistic regression.",
-    "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
-    "Logistic regression": "A model for binary outcomes (0/1); it predicts log-odds that are converted to probabilities between 0 and 1.",
-    "MAE": "Mean Absolute Error – the average absolute difference between predicted and actual values. Easy to read as 'typical error'.",
-    "Matthews correlation coefficient (MCC)": "A balanced score for binary classification that uses all four confusion-matrix cells. Works well even when classes are imbalanced.",
-    "Mean": "The simple average: add up all values and divide by how many you have.",
-    "Median": "The middle value when the data is sorted. Half the values are above it and half below. Less sensitive to outliers than the mean.",
-    "MSE": "Mean Squared Error – the average of the squared errors between predictions and actual values. Penalises large errors more strongly.",
+    "Levene’s test": "Statistical test for equality of variances across groups, often used before ANOVA or t-tests when checking assumptions.",
+    "Linear model": "Model where the prediction is a linear combination of inputs plus noise. Includes linear regression and (on the log-odds scale) logistic regression.",
+    "Linear regression": "Model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
+    "Log-loss": "Same as cross-entropy loss for binary classification; punishes overly confident wrong predictions.",
+    "Logistic regression": "Model for binary outcomes (0/1). It predicts log-odds that are converted to probabilities between 0 and 1.",
+    "MAE": "Mean Absolute Error – average absolute difference between predicted and actual values. Easy to read as 'typical error'.",
+    "Matthews correlation coefficient (MCC)": "Balanced score for binary classification that uses all four confusion-matrix cells. Works well even when classes are imbalanced.",
+    "Mean": "Simple average: add up all values and divide by how many you have.",
+    "Median": "Middle value when the data is sorted. Half the values are above it and half below. Less sensitive to outliers than the mean.",
+    "Mode": "Most frequently occurring value in a dataset.",
+    "Model capacity": "How complex patterns a model can represent. Higher capacity can fit more structure but risks overfitting.",
+    "Model selection": "Choosing between candidate models (or hyperparameter settings) based on performance and simplicity.",
+    "Monte Carlo simulation": "Using random sampling to approximate quantities that are hard to calculate analytically.",
+    "MSE": "Mean Squared Error – average of squared errors between predictions and actual values. Penalises large errors more strongly.",
     "Multicollinearity": "Predictors are strongly correlated with each other, making coefficient estimates unstable and hard to interpret.",
+    "Multivariate analysis": "Analysis involving several variables at once (e.g. multivariate regression, MANOVA).",
+    "Naïve Bayes": "Simple probabilistic classifier that applies Bayes’ theorem assuming features are conditionally independent.",
     "Noise": "Random variation in the data that is not explained by the model or features.",
-    "Noise feature": "A predictor with no real relationship to the target; used to test robustness or illustrate false-positive behaviour.",
-    "Non-parametric": "Methods that make fewer distributional assumptions (e.g. no normality), often using ranks or resampling. More flexible but may need more data.",
-    "Normal distribution": "The classic bell-shaped curve. Many statistical methods assume data (or residuals) are approximately normal.",
-    "Outlier": "Observation that is unusual compared to the rest of the data (extreme value or strange combination of features). It can strongly affect many statistics.",
-    "Overfitting": "The model fits the noise and quirks of the training data but performs poorly on new data.",
+    "Noise feature": "Predictor with no real relationship to the target; used to test robustness or illustrate false-positive behaviour.",
+    "Non-parametric": "Methods that make fewer distributional assumptions (e.g. no required normality), often using ranks or resampling.",
+    "Normal distribution": "Classic bell-shaped curve. Many statistical methods assume data (or residuals) are approximately normal.",
+    "One-hot encoding": "Representing categories as binary indicator columns (0/1) instead of single numeric codes.",
+    "Outlier": "Observation that is unusual compared to the rest of the data (extreme value or strange feature combination). It can strongly affect many statistics.",
+    "Overfitting": "Model fits the noise and quirks of the training data but performs poorly on new data.",
     "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data is hard to explain under 'no effect'.",
-    "Parametric": "Methods that assume a specific distributional or functional form (e.g. normal errors, linear relationships) with a small number of parameters.",
-    "Percentile": "A value below which a certain percentage of observations fall (e.g. the 90th percentile is higher than 90% of the data).",
-    "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
+    "Parameter": "Unknown numerical value describing a population or model (e.g. a regression coefficient) that we try to estimate from data.",
+    "Parametric": "Methods that assume a specific distribution or functional form (e.g. normal errors, linear relationships) with a small number of parameters.",
+    "Percentile": "Value below which a certain percentage of observations fall (e.g. the 90th percentile is higher than 90% of the data).",
+    "Pipeline": "Chained sequence of steps (pre-processing, modelling, evaluation) treated as a single object.",
+    "Poisson distribution": "Distribution for counts of rare events over fixed intervals when events happen independently.",
+    "Power": "Probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
     "PR AUC": "Area under the Precision–Recall curve; more informative than ROC AUC when the positive class is rare.",
     "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
+    "Predictor variable": "Another name for feature or independent variable used to predict the target.",
+    "Pre-processing": "Cleaning and transforming raw data (imputation, scaling, encoding) before modelling.",
+    "Random forest": "Ensemble of decision trees built on bootstrap samples and random subsets of features. Usually robust and strong out-of-the-box.",
+    "Random search": "Hyperparameter tuning method that samples random combinations instead of checking every point on a grid.",
+    "Range": "Difference between the maximum and minimum values in the data.",
     "R²": "Coefficient of determination. Roughly, the fraction of variance in the target that the model explains (0 to 1). High R² does not guarantee a good model.",
     "Recall (Sensitivity)": "Of all true positives in the data, how many did we catch? Focuses on avoiding false negatives.",
+    "Regression": "Family of methods that model the relationship between inputs and a numeric target.",
     "Regularisation": "Adding a penalty to large coefficients to reduce variance and overfitting (examples: Lasso/L1, Ridge/L2).",
-    "Residual": "The difference between the observed value and the model’s predicted value. Residual patterns help diagnose model problems.",
-    "Resampling": "Any method that repeatedly draws samples from the data (or simulates data) to estimate variability, uncertainty, or stability.",
-    "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
-    "Robustness": "How resistant a method or metric is to outliers, noise, and assumption violations. Robust methods give similar conclusions even if a few points are odd.",
-    "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across all thresholds (0.5 = random, 1.0 = perfect).",
+    "Residual": "Difference between an observed value and the model’s predicted value. Residual patterns help diagnose model problems.",
+    "Resampling": "Any method that repeatedly draws samples from the data (or simulates data) to estimate variability, uncertainty or stability.",
+    "RMSE": "Root Mean Squared Error – square root of MSE. Typical size of prediction error in the same units as the target.",
+    "Robustness": "How resistant a method or metric is to outliers, noise and assumption violations. Robust methods give similar conclusions even if a few points are odd.",
+    "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across thresholds (0.5 = random, 1.0 = perfect).",
+    "Sample": "Subset of units from a population on which we actually collect data.",
     "Sample size": "How many observations are in the dataset or in the part of the data being analysed.",
-    "Significance (statistical)": "Shorthand for 'statistically significant'. Usually means the p-value is below the chosen alpha level (for example 0.05). It does not by itself mean the effect is large or important.",
+    "Sampling distribution": "Distribution of a statistic (e.g. the mean) across many hypothetical samples from the same population.",
+    "Scaling": "General term for transforming feature magnitudes (standardisation, normalisation, log-scaling, etc.).",
+    "Significance (statistical)": "Shorthand for 'statistically significant'. Usually means the p-value is below the chosen alpha level. It does not guarantee a large or important effect.",
     "Signal": "The real underlying pattern or effect in the data that we care about.",
     "Skewness": "How asymmetric a distribution is. Positive skew means a longer tail to the right; negative skew means a longer tail to the left.",
+    "SMOTE": "Synthetic Minority Over-sampling Technique. Creates artificial minority-class examples to help with class imbalance.",
     "Specificity": "Of all true negatives, how many did we correctly predict as negative?",
-    "Squared error": "The squared difference between predicted and actual values. Squaring makes bigger errors count more and keeps everything positive.",
-    "Stability": "How consistent a coefficient, metric, or decision is under resampling or small changes in the data.",
-    "Standard deviation": "The square root of variance. Roughly, a typical distance from the mean in the same units as the data.",
-    "Sum of squared errors (SSE)": "The sum of all squared errors between predictions and actual values. Forms the basis for MSE and RMSE.",
-    "Target": "The outcome the model is trying to predict. Also called label, response, or dependent variable.",
-    "t-test": "A statistical test that compares means between groups or against a reference value. Produces a t-statistic and a p-value.",
+    "Squared error": "Squared difference between predicted and actual values. Squaring makes bigger errors count more and keeps everything positive.",
+    "Stability": "How consistent a coefficient, metric or decision is under resampling or small changes in the data.",
+    "Standard deviation": "Square root of variance. Roughly, a typical distance from the mean in the same units as the data.",
+    "Standard error": "Estimated standard deviation of a statistic (e.g. the mean) across repeated samples; used to build confidence intervals.",
+    "Standardisation": "Scaling a feature to have mean 0 and standard deviation 1.",
+    "Stationarity": "Time-series property where statistical behaviour (mean, variance, autocorrelation) does not change over time.",
+    "Stratified sampling": "Sampling method that keeps class or group proportions similar to the original population.",
+    "Sum of squared errors (SSE)": "Sum of all squared prediction errors. Forms the basis for MSE and RMSE.",
+    "Target": "Outcome the model is trying to predict. Also called label, response or dependent variable.",
+    "t-test": "Statistical test comparing means between groups or against a reference value. Produces a t-statistic and a p-value.",
+    "Test set": "Data reserved to evaluate final model performance after all training and tuning.",
+    "Threshold (classification)": "Cut-off on predicted probability or score used to decide between classes.",
+    "Time series": "Data collected over time in order (e.g. daily prices, hourly temperatures).",
     "Train–test split": "Dividing the data into a training set (to fit the model) and a test set (to evaluate how it generalises).",
-    "True negative (TN)": "A case that is actually negative and was predicted negative.",
-    "True positive (TP)": "A case that is actually positive and was predicted positive.",
+    "Training set": "Part of the data used to fit model parameters.",
+    "True negative (TN)": "Case that is actually negative and predicted negative.",
+    "True positive (TP)": "Case that is actually positive and predicted positive.",
     "Type I error": "Rejecting a true null hypothesis. In practice: a false alarm or false positive.",
     "Type II error": "Failing to reject a false null hypothesis. In practice: a missed effect or false negative.",
-    "Underfitting": "The model is too simple to capture the structure in the data and performs poorly even on training data.",
+    "Underfitting": "Model is too simple to capture structure in the data and performs poorly even on training data.",
+    "Validation set": "Subset of data used during model development to tune hyperparameters and choose between models.",
     "Variance": "How much values or estimates spread around their mean. High variance means a lot of variability or instability.",
-    "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity. Rough guide: VIF ≈ 1 no issue, >10 serious."
+    "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity. Rough rule: VIF ≈ 1 no issue, >10 serious.",
+    "Vectorisation": "Implementing operations on whole arrays/matrices rather than loops, often for speed (e.g. NumPy operations)."
   };
+
 
   /* ========= 2. BUILD UI ========= */
   const panel = document.getElementById("glossary-panel");
