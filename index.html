@@ -771,175 +771,6 @@ body.dark .poor {
 
 
 
-/* ===== Floating Plain-Language Glossary (collapsible) ===== */
-
-#glossary-panel {
-  position: fixed;
-  right: 12px;
-  top: 210px;               /* below the music player */
-  width: 260px;
-  max-height: 60vh;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  padding: 8px 10px;
-  font-size: 0.85em;
-  z-index: 999;
-  overflow: hidden; /* body inside handles scroll */
-}
-
-.glossary-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-
-.glossary-title span {
-  font-weight: 600;
-}
-
-.glossary-title small {
-  display: block;
-  font-weight: normal;
-  font-size: 0.78em;
-  opacity: 0.8;
-}
-
-#glossary-toggle {
-  border: none;
-  background: #f3f4f6;
-  border-radius: 999px;
-  padding: 3px 8px;
-  font-size: 0.75em;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-#glossary-toggle:hover {
-  background: #e5e7eb;
-}
-
-.glossary-body {
-  margin-top: 2px;
-  max-height: 52vh;
-  overflow-y: auto;
-}
-
-/* collapsed state */
-#glossary-panel.collapsed .glossary-body {
-  display: none;
-}
-
-#glossary-panel.collapsed {
-  max-height: none;
-}
-
-.glossary-current {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 6px;
-  padding-bottom: 4px;
-}
-
-.glossary-current strong {
-  font-size: 0.85em;
-}
-
-.glossary-current ul {
-  margin: 4px 0 0;
-  padding-left: 18px;
-  max-height: 5.5em;
-  overflow-y: auto;
-  font-size: 0.8em;
-}
-
-.glossary-current li {
-  cursor: pointer;
-}
-
-.glossary-current li:hover {
-  text-decoration: underline;
-}
-
-.glossary-search {
-  margin: 4px 0 6px;
-}
-
-#glossary-search-input {
-  width: 100%;
-  padding: 4px 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.8em;
-}
-
-#glossary-entries {
-  margin: 0;
-}
-
-#glossary-entries dt {
-  font-weight: 600;
-  margin-top: 6px;
-}
-
-#glossary-entries dd {
-  margin-left: 0;
-  margin-bottom: 4px;
-}
-
-/* Temporary highlight when user jumps from "Terms on this part..." */
-.glossary-highlight {
-  outline: 2px solid #f97316;
-  background: rgba(249, 115, 22, 0.08);
-}
-
-/* Dark-mode variants */
-
-body.dark #glossary-panel {
-  background: #1b1b1b;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-  border: 1px solid #444;
-}
-
-body.dark .glossary-current {
-  border-bottom-color: #444;
-}
-
-body.dark #glossary-search-input {
-  background: #111;
-  border-color: #555;
-  color: #eee;
-}
-
-body.dark #glossary-toggle {
-  background: #111827;
-  color: #e5e7eb;
-}
-
-body.dark #glossary-toggle:hover {
-  background: #020617;
-}
-
-body.dark .glossary-highlight {
-  outline-color: #facc15;
-  background: rgba(250, 204, 21, 0.12);
-}
-
-/* Mobile: inline instead of floating */
-
-@media (max-width: 900px) {
-  #glossary-panel {
-    position: static;
-    width: auto;
-    max-height: none;
-    margin: 10px 0;
-  }
-}
-
-
-
-
 
 
 
@@ -1102,341 +933,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
-
-
-<!-- ===== Floating Plain-Language Glossary ===== -->
-<aside id="glossary-panel" aria-label="Data science glossary">
-  <div class="glossary-header">
-    <div class="glossary-title">
-      <span>📚 Plain-Language Glossary</span>
-      <small>for non-data-scientists</small>
-    </div>
-    <button id="glossary-toggle" type="button">Hide glossary ▴</button>
-  </div>
-
-  <div class="glossary-body">
-    <div class="glossary-current">
-      <strong>Terms on this part of the page:</strong>
-      <ul id="glossary-current-list">
-        <li>Scroll the page – matching terms will appear here.</li>
-      </ul>
-    </div>
-
-    <div class="glossary-search">
-      <input id="glossary-search-input"
-             type="text"
-             placeholder="Filter terms (e.g. p-value, FDR)…">
-    </div>
-
-    <dl id="glossary-entries">
-      <!-- Each <dt> has optional data-aliases used for matching text on screen -->
-
-      <!-- BASIC STATS -->
-      <dt data-aliases="mean,average">Mean</dt>
-      <dd>The simple average: add up all values and divide by how many you have.</dd>
-
-      <dt data-aliases="median">Median</dt>
-      <dd>The middle value when you sort the data. Half of the values are above,
-          half below. Much less sensitive to outliers than the mean.</dd>
-
-      <dt data-aliases="variance">Variance</dt>
-      <dd>A measure of spread: how much values deviate from the mean on average,
-          squared. Higher variance means more variability.</dd>
-
-      <dt data-aliases="standard deviation,sd,stdev">Standard deviation</dt>
-      <dd>The square root of variance. Roughly, a “typical” distance from the
-          mean, in the same units as the data.</dd>
-
-      <dt data-aliases="percentile,quantile">Percentile</dt>
-      <dd>A value below which a given percentage of observations fall.
-          Example: the 90th percentile is higher than 90% of the data.</dd>
-
-      <dt data-aliases="iqr,interquartile range">IQR (Interquartile range)</dt>
-      <dd>The range between the 25th and 75th percentiles. A robust spread
-          measure that ignores the most extreme 25% of values at each end.</dd>
-
-      <dt data-aliases="skew,skewness">Skewness</dt>
-      <dd>How asymmetric a distribution is. Positive skew = longer tail to the
-          right; negative skew = longer tail to the left.</dd>
-
-      <dt data-aliases="kurtosis,tailedness">Kurtosis</dt>
-      <dd>A summary of how heavy the tails are compared to a normal distribution.
-          High kurtosis = more extreme outliers than expected.</dd>
-
-      <dt data-aliases="normal distribution,gaussian">Normal distribution</dt>
-      <dd>The classic bell-shaped curve. Many methods assume data or residuals
-          are approximately normal.</dd>
-
-      <!-- HYPOTHESIS TESTING & MULTIPLE TESTING -->
-
-      <dt data-aliases="p-value,p value,p-value">p-value</dt>
-      <dd>The probability of seeing a result at least this extreme if there is
-          really no effect and only random noise. Small p-values are evidence
-          against “no difference”. They do <strong>not</strong> tell you the
-          probability that the hypothesis is true.</dd>
-
-      <dt data-aliases="alpha,significance level">α (alpha)</dt>
-      <dd>The significance threshold you decide <em>before</em> running a test,
-          often 0.05. If p &lt; α you call the result “statistically significant”.
-          Alpha is the target long-run false positive rate per test.</dd>
-
-      <dt data-aliases="beta,type II error">β (beta)</dt>
-      <dd>The probability of missing a real effect (false negative). If power is
-          80%, then β = 20%.</dd>
-
-      <dt data-aliases="power,statistical power,power analysis">Power</dt>
-      <dd>The chance that your study will correctly detect a real effect (reject
-          the null when it is false). Higher power is better.</dd>
-
-      <dt data-aliases="type I error,false positive">Type I error</dt>
-      <dd>Calling something a real effect when in truth there is none
-          (false positive). Its long-run rate is controlled by α.</dd>
-
-      <dt data-aliases="type II error,false negative">Type II error</dt>
-      <dd>Missing a real effect (false negative). Its rate is β; 1 − β is power.</dd>
-
-      <dt data-aliases="family wise error,familywise error,fwe,FWER">
-        Family-wise error rate (FWER)
-      </dt>
-      <dd>The probability of getting <em>at least one</em> false positive when
-          you run many tests as a “family” (e.g. testing 100 features). FWER
-          control tries to keep this probability near a target such as 5%.</dd>
-
-      <dt data-aliases="bonferroni,bonferroni correction">Bonferroni correction</dt>
-      <dd>A simple, very conservative way to control FWER: divide α by the
-          number of tests. Safe, but can make it hard to detect real effects
-          when you have many tests.</dd>
-
-      <dt data-aliases="holm,holm correction">Holm correction</dt>
-      <dd>A stepwise method that also controls FWER, usually less conservative
-          than plain Bonferroni but based on the same idea.</dd>
-
-      <dt data-aliases="false discovery rate,FDR,BH,benjamini hochberg">
-        False Discovery Rate (FDR)
-      </dt>
-      <dd>The expected proportion of “discoveries” (significant results) that
-          are actually false positives. FDR methods (like Benjamini–Hochberg)
-          are less strict than Bonferroni and useful for large screens.</dd>
-
-      <dt data-aliases="multiple testing,multiple comparisons">
-        Multiple testing
-      </dt>
-      <dd>Running many hypothesis tests on the same dataset (many features,
-          timepoints, subgroups, etc.). Without correction, false positives
-          accumulate quickly.</dd>
-
-      <dt data-aliases="fwe explanation,familywise">
-        Family-wise error
-      </dt>
-      <dd>Family-wise error (FWE) is the probability of making at least one
-          Type I error (false positive) when performing multiple statistical
-          tests. Because each test is a new chance for a false alarm, FWE grows
-          with the number of tests. Methods like Bonferroni or Holm adjust the
-          significance level to control this risk.</dd>
-
-      <!-- MODELS & RESAMPLING -->
-
-      <dt data-aliases="resampling,bootstrap,jackknife,cross validation">
-        Resampling
-      </dt>
-      <dd>Any method that repeatedly reuses the data (bootstrap, jackknife,
-          cross-validation) to estimate variability, stability, or prediction
-          performance without needing extra data.</dd>
-
-      <dt data-aliases="bootstrap,bootstrapping,resampling">Bootstrap</dt>
-      <dd>A resampling technique: repeatedly sample (with replacement) from your
-          data to see how a statistic varies. Used for confidence intervals and
-          stability checks.</dd>
-
-      <dt data-aliases="jackknife">Jackknife</dt>
-      <dd>A resampling method that systematically leaves out one observation
-          (or group) at a time to see how a statistic changes. Useful for
-          influence and variance estimates.</dd>
-
-      <dt data-aliases="cross validation,CV,folds">Cross-validation</dt>
-      <dd>A way to estimate how a model will perform on new, unseen data by
-          repeatedly splitting the data into training and test folds.</dd>
-
-      <dt data-aliases="linear regression">Linear regression</dt>
-      <dd>A model that predicts a numeric outcome as a straight-line combination
-          of input features (plus noise).</dd>
-
-      <dt data-aliases="logistic regression,logit">Logistic regression</dt>
-      <dd>A model for binary outcomes (0/1) that predicts log-odds and converts
-          them to probabilities between 0 and 1.</dd>
-
-      <dt data-aliases="feature,predictor,independent variable">
-        Feature / predictor
-      </dt>
-      <dd>An input variable used by the model to make predictions.</dd>
-
-      <dt data-aliases="target,label,dependent variable">
-        Target / label
-      </dt>
-      <dd>The outcome the model is trying to predict.</dd>
-
-      <dt data-aliases="train test split,holdout">Train-test split</dt>
-      <dd>Dividing the data into a training set (to fit the model) and a test
-          set (to evaluate how well it generalises).</dd>
-
-      <dt data-aliases="overfitting,overfit">Overfitting</dt>
-      <dd>When a model learns noise and quirks of the training data instead of
-          the underlying pattern; great on training data, weak on new data.</dd>
-
-      <dt data-aliases="underfitting,underfit">Underfitting</dt>
-      <dd>When a model is too simple and cannot capture real structure; performs
-          poorly on training and test data.</dd>
-
-      <dt data-aliases="bias variance,bias-variance tradeoff">
-        Bias–variance tradeoff
-      </dt>
-      <dd>Simple models: high bias, low variance. Complex models: low bias, high
-          variance. Good models balance both to minimise total error.</dd>
-
-      <dt data-aliases="regularisation,regularization,L1,L2,lasso,ridge">
-        Regularisation
-      </dt>
-      <dd>Penalising large model weights (e.g. L1/L2 penalties) to reduce
-          overfitting and improve stability, especially with many features.</dd>
-
-      <dt data-aliases="nonparametric,non parametric">
-        Non-parametric
-      </dt>
-      <dd>Methods that do not assume a specific distribution shape (like
-          normal) or a fixed small set of parameters. Often use ranks or
-          resampling and are more robust when assumptions are doubtful.</dd>
-
-      <dt data-aliases="parametric">
-        Parametric
-      </dt>
-      <dd>Methods that assume data follow a specific distribution with a small
-          number of parameters (e.g. normal with mean μ and variance σ²).</dd>
-
-      <!-- ROBUSTNESS, OUTLIERS, INFLUENCE -->
-
-      <dt data-aliases="outlier,outliers">Outlier</dt>
-      <dd>A data point far away from the bulk of the data. It may be a real
-          rare event or a data error, but it can heavily influence many
-          statistics and models.</dd>
-
-      <dt data-aliases="robust,robustness">Robustness</dt>
-      <dd>How sensitive a method is to outliers, noise, and assumption
-          violations. Robust methods give similar conclusions even if some
-          data points are odd.</dd>
-
-      <dt data-aliases="leverage,high leverage">Leverage</dt>
-      <dd>Measures how unusual a case is in terms of predictor values. High-
-          leverage points sit far out in feature space and can strongly pull
-          fitted lines if they’re also outliers.</dd>
-
-      <dt data-aliases="cook's distance,cooks distance,influence">
-        Cook’s distance
-      </dt>
-      <dd>A measure of how much a single data point changes the regression
-          model. Large values flag influential points that deserve a closer look.</dd>
-
-      <dt data-aliases="multicollinearity,collinearity">
-        Multicollinearity
-      </dt>
-      <dd>When predictors are strongly correlated with each other, making
-          coefficient estimates unstable and hard to interpret.</dd>
-
-      <dt data-aliases="vif,variance inflation factor">
-        VIF (Variance Inflation Factor)
-      </dt>
-      <dd>A number that tells you how much the variance (noise) of a regression
-          coefficient is inflated by collinearity. VIF ≈ 1 no concern, 5–10
-          watch, &gt;10 serious collinearity.</dd>
-
-      <!-- CLASSIFICATION METRICS -->
-
-      <dt data-aliases="accuracy,classification accuracy">
-        Accuracy
-      </dt>
-      <dd>Proportion of correct predictions overall. Easy to grasp but can be
-          misleading for imbalanced classes.</dd>
-
-      <dt data-aliases="precision,positive predictive value,PPV">
-        Precision
-      </dt>
-      <dd>Of all cases the model predicted as positive, how many were actually
-          positive?</dd>
-
-      <dt data-aliases="recall,sensitivity,true positive rate,TPR">
-        Recall / sensitivity
-      </dt>
-      <dd>Of all truly positive cases, how many did the model successfully find?</dd>
-
-      <dt data-aliases="specificity,true negative rate,TNR">
-        Specificity
-      </dt>
-      <dd>Of all truly negative cases, how many did the model correctly label
-          as negative?</dd>
-
-      <dt data-aliases="f1,f1-score,f1 score">
-        F1-score
-      </dt>
-      <dd>The harmonic mean of precision and recall. High only when both are
-          reasonably high.</dd>
-
-      <dt data-aliases="roc auc,auc,area under the roc curve">
-        ROC AUC
-      </dt>
-      <dd>Area under the ROC curve. Probability that a random positive gets a
-          higher score than a random negative. 0.5 = random, 1.0 = perfect.</dd>
-
-      <dt data-aliases="pr auc,precision recall auc">
-        PR AUC
-      </dt>
-      <dd>Area under the precision–recall curve. Very useful when positives are
-          rare.</dd>
-
-      <dt data-aliases="mcc,matthews correlation coefficient">
-        Matthews correlation coefficient (MCC)
-      </dt>
-      <dd>A balanced performance measure for binary classification that uses
-          all four cells of the confusion matrix. Good for imbalanced data.</dd>
-
-      <dt data-aliases="cohen kappa,kappa,cohen's kappa">
-        Cohen’s κ (kappa)
-      </dt>
-      <dd>Agreement between predictions and true labels adjusted for random
-          agreement. 0 = chance level, 1 = perfect agreement.</dd>
-
-      <!-- REGRESSION METRICS -->
-
-      <dt data-aliases="rmse,root mean squared error">
-        RMSE (Root Mean Squared Error)
-      </dt>
-      <dd>A typical size of prediction error, with larger errors penalised
-          more strongly. In the same units as the target.</dd>
-
-      <dt data-aliases="mae,mean absolute error">
-        MAE (Mean Absolute Error)
-      </dt>
-      <dd>The average absolute difference between predicted and actual values.
-          Easy to interpret as “typical error”.</dd>
-
-      <dt data-aliases="r-squared,r2,r²,coefficient of determination">
-        R² (coefficient of determination)
-      </dt>
-      <dd>Roughly, the fraction of variance in the target explained by the
-          model (0–1). Higher is better, but high R² does not guarantee a
-          good model if assumptions fail.</dd>
-
-      <dt data-aliases="residual,residuals">
-        Residual
-      </dt>
-      <dd>The difference between the observed value and the value predicted
-          by the model. Residual diagnostics show whether assumptions are
-          reasonable.</dd>
-
-    </dl>
-  </div>
-</aside>
 
 
 
@@ -7010,138 +6506,501 @@ exp.show_in_notebook()
   
   
   
-
   
+  
+  
+<!-- ===========================
+     FLOATING GLOSSARY PANEL
+     =========================== -->
+<div id="glossary-panel" class="glossary-panel" aria-label="Data science glossary">
+  <div class="glossary-header">
+    <span class="glossary-title">Plain-language Glossary</span>
+    <div class="glossary-controls">
+      <input
+        id="glossary-search-input"
+        type="text"
+        placeholder="Search terms (e.g. p-value, Brier, CI)…"
+        aria-label="Search glossary terms"
+      />
+      <button id="glossary-collapse-btn" title="Collapse glossary">−</button>
+      <button id="glossary-minimize-btn" title="Shrink to tiny button">▢</button>
+    </div>
+  </div>
+
+  <div class="glossary-body">
+    <section class="glossary-current">
+      <div class="glossary-current-title">Terms on this part of the page</div>
+      <div id="glossary-current-list" class="glossary-current-list">
+        Scroll the page – I’ll show terms here.
+      </div>
+    </section>
+
+    <details class="glossary-all" open>
+      <summary>All terms (A–Z)</summary>
+      <div id="glossary-terms" class="glossary-terms"></div>
+    </details>
+  </div>
+
+  <!-- Tiny icon when minimized -->
+  <div class="glossary-mini-icon" title="Click to reopen glossary">?</div>
+</div>
+
+<style>
+  /* ===== Layout & look ===== */
+  .glossary-panel {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 340px;
+    max-height: 70vh;
+    background: #020617f2; /* dark glassy */
+    color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .glossary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    background: linear-gradient(90deg, #111827, #020617);
+    border-bottom: 1px solid rgba(148,163,184,0.4);
+    gap: 6px;
+  }
+
+  .glossary-title {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .glossary-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #glossary-search-input {
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(148,163,184,0.7);
+    background: rgba(15,23,42,0.9);
+    color: #e5e7eb;
+    min-width: 150px;
+  }
+
+  #glossary-search-input::placeholder {
+    color: #9ca3af;
+  }
+
+  #glossary-search-input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56,189,248,0.7);
+  }
+
+  .glossary-controls button {
+    background: transparent;
+    border: 1px solid rgba(148,163,184,0.8);
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 1px 6px;
+    font-size: 11px;
+    line-height: 1.2;
+    border-radius: 6px;
+  }
+
+  .glossary-controls button:hover {
+    color: #e5e7eb;
+    border-color: #e5e7eb;
+  }
+
+  .glossary-body {
+    padding: 8px 8px 10px;
+    overflow: auto;
+  }
+
+  .glossary-current {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: rgba(15,23,42,0.9);
+    padding: 6px 8px;
+  }
+
+  .glossary-current-title {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .glossary-current-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .glossary-chip {
+    border: none;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    background: #020617;
+    color: #e5e7eb;
+    white-space: nowrap;
+  }
+
+  .glossary-chip:hover {
+    background: #2563eb;
+    color: #f9fafb;
+  }
+
+  .glossary-all {
+    margin-top: 6px;
+  }
+
+  .glossary-all summary {
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .glossary-all summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .glossary-terms {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .glossary-term {
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #020617;
+    border: 1px solid rgba(148,163,184,0.4);
+  }
+
+  .glossary-term-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .glossary-term-name {
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .glossary-term-tag {
+    font-size: 10px;
+    opacity: 0.75;
+  }
+
+  .glossary-term-def {
+    font-size: 12px;
+    color: #e5e7eb;
+  }
+
+  .glossary-term--highlight {
+    outline: 2px solid #facc15;
+    outline-offset: 1px;
+    box-shadow: 0 0 0 1px #facc15;
+  }
+
+  /* Collapsed (header only) */
+  .glossary-panel.collapsed .glossary-body {
+    display: none;
+  }
+
+  /* Minimized: tiny square */
+  .glossary-panel.minimized {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 10px;
+    background: #020617;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .glossary-panel.minimized .glossary-header,
+  .glossary-panel.minimized .glossary-body {
+    display: none;
+  }
+
+  .glossary-mini-icon {
+    display: none;
+    font-weight: 700;
+    font-size: 18px;
+    color: #f9fafb;
+  }
+
+  .glossary-panel.minimized .glossary-mini-icon {
+    display: block;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 768px) {
+    .glossary-panel {
+      right: 0.6rem;
+      bottom: 0.6rem;
+      width: 90vw;
+      max-height: 60vh;
+    }
+
+    #glossary-search-input {
+      min-width: 110px;
+    }
+  }
+</style>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const glossaryPanel = document.getElementById('glossary-panel');
-  const glossaryBody  = glossaryPanel ? glossaryPanel.querySelector('.glossary-body') : null;
-  const currentList   = document.getElementById('glossary-current-list');
-  const searchInput   = document.getElementById('glossary-search-input');
-  const toggleBtn     = document.getElementById('glossary-toggle');
-  const dtNodes       = Array.from(document.querySelectorAll('#glossary-entries dt'));
+(function () {
+  /* ========= 1. GLOSSARY TERMS (A–Z via sorting later) ========= */
+  const GLOSSARY = {
+    "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
+    "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
+    "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null.",
+    "Bias": "Systematic deviation from the truth. High-bias models are too simple and miss real structure (underfitting).",
+    "Bias–variance tradeoff": "Simple models: high bias, low variance. Complex models: low bias, high variance. Good models balance both to minimise total error.",
+    "Bonferroni correction": "Simple multiple-testing correction: divide α by the number of tests. Very safe, but often conservative (harder to declare significance).",
+    "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (e.g. confidence intervals) or stability of a statistic or model.",
+    "Brier score": "A metric for probabilistic predictions between 0 and 1. It is the mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
+    "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for the agreement you would expect by chance alone. 0 = chance level, 1 = perfect agreement.",
+    "Coefficient": "A number that multiplies a feature in a model (for example, in regression). It describes how the prediction changes when that feature increases by one unit, holding other features fixed.",
+    "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (e.g. 95%). Narrow intervals indicate more precise estimates.",
+    "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
+    "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
+    "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets, to estimate performance on new data.",
+    "Dataset": "A collection of observations, typically rows = cases and columns = variables or features.",
+    "Effect size": "How big a difference or relationship is, not just whether it is statistically significant. Answers 'how much', not just 'is it non-zero'.",
+    "Family-wise error rate (FWER / FWE)": "Probability of making at least one Type I error across a whole family of tests. It grows quickly when many tests are run.",
+    "Feature": "An input variable used by the model to make predictions. Also called predictor or independent variable.",
+    "Feature space": "The multi-dimensional space defined by all features. Each observation is a point in this space.",
+    "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
+    "False Discovery Rate (FDR)": "Expected proportion of false positives among the tests we call 'significant'. Often controlled with Benjamini–Hochberg.",
+    "False negative (FN)": "A case that is actually positive but was predicted negative. In hypothesis testing this corresponds to a Type II error.",
+    "False positive (FP)": "A case that is actually negative but was predicted positive. In hypothesis testing this corresponds to a Type I error.",
+    "Holm correction": "A stepwise improvement over Bonferroni that is slightly less conservative while still controlling the family-wise error rate.",
+    "Interquartile range (IQR)": "The distance between the 25th and 75th percentiles. A robust measure of spread that ignores the most extreme values.",
+    "Jackknife": "Resampling method that repeatedly leaves out one observation at a time to estimate variance and influence of each point.",
+    "Leverage": "How unusual a point's predictor values are. High-leverage points sit far from the bulk of the data in feature space and can strongly pull the fit.",
+    "Linear model": "A model where the prediction is a linear combination of inputs plus noise. Includes linear regression and (on the log-odds scale) logistic regression.",
+    "Linear regression": "A model that predicts a numeric outcome as a weighted sum of predictors (plus noise).",
+    "Logistic regression": "A model for binary outcomes (0/1); it predicts log-odds that are converted to probabilities between 0 and 1.",
+    "MAE": "Mean Absolute Error – the average absolute difference between predicted and actual values. Easy to read as 'typical error'.",
+    "Matthews correlation coefficient (MCC)": "A balanced score for binary classification that uses all four confusion-matrix cells. Works well even when classes are imbalanced.",
+    "Mean": "The simple average: add up all values and divide by how many you have.",
+    "Median": "The middle value when the data is sorted. Half the values are above it and half below. Less sensitive to outliers than the mean.",
+    "MSE": "Mean Squared Error – the average of the squared errors between predictions and actual values. Penalises large errors more strongly.",
+    "Multicollinearity": "Predictors are strongly correlated with each other, making coefficient estimates unstable and hard to interpret.",
+    "Noise": "Random variation in the data that is not explained by the model or features.",
+    "Noise feature": "A predictor with no real relationship to the target; used to test robustness or illustrate false-positive behaviour.",
+    "Non-parametric": "Methods that make fewer distributional assumptions (e.g. no normality), often using ranks or resampling. More flexible but may need more data.",
+    "Normal distribution": "The classic bell-shaped curve. Many statistical methods assume data (or residuals) are approximately normal.",
+    "Outlier": "Observation that is unusual compared to the rest of the data (extreme value or strange combination of features). It can strongly affect many statistics.",
+    "Overfitting": "The model fits the noise and quirks of the training data but performs poorly on new data.",
+    "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data is hard to explain under 'no effect'.",
+    "Parametric": "Methods that assume a specific distributional or functional form (e.g. normal errors, linear relationships) with a small number of parameters.",
+    "Percentile": "A value below which a certain percentage of observations fall (e.g. the 90th percentile is higher than 90% of the data).",
+    "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
+    "PR AUC": "Area under the Precision–Recall curve; more informative than ROC AUC when the positive class is rare.",
+    "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
+    "R²": "Coefficient of determination. Roughly, the fraction of variance in the target that the model explains (0 to 1). High R² does not guarantee a good model.",
+    "Recall (Sensitivity)": "Of all true positives in the data, how many did we catch? Focuses on avoiding false negatives.",
+    "Regularisation": "Adding a penalty to large coefficients to reduce variance and overfitting (examples: Lasso/L1, Ridge/L2).",
+    "Residual": "The difference between the observed value and the model’s predicted value. Residual patterns help diagnose model problems.",
+    "Resampling": "Any method that repeatedly draws samples from the data (or simulates data) to estimate variability, uncertainty, or stability.",
+    "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
+    "Robustness": "How resistant a method or metric is to outliers, noise, and assumption violations. Robust methods give similar conclusions even if a few points are odd.",
+    "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across all thresholds (0.5 = random, 1.0 = perfect).",
+    "Sample size": "How many observations are in the dataset or in the part of the data being analysed.",
+    "Significance (statistical)": "Shorthand for 'statistically significant'. Usually means the p-value is below the chosen alpha level (for example 0.05). It does not by itself mean the effect is large or important.",
+    "Signal": "The real underlying pattern or effect in the data that we care about.",
+    "Skewness": "How asymmetric a distribution is. Positive skew means a longer tail to the right; negative skew means a longer tail to the left.",
+    "Specificity": "Of all true negatives, how many did we correctly predict as negative?",
+    "Squared error": "The squared difference between predicted and actual values. Squaring makes bigger errors count more and keeps everything positive.",
+    "Stability": "How consistent a coefficient, metric, or decision is under resampling or small changes in the data.",
+    "Standard deviation": "The square root of variance. Roughly, a typical distance from the mean in the same units as the data.",
+    "Sum of squared errors (SSE)": "The sum of all squared errors between predictions and actual values. Forms the basis for MSE and RMSE.",
+    "Target": "The outcome the model is trying to predict. Also called label, response, or dependent variable.",
+    "t-test": "A statistical test that compares means between groups or against a reference value. Produces a t-statistic and a p-value.",
+    "Train–test split": "Dividing the data into a training set (to fit the model) and a test set (to evaluate how it generalises).",
+    "True negative (TN)": "A case that is actually negative and was predicted negative.",
+    "True positive (TP)": "A case that is actually positive and was predicted positive.",
+    "Type I error": "Rejecting a true null hypothesis. In practice: a false alarm or false positive.",
+    "Type II error": "Failing to reject a false null hypothesis. In practice: a missed effect or false negative.",
+    "Underfitting": "The model is too simple to capture the structure in the data and performs poorly even on training data.",
+    "Variance": "How much values or estimates spread around their mean. High variance means a lot of variability or instability.",
+    "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity. Rough guide: VIF ≈ 1 no issue, >10 serious."
+  };
 
-  if (!glossaryPanel || !glossaryBody || !currentList || !dtNodes.length) return;
+  /* ========= 2. BUILD UI ========= */
+  const panel = document.getElementById("glossary-panel");
+  const termsContainer = document.getElementById("glossary-terms");
+  const currentList = document.getElementById("glossary-current-list");
+  const collapseBtn = document.getElementById("glossary-collapse-btn");
+  const minimizeBtn = document.getElementById("glossary-minimize-btn");
+  const miniIcon = panel.querySelector(".glossary-mini-icon");
+  const searchInput = document.getElementById("glossary-search-input");
 
-  // Build term config: label + aliases + associated dd
-  const termConfigs = [];
-  const labelToConfig = {};
+  if (!panel || !termsContainer) return;
 
-  dtNodes.forEach(dt => {
-    const dd = dt.nextElementSibling && dt.nextElementSibling.tagName === 'DD'
-      ? dt.nextElementSibling
-      : null;
-    const aliasesAttr = dt.dataset.aliases || dt.textContent;
-    const aliases = aliasesAttr
-      .split(',')
-      .map(s => s.trim())
-      .filter(Boolean);
+  const termNames = Object.keys(GLOSSARY).sort((a, b) =>
+    a.localeCompare(b, "en", { sensitivity: "base" })
+  );
+  const termElements = {}; // name -> element
 
-    const label = dt.textContent.trim();
-    const conf = { dt, dd, label, aliases };
-    termConfigs.push(conf);
-    labelToConfig[label] = conf;
+  function makeId(term) {
+    return "glossary-" + term.toLowerCase().replace(/[^a-z0-9]+/gi, "-");
+  }
+
+  termNames.forEach(name => {
+    const card = document.createElement("div");
+    card.className = "glossary-term";
+    card.id = makeId(name);
+
+    const titleRow = document.createElement("div");
+    titleRow.className = "glossary-term-title-row";
+
+    const termSpan = document.createElement("span");
+    termSpan.className = "glossary-term-name";
+    termSpan.textContent = name;
+
+    const tagSpan = document.createElement("span");
+    tagSpan.className = "glossary-term-tag";
+    // Optional extra tag – here we just leave blank or reuse a short hint:
+    tagSpan.textContent = "";
+
+    const def = document.createElement("div");
+    def.className = "glossary-term-def";
+    def.textContent = GLOSSARY[name];
+
+    titleRow.appendChild(termSpan);
+    titleRow.appendChild(tagSpan);
+    card.appendChild(titleRow);
+    card.appendChild(def);
+    termsContainer.appendChild(card);
+
+    termElements[name] = card;
   });
 
-  // --- Toggle button (collapse / expand glossary) ---
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function () {
-      const collapsed = glossaryPanel.classList.toggle('collapsed');
-      this.textContent = collapsed ? 'Show glossary ▾' : 'Hide glossary ▴';
+  /* ========= 3. COLLAPSE / MINIMISE ========= */
+  collapseBtn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    panel.classList.toggle("collapsed");
+  });
+
+  minimizeBtn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    panel.classList.toggle("minimized");
+    if (!panel.classList.contains("minimized")) {
+      panel.classList.remove("collapsed");
+    }
+  });
+
+  miniIcon.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    panel.classList.remove("minimized");
+  });
+
+  /* ========= 4. SCROLL TO TERM ========= */
+  function highlightTerm(name) {
+    const el = termElements[name];
+    if (!el) return;
+    panel.classList.remove("minimized");
+    panel.classList.remove("collapsed");
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    el.classList.add("glossary-term--highlight");
+    setTimeout(() => el.classList.remove("glossary-term--highlight"), 1500);
+  }
+
+  /* ========= 5. SEARCH FILTER ========= */
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      const q = searchInput.value.trim().toLowerCase();
+      termNames.forEach(name => {
+        const el = termElements[name];
+        if (!el) return;
+        const haystack =
+          (name + " " + (GLOSSARY[name] || "")).toLowerCase();
+        const match = !q || haystack.includes(q);
+        el.style.display = match ? "" : "none";
+      });
     });
   }
 
-  // --- Helper: debounce to avoid firing on every pixel of scroll ---
-  function debounce(fn, wait) {
-    let timeout;
-    return function () {
-      const args = arguments;
-      clearTimeout(timeout);
-      timeout = setTimeout(function () {
-        fn.apply(null, args);
-      }, wait);
-    };
-  }
-
-  // --- Update "terms currently visible" based on text in viewport ----
+  /* ========= 6. TERMS ON THIS PART OF THE PAGE ========= */
   function updateVisibleTerms() {
-    const visibleTerms = new Set();
-    const textEls = document.querySelectorAll('p, li, td, th, summary, h1, h2, h3, h4');
-
-    const vTop = 0;
-    const vBottom = window.innerHeight;
+    const textEls = document.querySelectorAll("p, li, td, th, summary, h1, h2, h3, h4, h5");
+    const viewportTop = 0;
+    const viewportBottom = window.innerHeight;
+    const seen = new Set();
 
     textEls.forEach(el => {
       const rect = el.getBoundingClientRect();
-      if (rect.bottom < vTop || rect.top > vBottom) return; // not on screen
-
-      const text = (el.innerText || '').toLowerCase();
-      if (!text) return;
-
-      termConfigs.forEach(conf => {
-        if (visibleTerms.has(conf.label)) return;
-        for (const alias of conf.aliases) {
-          if (alias && text.includes(alias.toLowerCase())) {
-            visibleTerms.add(conf.label);
-            break;
-          }
+      if (rect.bottom < viewportTop || rect.top > viewportBottom) return;
+      const t = (el.innerText || "").toLowerCase();
+      if (!t) return;
+      termNames.forEach(name => {
+        if (seen.has(name)) return;
+        const simple = name.toLowerCase();
+        if (t.includes(simple)) {
+          seen.add(name);
         }
       });
     });
 
-    currentList.innerHTML = '';
-    if (!visibleTerms.size) {
-      const li = document.createElement('li');
-      li.textContent = 'Scroll the page – matching terms will appear here.';
-      currentList.appendChild(li);
+    currentList.innerHTML = "";
+    if (!seen.size) {
+      currentList.textContent = "Scroll the page – I’ll show terms here.";
       return;
     }
 
-    Array.from(visibleTerms).sort().forEach(label => {
-      const li = document.createElement('li');
-      li.textContent = label;
-
-      // Click jumps to glossary term and highlights it
-      li.addEventListener('click', () => {
-        const conf = labelToConfig[label];
-        if (!conf || !conf.dt) return;
-        conf.dt.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        conf.dt.classList.add('glossary-highlight');
-        if (conf.dd) conf.dd.classList.add('glossary-highlight');
-        setTimeout(() => {
-          conf.dt.classList.remove('glossary-highlight');
-          if (conf.dd) conf.dd.classList.remove('glossary-highlight');
-        }, 1800);
+    Array.from(seen)
+      .sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }))
+      .slice(0, 12)
+      .forEach(name => {
+        const btn = document.createElement("button");
+        btn.className = "glossary-chip";
+        btn.textContent = name;
+        btn.addEventListener("click", () => highlightTerm(name));
+        currentList.appendChild(btn);
       });
-
-      currentList.appendChild(li);
-    });
   }
 
-  const updateVisibleTermsDebounced = debounce(updateVisibleTerms, 200);
-  window.addEventListener('scroll', updateVisibleTermsDebounced);
-  window.addEventListener('resize', updateVisibleTermsDebounced);
-  updateVisibleTerms();  // initial
-
-  // --- Simple in-glossary filter ----
-  if (searchInput) {
-    searchInput.addEventListener('input', function () {
-      const q = this.value.trim().toLowerCase();
-      termConfigs.forEach(conf => {
-        const match = !q ||
-          conf.label.toLowerCase().includes(q) ||
-          conf.aliases.some(a => a.toLowerCase().includes(q));
-        if (conf.dt) conf.dt.style.display = match ? '' : 'none';
-        if (conf.dd) conf.dd.style.display = match ? '' : 'none';
-      });
-    });
-  }
-});
+  updateVisibleTerms();
+  window.addEventListener("scroll", () => {
+    window.requestAnimationFrame(updateVisibleTerms);
+  });
+})();
 </script>
 
   
   
+  
+  
+  
+
   
   
   
