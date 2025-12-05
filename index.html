@@ -825,6 +825,323 @@ body.dark .poor {
         }
 
 
+        /* --- Page title: light mode --- */
+        .page-title {
+          margin: 0;
+          padding: 0.6rem 1.2rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+          background: #f5f5f7;
+          color: #111827;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        
+        /* optional: keep header layout tight */
+        .page-header {
+          margin: 0 0 0.5rem 0;
+        }
+        
+        /* --- Page title: dark mode override --- */
+        body.dark-mode .page-title {
+          background: #020617;   /* dark panel */
+          color: #f9fafb;        /* light text */
+          border-color: #1f2937;
+        }
+        
+                
+
+
+
+
+
+        .section-banner.condensed-banner {
+          margin: 0;
+          padding: 0.45rem 1.2rem;
+          font-size: 0.95rem;
+          font-weight: 600;
+          background: #f5f5f7;
+          color: #111827;
+          border-top: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        
+        /* dark mode */
+        body.dark-mode .section-banner.condensed-banner {
+          background: #020617;
+          color: #f9fafb;
+          border-color: #1f2937;
+        }
+        
+        
+
+
+
+        
+        /* ============================
+           Condensed Reference: base (light mode)
+           ============================ */
+        
+        #condensed-reference-wrapper {
+          margin: 1.5rem 0 2rem;
+        }
+        
+        .ref-toggle-btn {
+          display: inline-block;
+          width: 100%;
+          text-align: left;
+          padding: 0.55rem 0.9rem;
+          font-size: 0.95rem;
+          font-weight: 600;
+          border-radius: 6px;
+          border: 1px solid #e5e7eb;
+          background: #f9fafb;
+          color: #111827;
+          cursor: pointer;
+          transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+        
+        .ref-toggle-btn:hover {
+          background: #eef2ff;
+          border-color: #c7d2fe;
+        }
+        
+        /* The expanded content panel */
+        .ref-section {
+          margin-top: 0.6rem;
+          padding: 1rem 1.1rem 1.25rem;
+          border-radius: 8px;
+          border: 1px solid #e5e7eb;
+          background: #ffffff;
+        }
+        
+        /* Header inside the condensed sheet */
+        .ref-header h2 {
+          margin: 0;
+          font-size: 1.05rem;
+          font-weight: 650;
+          color: #111827;
+        }
+        
+        .ref-subtitle {
+          margin: 0.25rem 0 0.75rem;
+          font-size: 0.85rem;
+          color: #4b5563;
+        }
+        
+        /* Cards / subsections inside the sheet */
+        .ref-card {
+          padding: 0.75rem 0 0.4rem;
+          border-top: 1px solid #e5e7eb;
+        }
+        
+        .ref-card:first-of-type {
+          border-top: none;
+          padding-top: 0;
+        }
+        
+        .ref-card h3 {
+          margin: 0 0 0.4rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #111827;
+        }
+        
+        .ref-list {
+          padding-left: 1.2rem;
+          margin: 0;
+          font-size: 0.85rem;
+          color: #111827;
+        }
+        
+        .ref-list li {
+          margin-bottom: 0.4rem;
+        }
+        
+        /* ============================
+           Condensed Reference: dark mode
+           ============================ */
+        
+        body.dark-mode .ref-toggle-btn {
+          background: #020617;
+          color: #e5e7eb;
+          border-color: #1f2937;
+        }
+        
+        body.dark-mode .ref-toggle-btn:hover {
+          background: #0f172a;
+          border-color: #4b5563;
+        }
+        
+        body.dark-mode .ref-section {
+          background: #020617;
+          border-color: #1f2937;
+        }
+        
+        body.dark-mode .ref-header h2 {
+          color: #f9fafb;
+        }
+        
+        body.dark-mode .ref-subtitle {
+          color: #9ca3af;
+        }
+        
+        body.dark-mode .ref-card {
+          border-top-color: #1f2937;
+        }
+        
+        body.dark-mode .ref-card h3 {
+          color: #e5e7eb;
+        }
+        
+        body.dark-mode .ref-list {
+          color: #e5e7eb;
+        }
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+        
+        /* =========================================
+           Fix dark-mode for header + ref sheet
+           ========================================= */
+        
+/* Default (light mode) page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: #f9fafb;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Dark mode override for the header bar */
+body.dark-mode .page-header {
+  background: #020617;          /* very dark navy/black */
+  color: #f9fafb;               /* light text */
+  border-bottom: 1px solid #1f2937;
+}
+
+/* Make sure inner text picks up the dark-mode color */
+body.dark-mode .page-header h1,
+body.dark-mode .page-header .legend-note {
+  color: inherit;
+}
+
+/* Light mode (you can keep your existing styles if you like) */
+#condensed-reference-wrapper {
+  background: #ffffff;
+  color: #111827;
+}
+
+#condensed-reference {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+/* Dark mode overrides */
+body.dark-mode #condensed-reference-wrapper {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark-mode #condensed-reference {
+  background: #020617;
+  border-color: #1f2937;
+}
+
+/* The toggle button bar at the top of the condensed sheet */
+#condensed-ref-toggle {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  border: 0;
+  background: #f3f4f6;
+  color: #111827;
+  cursor: pointer;
+}
+
+/* Dark-mode styling for the toggle button */
+body.dark-mode #condensed-ref-toggle {
+  background: #111827;
+  color: #e5e7eb;
+  border-bottom: 1px solid #1f2937;
+}
+
+/* Cards / sub-sections inside the condensed sheet */
+.ref-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Dark-mode version */
+body.dark-mode .ref-card {
+  background: #020617;
+  border-color: #1f2937;
+}
+
+/* Tables inside the condensed sheet */
+.ref-table th,
+.ref-table td {
+  background: #ffffff;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+
+/* Dark-mode tables */
+body.dark-mode .ref-table th,
+body.dark-mode .ref-table td {
+  background: #020617;
+  color: #e5e7eb;
+  border-color: #1f2937;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -964,23 +1281,14 @@ document.addEventListener('DOMContentLoaded', function () {
   
   
 <header class="page-header">
-  <h1>Comprehensive Model Evaluation Metrics Dashboard</h1>   <p> </p>
-    <p class="legend-note">
-    <em>designed to nourish the human spirit and honor the truth. &#10084</em>
+  <h1 class="page-title">Comprehensive Model Evaluation Metrics Dashboard</h1>
+  <p class="legend-note">
+    <em>designed to nourish the human spirit and honor the truth. &#10084;</em>
   </p>
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   <div class="controls">
-    <button onclick="toggleDetails(true)">▼ Expand all</button>
-    <button onclick="toggleDetails(false)">▲ Collapse all</button>
+    <button onclick="toggleDetails(true)">▾ Expand all</button>
+    <button onclick="toggleDetails(false)">▴ Collapse all</button>
     <button id="darkToggle" onclick="toggleDarkMode()">🌙 Dark mode</button>
   </div>
 </header>
@@ -1142,8 +1450,7 @@ Accuracy  = (TP + TN) / (TP + FP + TN + FN)
 Precision = TP / (TP + FP)
 Recall    = TP / (TP + FN)
 F1        = 2 × (Precision × Recall) / (Precision + Recall)
-MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]
-      </pre>
+MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
 
       <div class="ref-table-wrapper">
         <table class="ref-table">
@@ -1500,8 +1807,7 @@ acc     = accuracy_score(y_true, y_pred)
 prec    = precision_score(y_true, y_pred)
 rec     = recall_score(y_true, y_pred)
 f1      = f1_score(y_true, y_pred)
-roc_auc = roc_auc_score(y_true, y_proba)
-      </pre>
+roc_auc = roc_auc_score(y_true, y_proba)      </pre>
 
       <h4>Regression Metrics</h4>
       <pre class="ref-code">
@@ -1509,29 +1815,27 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 mae  = mean_absolute_error(y_true, y_pred)
 rmse = mean_squared_error(y_true, y_pred, squared=False)
-r2   = r2_score(y_true, y_pred)
-      </pre>
+r2   = r2_score(y_true, y_pred)      </pre>
 
       <h4>Statistical Tests</h4>
       <pre class="ref-code">
-      from scipy import stats
-      
-      # t-test (two independent groups, equal variance assumed)
-      t_stat, p_value = stats.ttest_ind(group1, group2)
-      
-      # Chi-square test of independence for a contingency table
-      chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
-      
-      # Kolmogorov–Smirnov:
-      # 1-sample KS: does sample follow a normal distribution?
-      ks_stat, p_ks = stats.kstest(sample, 'norm')
-      
-      # 2-sample KS: are two samples from the same distribution?
-      ks2_stat, p_ks2 = stats.ks_2samp(sample1, sample2)
-      
-      # Levene’s test for equality of variances
-      lev_stat, p_lev = stats.levene(group1, group2, group3)
-      </pre>
+from scipy import stats
+
+# t-test (two independent groups, equal variance assumed)
+t_stat, p_value = stats.ttest_ind(group1, group2)
+
+# Chi-square test of independence for a contingency table
+chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
+
+# Kolmogorov–Smirnov:
+# 1-sample KS: does sample follow a normal distribution?
+ks_stat, p_ks = stats.kstest(sample, 'norm')
+
+# 2-sample KS: are two samples from the same distribution?
+ks2_stat, p_ks2 = stats.ks_2samp(sample1, sample2)
+
+# Levene’s test for equality of variances
+lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
 
     </section>
 
