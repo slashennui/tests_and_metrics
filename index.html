@@ -1107,6 +1107,8 @@ body.dark .poor {
 
 
 
+
+
         
         
         
@@ -1252,6 +1254,90 @@ body.dark-mode .ref-table td {
 .dark-mode .glossary-inline-term {
   border-bottom-color: rgba(45, 212, 191, 0.9);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Gödel / Limits block ===== */
+.limits-block {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft, #e5e7eb);
+  background: var(--card-bg, #ffffff);
+  overflow: hidden;
+}
+
+.limits-block > summary {
+  cursor: pointer;
+  padding: 0.8rem 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(
+    to right,
+    var(--accent-soft, #fff7ed),
+    var(--card-bg, #ffffff)
+  );
+  border-bottom: 1px solid var(--border-soft, #e5e7eb);
+  color: var(--accent-strong, #b45309); /* standout heading colour */
+}
+
+.limits-block > summary::marker {
+  content: '';
+}
+
+.limits-block__chevron {
+  font-size: 0.85rem;
+  transition: transform 0.15s ease-out;
+}
+
+.limits-block[open] .limits-block__chevron {
+  transform: rotate(90deg);
+}
+
+.limits-block__title {
+  font-size: 0.98rem;
+}
+
+.limits-block__body {
+  padding: 1rem 1.25rem 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted, #4b5563);
+}
+
+.limits-block__body p {
+  margin: 0 0 0.6rem;
+}
+
+.limits-block__body p:last-child {
+  margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1514,7 +1600,7 @@ document.addEventListener('DOMContentLoaded', function () {
   </button>
 
   <!-- Collapsible content -->
-  <div id="condensed-reference" class="ref-section">
+  <div id="condensed-reference" class="ref-section" style="background-color: #f8f9fa">
     <div class="ref-header">
       <h2>Data Science Model Evaluation Metrics: Condensed Reference Sheet</h2>
       <p class="ref-subtitle">
@@ -1525,7 +1611,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <!-- 1. Metric Selection Guide -->
     <section class="ref-card">
       <h3>Metric Selection Guide</h3>
-      <ol class="ref-list">
+      <ol class="ref-list" >
         <li>
           <strong>Problem Type → Metric Category</strong><br>
           Binary/Multiclass Classification → <em>Performance (Classification)</em> metrics<br>
@@ -7639,7 +7725,16 @@ implementations.<br><br>
 <details class="metric-section">
   <summary>Cutting-Edge ML Metrics (2020–2025)</summary>
 
-  <section class="ref-card">
+  <section class="ref-card" style="background-color: #f8f9fa">
+   
+   
+   
+          <div class="cutting-header">
+          <strong> </strong>
+          <span  > </span>
+        </div>
+   
+  
    
     <p class="ref-description">
       Modern machine-learning research uses metrics that go beyond classical AUC, RMSE, and p-values.
@@ -8246,6 +8341,80 @@ exp.show_in_notebook()
 </div>
 
   </details>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+<!-- Limits of Models, Metrics & Science -->
+<div id="condensed-reference" class="ref-section soft-yellow" style="background-color: #f8f9fa; padding: 20px;">
+  <div class="ref-header">
+    <h2>Limits of Models, Metrics & Science</h2>
+    <p class="ref-subtitle">
+      Gödel’s reminder
+    </p>
+  </div>
+
+  <div class="metric-section__body">
+    <p>
+      This dashboard summarises many of the tools we currently use to make
+      sense of data – from classical statistics to modern ML metrics. They
+      are powerful, but they are not the whole story.
+    </p>
+
+    <p>
+      <strong>Gödel’s incompleteness theorem</strong> shows that any formal
+      system rich enough to express basic arithmetic will contain true
+      statements that cannot be proven within that system. No system can be
+      both complete and consistent.
+    </p>
+
+    <p>
+      By analogy, no modelling framework or collection of metrics can ever
+      fully capture the processes we study. We always work with:
+    </p>
+
+    <ul>
+      <li>finite, noisy, and biased data;</li>
+      <li>simplified models of complex systems;</li>
+      <li>metrics that highlight some aspects while ignoring others;</li>
+      <li>assumptions that are never perfectly satisfied.</li>
+    </ul>
+
+    <p>
+      The goal here is not to pretend that AUC, RMSE, p-values, or any
+      “cutting-edge” metric delivers final truth. Instead, this dashboard
+      makes our tools <strong>explicit</strong> – showing where they are
+      informative, where they are fragile, and where they leave important
+      questions unanswered.
+    </p>
+
+    <p>
+      In other words: this is a <em>map</em>, not the territory. The map is
+      useful, and it keeps improving – but if we ever forget that it is
+      incomplete, we stop doing science.
+    </p>
+
+    <p style="margin-top:1rem; font-weight:500;">
+      Thanks for your attention.<br>
+      — manu
+    </p>
+  </div>
+</div>
+
+
+
+  
+  
   
   
   
