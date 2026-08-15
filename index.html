@@ -85,42 +85,6 @@ tbody tr:nth-child(even) {
   );
 }
 
-/* F1 Score */
-.colorbar-f1 {
-  background: linear-gradient(to right,
-    #ff8c00 0%,    /* <0.5 poor */
-    #ff8c00 50%,
-    #ffeb3b 50%,   /* 0.5–0.8 good */
-    #ffeb3b 80%,
-    #81c784 80%,   /* >0.8 very good */
-    #81c784 100%
-  );
-}
-
-/* ROC / PR AUC */
-.colorbar-auc {
-  background: linear-gradient(to right,
-    #ff8c00 0%,    /* <0.7 poor */
-    #ff8c00 70%,
-    #ffecb3 70%,   /* 0.7–0.8 moderate */
-    #ffecb3 80%,
-    #81c784 80%,   /* >0.8 good */
-    #81c784 100%
-  );
-}
-
-/* R² / Adjusted R² (0–1) */
-.colorbar-r2 {
-  background: linear-gradient(to right,
-    #ff8c00 0%,    /* weak */
-    #ff8c00 25%,
-    #ffecb3 25%,   /* moderate */
-    #ffecb3 50%,
-    #81c784 50%,   /* strong */
-    #81c784 100%
-  );
-}
-
 /* Correlations & symmetric -1..+1 type scales (|value| small = poor, large = good) */
 .colorbar-correlation {
   background: linear-gradient(to right,
@@ -218,15 +182,6 @@ tbody tr:nth-child(even) {
     #ffccbc 0%,    /* underfit: high bias */
     #c8e6c9 50%,   /* balanced */
     #ffccbc 100%   /* overfit: high variance */
-  );
-}
-
-/* Error magnitude (RMSE / MAE etc.): lower better */
-.colorbar-error {
-  background: linear-gradient(to right,
-    #c8e6c9 0%,    /* 0 error (good) */
-    #fff9c4 50%,   /* moderate */
-    #ffccbc 100%   /* large error (bad) */
   );
 }
 
@@ -1461,36 +1416,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-<div class="spotify-wrapper">
-  <iframe
-    src="https://open.spotify.com/embed/playlist/5qggnZgnAAPIa50DQSKe3a?utm_source=generator&theme=0&highlight=0Y0spT0fowl50Ob4Y4VOCW"
-    frameborder="0"
-    allowfullscreen
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-    loading="lazy"
-  ></iframe>
-</div>
+<details class="spotify-optional">
+  <summary>Optional focus music</summary>
+  <p class="spotify-note">Personal playlist — unrelated to the dashboard content and collapsed by default.</p>
+  <div class="spotify-wrapper">
+    <iframe
+      title="Optional Spotify focus playlist"
+      src="https://open.spotify.com/embed/playlist/5qggnZgnAAPIa50DQSKe3a?utm_source=generator&theme=0&highlight=0Y0spT0fowl50Ob4Y4VOCW"
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy"
+    ></iframe>
+  </div>
+</details>
 
 <style>
+  .spotify-optional {
+    max-width: 340px;
+    margin: 0 auto 0.75rem;
+    text-align: center;
+  }
+
+  .spotify-optional > summary {
+    display: inline-block;
+    margin: 0.25rem 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #4b5563;
+  }
+
+  body.dark .spotify-optional > summary {
+    color: #9ca3af;
+  }
+
+  .spotify-note {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  body.dark .spotify-note {
+    color: #9ca3af;
+  }
+
   .spotify-wrapper {
     width: 260px;
     height: 115px;
     overflow: hidden;
-    margin: 0 auto;          /* center horizontally */
+    margin: 0 auto;
   }
 
   .spotify-wrapper iframe {
     width: 100%;
     height: 152px;
     transform: scale(0.75);
-    transform-origin: top center;  /* keep it centered while scaling */
+    transform-origin: top center;
     border-radius: 12px;
   }
 
   @media (min-width: 900px) {
     .spotify-wrapper {
       width: 320px;
-      height: 114px; /* 152 * 0.75 */
+      height: 114px;
     }
   }
 </style>
@@ -1517,6 +1505,52 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
 </header>
 
+<nav class="jump-nav" aria-label="Jump to dashboard sections">
+  <a href="#metric-selection-guide">Metric guide</a>
+  <a href="#validation-deployment">Validation</a>
+  <a href="#classification">Classification</a>
+  <a href="#survival">Survival</a>
+  <a href="#inference">Inference</a>
+  <a href="#robustness-resampling">Robustness</a>
+  <a href="#regression-correlation">Regression</a>
+  <a href="#multicollinearity">Multicollinearity</a>
+  <a href="#outliers-distributions">Outliers</a>
+  <a href="#model-selection">Model selection</a>
+  <a href="#interpretability">Interpretability</a>
+  <a href="#python-examples">Python</a>
+  <a href="#references">References</a>
+</nav>
+
+<style>
+  .jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    margin: 0.5rem 0 1rem;
+  }
+  .jump-nav a {
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.78rem;
+    text-decoration: none;
+    color: #374151;
+    background: #f9fafb;
+  }
+  .jump-nav a:hover,
+  .jump-nav a:focus-visible {
+    border-color: #2563eb;
+    color: #1d4ed8;
+    outline: none;
+  }
+  body.dark .jump-nav a {
+    border-color: #374151;
+    color: #d1d5db;
+    background: #111827;
+  }
+</style>
+
 
 
 
@@ -1534,7 +1568,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- ===================================== -->
 <!-- 0. METRIC SELECTION GUIDE            -->
 <!-- ===================================== -->
-<details open>
+<details open id="metric-selection-guide">
   <summary>Metric Selection Guide (Flowchart‑style)</summary>
   <p>High‑level guide for picking suitable metrics:</p>
   <ol>
@@ -1561,7 +1595,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <ul>
         <li>Penalise big errors heavily → RMSE / MSE.</li>
         <li>Interpret “average absolute deviation” → MAE.</li>
-        <li>Targets span orders of magnitude → RMSLE or log‑transforms.</li>
+        <li>Multiplicative/log-scale discrepancies matter on a non-negative target → RMSLE or log-scale modelling; target skew or a wide range alone is not sufficient.</li>
       </ul>
     </li>
     <li><strong>Need interpretability?</strong>
@@ -1654,7 +1688,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <strong>Regression Goals</strong><br>
           Heavily penalize big errors → <strong>RMSE / MSE</strong><br>
           Interpret “average absolute deviation” → <strong>MAE</strong><br>
-          Targets span orders of magnitude → <strong>RMSLE or log transforms</strong>
+          Multiplicative/log-scale discrepancies matter on a non-negative target → <strong>RMSLE or log-scale modelling</strong>; target skew or a wide range alone is not sufficient
         </li>
         <li>
           <strong>Need Interpretability?</strong><br>
@@ -2195,22 +2229,61 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
 
 
 
+
+
+<!-- ===================================== -->
+<!-- VALIDATION, UNCERTAINTY & DEPLOYMENT  -->
+<!-- ===================================== -->
+<details id="validation-deployment">
+  <summary>Validation, Uncertainty &amp; Deployment</summary>
+  <div class="ref-card">
+    <p><strong>Core rule:</strong> a metric is only as trustworthy as the evaluation design that produced it. Choose the split, resampling scheme, threshold-selection procedure and uncertainty method to match how the model will actually be used.</p>
+
+    <h4>1. Match validation to the data-generating structure</h4>
+    <ul class="ref-list">
+      <li><strong>Ordinary i.i.d.-like prediction:</strong> stratified splits/CV can preserve class proportions when appropriate.</li>
+      <li><strong>Grouped or repeated observations:</strong> keep related observations in the same fold.</li>
+      <li><strong>Temporal prediction:</strong> train on the past and validate on the future; use rolling/blocked or otherwise time-aware splits rather than random leakage-prone folds.</li>
+      <li><strong>Spatial/geographical generalisation:</strong> consider spatial blocking or genuinely separate regions.</li>
+      <li><strong>Model/hyperparameter selection:</strong> use nested CV or a distinct validation layer when extensive tuning would otherwise contaminate the performance estimate.</li>
+      <li><strong>External validity:</strong> when possible, evaluate on a genuinely separate population, site, period or acquisition process.</li>
+    </ul>
+
+    <h4>2. Keep every learned preprocessing step inside training folds</h4>
+    <p>Imputation, scaling, feature selection, target encoding, oversampling/resampling, dimensionality reduction and learned feature engineering must be fitted using training data only, ideally inside a pipeline. Otherwise validation performance can be optimistically biased.</p>
+
+    <h4>3. Select thresholds before the final test evaluation</h4>
+    <p>Tune a decision threshold on training/validation data using the relevant error costs or operating constraints, then lock it before evaluating the final untouched test set. Selecting the threshold on the final test set makes the reported test performance optimistic.</p>
+
+    <h4>4. Quantify uncertainty with a design-appropriate method</h4>
+    <ul class="ref-list">
+      <li>For i.i.d.-like test data, a stratified bootstrap is useful for many metrics; grouped or serially dependent data need cluster/block/time-aware resampling.</li>
+      <li>ROC AUC uncertainty is commonly estimated with bootstrap or DeLong-type methods; use a method compatible with the sampling design.</li>
+      <li>Repeated/CV score distributions can describe resampling variability, but ordinary fold-to-fold SD is not automatically a standard error or confidence interval.</li>
+      <li>Time-to-event metrics require censoring-aware uncertainty procedures and explicit time horizons.</li>
+    </ul>
+
+    <h4>5. Check subgroups, data quality and post-deployment shift</h4>
+    <p>Inspect performance and uncertainty for substantively relevant subgroups where sample size permits. Also investigate label quality, missingness, duplicates/near-duplicates, sampling bias, prevalence changes, calibration drift and covariate/concept shift. Fairness criteria encode different normative goals and should be chosen from the application and harms, not mechanically.</p>
+  </div>
+</details>
+
 <!-- ====== ADDED: COLOR LEGEND ====== -->
 <section class="color-legend">
   <h3 class="legend-title">How to Read the Color Bars</h3>
-  <p>The colors indicate the qualitative interpretation of a metric's value, following a consistent rule:</p>
+  <p>The colors are visual cues for direction or screening regions under the stated metric-specific guidance; they are <strong>not universal pass/fail grades</strong>.</p>
   <div class="legend-items">
     <div class="legend-item">
       <div class="legend-color-box" style="background-color: #c8e6c9;"></div>
-      <span><strong>Green</strong>: A <strong>desirable</strong> or <strong>good</strong> result for the metric's purpose.</span>
+      <span><strong>Green</strong>: a more favourable direction or reference region <strong>under the stated context or heuristic</strong>.</span>
     </div>
     <div class="legend-item">
       <div class="legend-color-box" style="background-color: #fff9c4;"></div>
-      <span><strong>Yellow</strong>: A <strong>moderate</strong>, acceptable, or cautionary result.</span>
+      <span><strong>Yellow</strong>: an intermediate or cautionary region that requires context.</span>
     </div>
     <div class="legend-item">
       <div class="legend-color-box" style="background-color: #ffccbc;"></div>
-      <span><strong>Red</strong>: An <strong>undesirable</strong>, poor, or problematic result.</span>
+      <span><strong>Red</strong>: a less favourable or flagged region under the stated context or screening rule.</span>
     </div>
   </div>
   <p class="legend-note">
@@ -2231,7 +2304,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
 <!-- ===================================== -->
 <!-- 1. PERFORMANCE (CLASSIFICATION)      -->
 <!-- ===================================== -->
-<details open>
+<details open id="classification">
 <summary>Performance (Classification)</summary>
 <div class="table-responsive">
 <table>
@@ -2590,22 +2663,22 @@ A standard multiclass generalisation also exists.</td>
         <th>Actual Positive</th>
         <td>
           TP:
-          <input id="cm-tp" class="cm-input" type="number" min="0" value="50" style="width: 80px;">
+          <input id="cm-tp" class="cm-input" type="number" min="0" value="50" style="width: 80px;" aria-label="True positives (TP)">
         </td>
         <td>
           FN:
-          <input id="cm-fn" class="cm-input" type="number" min="0" value="10" style="width: 80px;">
+          <input id="cm-fn" class="cm-input" type="number" min="0" value="10" style="width: 80px;" aria-label="False negatives (FN)">
         </td>
       </tr>
       <tr>
         <th>Actual Negative</th>
         <td>
           FP:
-          <input id="cm-fp" class="cm-input" type="number" min="0" value="5" style="width: 80px;">
+          <input id="cm-fp" class="cm-input" type="number" min="0" value="5" style="width: 80px;" aria-label="False positives (FP)">
         </td>
         <td>
           TN:
-          <input id="cm-tn" class="cm-input" type="number" min="0" value="100" style="width: 80px;">
+          <input id="cm-tn" class="cm-input" type="number" min="0" value="100" style="width: 80px;" aria-label="True negatives (TN)">
         </td>
       </tr>
     </tbody>
@@ -2639,7 +2712,7 @@ A standard multiclass generalisation also exists.</td>
 
 
 <!-- Survival / Time-to-Event Performance -->
-<details class="metric-section" >
+<details class="metric-section"  id="survival">
   <summary>Survival / Time-to-Event Performance</summary>
   <div class="metric-section-body" style="background-color: #f8f9fa">
 
@@ -2675,12 +2748,14 @@ A standard multiclass generalisation also exists.</td>
       <li>
         <strong>Cox proportional hazards model</strong> –
         regression model for time-to-event data that estimates
-        <strong>hazard ratios</strong> for predictors.
+        <strong>hazard ratios</strong> for predictors. Hazard ratios are model-based associations;
+        a causal interpretation requires an appropriate causal design and additional assumptions.
       </li>
       <li>
         <strong>C-index (concordance index)</strong> –
-        rank-based performance measure: probability that a person who experiences
-        the event earlier gets a higher predicted risk. (1 = perfect, 0.5 = random.)
+        rank-based discrimination based on concordance among <strong>comparable subject pairs</strong>.
+        The exact estimator determines how censoring and ties are handled; for common formulations,
+        0.5 is often a no-discrimination reference and 1.0 is perfect concordance.
       </li>
       <li>
         <strong>Time-dependent ROC / AUC(t)</strong> –
@@ -2688,8 +2763,9 @@ A standard multiclass generalisation also exists.</td>
       </li>
       <li>
         <strong>Brier score over time</strong> –
-        mean squared error of predicted event probabilities at a given time
-        horizon, adjusted for censoring. Lower is better.
+        censoring-aware mean squared error of predicted event probabilities at an explicit time horizon.
+        Compare against a reference forecast; an <strong>integrated Brier score</strong> summarises performance
+        across a chosen time interval, and time-dependent calibration plots complement the score.
       </li>
     </ul>
 
@@ -2716,8 +2792,8 @@ A standard multiclass generalisation also exists.</td>
       <li>
         <strong>Competing risks</strong> –
         if other events (e.g. death from another cause) prevent the event of
-        interest, standard survival curves can overstate risk unless competing-risk
-        methods are used.
+        interest, ordinary Kaplan–Meier treatment of the event of interest can overstate cumulative incidence.
+        Use competing-risk methods appropriate to the question; cause-specific and subdistribution hazards answer different questions.
       </li>
       <li>
         <strong>Too short follow-up</strong> –
@@ -2752,7 +2828,7 @@ A standard multiclass generalisation also exists.</td>
 <!-- ===================================== -->
 <!-- 2. INFERENCE & HYPOTHESIS TESTING     -->
 <!-- ===================================== -->
-<details open>
+<details open id="inference">
 <summary>Inference &amp; Hypothesis Testing</summary>
 <div class="table-responsive">
 <table>
@@ -2853,7 +2929,7 @@ Power is defined for a specified alternative/effect size and analysis plan.<br><
 <strong>Common pitfalls:</strong>
 <ul>
   <li>Doing “observed power” calculations after non‑significant results and over‑interpreting them.</li>
-  <li>Ignoring that low power inflates the proportion of false positives among significant findings.</li>
+  <li>Confusing low power with a higher nominal Type-I error rate. Low power mainly reduces sensitivity to a specified true effect; in selective literatures or screening settings, low power combined with low prior odds and significance filtering can still worsen the reliability and exaggeration of reported findings.</li>
 </ul>
 </td>
 </tr>
@@ -3033,7 +3109,7 @@ than differences in means.<br><br>
 </table>
 </div>
 
-<h2>Real‑Dataset Examples for Common Tests</h2>
+<h2>Real‑World Scenarios for Common Tests</h2>
 <ul>
   <li><strong>t‑test:</strong> compare mean blood pressure in treatment vs control groups in a clinical trial.</li>
   <li><strong>Paired t‑test:</strong> before/after measurements of the same patients after an intervention.</li>
@@ -3200,8 +3276,10 @@ than differences in means.<br><br>
     <section class="ref-card">
       <h3>Comparing means</h3>
       <p>
-        These tests compare group averages. Non-parametric alternatives use
-        <strong>ranks</strong> instead of assuming normality.
+        The parametric tests below target group means under their model assumptions.
+        Rank-based procedures such as Mann–Whitney and Kruskal–Wallis use <strong>orderings/ranks</strong>
+        and generally test rank/distribution hypotheses; they are not simply “mean tests without normality”.
+        Median or pure location-shift interpretations require additional shape/location assumptions.
       </p>
 
       <table class="metrics-table metrics-table-compact">
@@ -3303,7 +3381,7 @@ than differences in means.<br><br>
             <td>“Is there association in a 2×2 table?”</td>
             <td>2 × 2 table with small counts</td>
             <td>
-              Exact test, no large-sample approximation. Useful when a 2×2 table is sparse and the large-sample χ² approximation is questionable.
+              For the usual 2×2 formulation, Fisher’s test conditions on fixed margins and avoids the large-sample χ² approximation. It is useful for sparse 2×2 tables, but it is not an automatic replacement for every sparse table; two-sided conventions can differ across implementations, and effect estimates/confidence intervals still matter.
             </td>
           </tr>
         </tbody>
@@ -3401,7 +3479,7 @@ than differences in means.<br><br>
 <!-- ===================================== -->
 <!-- 3. ROBUSTNESS & RESAMPLING            -->
 <!-- ===================================== -->
-<details open>
+<details open id="robustness-resampling">
 <summary>Robustness &amp; Resampling</summary>
 <div class="table-responsive">
 
@@ -3580,7 +3658,7 @@ than differences in means.<br><br>
 
         <div class="rp-slider-label">
           Extra outlier:
-          <input id="rp-outlier-slider" type="range" min="-40" max="40" step="1" value="0">
+          <input id="rp-outlier-slider" type="range" min="-40" max="40" step="1" value="0" aria-label="Extra outlier value">
           <span id="rp-outlier-value" class="rp-slider-value">0</span>
         </div>
       </div>
@@ -3639,8 +3717,19 @@ The mean is less resistant to isolated extreme values than the median, but that 
         const mid = Math.floor(n / 2);
         const median = n % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 
-        const q1 = sorted[Math.floor(n * 0.25)];
-        const q3 = sorted[Math.floor(n * 0.75)];
+        // Linear-interpolation sample quantiles (the common (n-1)*p convention).
+        function quantileLinear(sortedValues, p) {
+          if (sortedValues.length === 1) return sortedValues[0];
+          const h = (sortedValues.length - 1) * p;
+          const lo = Math.floor(h);
+          const hi = Math.ceil(h);
+          if (lo === hi) return sortedValues[lo];
+          const weight = h - lo;
+          return sortedValues[lo] * (1 - weight) + sortedValues[hi] * weight;
+        }
+
+        const q1 = quantileLinear(sorted, 0.25);
+        const q3 = quantileLinear(sorted, 0.75);
         const iqr = q3 - q1;
 
         const trimmedSorted = sorted.slice(Math.floor(n * 0.1), Math.ceil(n * 0.9));
@@ -3660,7 +3749,7 @@ The mean is less resistant to isolated extreme values than the median, but that 
           ['Mean', stats.mean.toFixed(2), 'sensitive'],
           ['Median', stats.median.toFixed(2), 'robust'],
           ['Trimmed mean (10%)', stats.trimmedMean.toFixed(2), 'robust'],
-          ['Q1 / Q3', `${stats.q1.toFixed(2)} / ${stats.q3.toFixed(2)}`, 'robust'],
+          ['Q1 / Q3 (linear interpolation)', `${stats.q1.toFixed(2)} / ${stats.q3.toFixed(2)}`, 'robust'],
           ['IQR', stats.iqr.toFixed(2), 'robust']
         ];
 
@@ -4017,7 +4106,7 @@ The mean is less resistant to isolated extreme values than the median, but that 
         <div class="rsp-row">
           <div class="rsp-slider-label">
             Sample size
-            <input id="rsp-n" type="range" min="30" max="250" step="10" value="100">
+            <input id="rsp-n" type="range" min="30" max="250" step="10" value="100" aria-label="Resampling playground sample size">
             <span id="rsp-n-val" class="rsp-slider-value">100</span>
           </div>
         </div>
@@ -4025,7 +4114,7 @@ The mean is less resistant to isolated extreme values than the median, but that 
         <div class="rsp-row">
           <div class="rsp-slider-label">
             Noise level (σ)
-            <input id="rsp-noise" type="range" min="0" max="3" step="0.2" value="1.0">
+            <input id="rsp-noise" type="range" min="0" max="3" step="0.2" value="1.0" aria-label="Resampling playground noise level sigma">
             <span id="rsp-noise-val" class="rsp-slider-value">1.0</span>
           </div>
         </div>
@@ -4033,7 +4122,7 @@ The mean is less resistant to isolated extreme values than the median, but that 
         <div class="rsp-row">
           <div class="rsp-slider-label">
             Signal strength (β₁)
-            <input id="rsp-signal" type="range" min="0.2" max="3" step="0.2" value="1.5">
+            <input id="rsp-signal" type="range" min="0.2" max="3" step="0.2" value="1.5" aria-label="Resampling playground signal strength beta 1">
             <span id="rsp-signal-val" class="rsp-slider-value">1.5</span>
           </div>
         </div>
@@ -4094,8 +4183,9 @@ The mean is less resistant to isolated extreme values than the median, but that 
         </ul>
 
         <p>
-          Use this to build intuition for <strong>robustness</strong>: when resampling methods agree
-          and intervals are narrow, your inference is much safer than when everything jumps around.
+          Use this to build intuition for <strong>resampling stability and precision</strong>: agreement between
+          methods and narrower intervals can indicate less sampling sensitivity under the chosen resampling design.
+          It does not rule out bias, leakage, dependence violations or model misspecification.
         </p>
       </div>
     </div>
@@ -4620,7 +4710,7 @@ Cutoffs such as 0.5 or 0.8 are project-specific heuristics, not universal statis
 <!-- ===================================== -->
 <!-- 4. REGRESSION & CORRELATION           -->
 <!-- ===================================== -->
-<details open>
+<details open id="regression-correlation">
 <summary>Regression &amp; Correlation</summary>
 <div class="table-responsive">
 <table>
@@ -4726,33 +4816,37 @@ Compare with a naive baseline and a domain-defined tolerable error; percentages 
 </tr>
 
 <tr>
-<td><strong>MSE / RMSLE</strong></td>
+<td><strong>MSE</strong> (Mean Squared Error)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">moderate</span>
-      <span class="tick-errhi">large</span>
-    </div>
-  </div>
+  Lower is better for the <strong>same target, units and evaluation sample</strong>, but there is no universal quality cutoff.<br><br>
+  Compare MSE with a suitable baseline and the application's error costs. Remember that MSE is expressed in <strong>squared target units</strong>.
+</td>
+<td>Measure average squared prediction error when large residuals deserve extra weight.</td>
+<td>
+\[
+\text{MSE} = \frac{1}{n}\sum_i (y_i-\hat y_i)^2.
+\]
+</td>
+<td>Squares each residual before averaging, so a few large errors can dominate.</td>
+<td>On one fixed test set, MSE 400 is lower than MSE 900; whether either is acceptable depends on the target scale, baseline and decision problem.</td>
+<td>Squared units are less directly interpretable than MAE/RMSE, and the score is sensitive to extreme residuals. Do not compare raw MSE values across differently scaled targets.</td>
+</tr>
 
-  <span class="good">Lower MSE/RMSLE</span> = smaller errors overall.<br><br>
-  <span class="moderate">Intermediate values</span> = moderate performance.<br><br>
-  <span class="poor">High values</span> = many large errors.
+<tr>
+<td><strong>RMSLE</strong> (Root Mean Squared Logarithmic Error)</td>
+<td>
+  Lower is better only for the <strong>same non-negative target, evaluation sample and log1p definition</strong>; there is no universal cutoff.<br><br>
+  Use it when discrepancies on a multiplicative/log scale are substantively meaningful, not merely because the target is skewed.
 </td>
-<td>Alternative regression loss functions: MSE for squared errors, RMSLE for
-relative/log errors.</td>
-<td>RMSLE uses log1p transform, emphasising multiplicative errors.</td>
-<td>Useful when the target is non-negative and multiplicative/log-scale discrepancies are more meaningful than additive errors; target skew alone is not sufficient reason to use RMSLE.</td>
-<td>Useful for non-negative targets where multiplicative / relative error is meaningful.</td>
-<td>With the common log1p definition, zero is valid; negative targets or predictions are not. MSE is sensitive to outliers.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Applying RMSLE when targets or predictions can be negative, or when relative error is not the relevant loss.</li>
-  <li>Ignoring that MSE/RMSE heavily weight a small number of very large residuals.</li>
-</ul>
+<td>Evaluate prediction error on a log1p scale for non-negative outcomes.</td>
+<td>
+\[
+\text{RMSLE} = \sqrt{\frac{1}{n}\sum_i\left[\log(1+\hat y_i)-\log(1+y_i)\right]^2}.
+\]
 </td>
+<td>Transforms actual and predicted values with log1p, computes squared differences, averages them and takes the square root.</td>
+<td>Useful for non-negative outcomes where a multiplicative discrepancy is more meaningful than an additive error in the original units.</td>
+<td>Negative targets or predictions are invalid under the common definition. RMSLE is not a percentage error and should not be compared numerically with MSE/MAE/RMSE on the original scale.</td>
 </tr>
 
 <tr>
@@ -5023,7 +5117,7 @@ residuals deviate.<br><br>
 <!-- ===================================== -->
 <!-- 5. MULTICOLLINEARITY DIAGNOSTICS      -->
 <!-- ===================================== -->
-<details open>
+<details open id="multicollinearity">
 <summary>Multicollinearity Diagnostics</summary>
 <div class="table-responsive">
 <table>
@@ -5119,7 +5213,7 @@ pinpoint which variables are problematic.<br><br>
 <!-- ===================================== -->
 <!-- 6. OUTLIER & DISTRIBUTION METRICS     -->
 <!-- ===================================== -->
-<details open>
+<details open id="outliers-distributions">
 <summary>Outlier &amp; Distribution Metrics</summary>
 <div class="table-responsive">
 <table>
@@ -5725,11 +5819,9 @@ independent samples.<br><br>
 
   <!-- Main wrapper collapsible for the whole lab (optional; you can remove if you want it always open) -->
   <details class="lab-block" open>
-    <summary class="lab-summary">Influence & Robustness Lab (Interactive Playgrounds) <p class="ir-note">
-      &nbsp;&nbsp;&nbsp;&nbsp;These playgrounds show how single points, noise and multiple comparisons can quietly break your models,
-    even when headline metrics still look good.
-  </p></summary>
+    <summary class="lab-summary">Influence & Robustness Lab (Interactive Playgrounds)</summary>
     <div class="lab-inner">
+      <p class="ir-note">These playgrounds show how single points, noise and multiple comparisons can quietly break models, even when headline metrics still look good.</p>
 
       <!-- =========================
            Playground 1: Outlier Impact 2.0
@@ -5748,7 +5840,7 @@ independent samples.<br><br>
                     <span>Sample size (base points)</span>
                     <span class="ir-slider-value" id="oi-n-val">30</span>
                   </div>
-                  <input id="oi-n" type="range" min="10" max="80" step="5" value="30" />
+                  <input id="oi-n" type="range" min="10" max="80" step="5" value="30" aria-label="Outlier impact sample size" />
                 </div>
 
                 <div class="ir-controls-row">
@@ -5756,7 +5848,7 @@ independent samples.<br><br>
                     <span>Noise level (σ)</span>
                     <span class="ir-slider-value" id="oi-noise-val">1.0</span>
                   </div>
-                  <input id="oi-noise" type="range" min="0" max="2.5" step="0.1" value="1.0" />
+                  <input id="oi-noise" type="range" min="0" max="2.5" step="0.1" value="1.0" aria-label="Outlier impact noise level sigma" />
                 </div>
 
                 <div class="ir-controls-row">
@@ -5764,7 +5856,7 @@ independent samples.<br><br>
                     <span>Outlier height</span>
                     <span class="ir-slider-value" id="oi-outlier-y-val">6.0</span>
                   </div>
-                  <input id="oi-outlier-y" type="range" min="-6" max="8" step="0.2" value="6" />
+                  <input id="oi-outlier-y" type="range" min="-6" max="8" step="0.2" value="6" aria-label="Outlier impact outlier height" />
                 </div>
 
                 <div class="ir-btn-row">
@@ -5858,7 +5950,7 @@ independent samples.<br><br>
                     <span>Leverage (x position)</span>
                     <span class="ir-slider-value" id="cd-x-val">2.5</span>
                   </div>
-                  <input id="cd-x" type="range" min="0" max="4" step="0.1" value="2.5" />
+                  <input id="cd-x" type="range" min="0" max="4" step="0.1" value="2.5" aria-label="Cook distance leverage x position" />
                 </div>
 
                 <div class="ir-controls-row">
@@ -5866,7 +5958,7 @@ independent samples.<br><br>
                     <span>Residual offset (signed)</span>
                     <span class="ir-slider-value" id="cd-resid-val">2.0</span>
                   </div>
-                  <input id="cd-resid" type="range" min="-4" max="4" step="0.1" value="2.0" />
+                  <input id="cd-resid" type="range" min="-4" max="4" step="0.1" value="2.0" aria-label="Cook distance residual offset" />
                 </div>
 
                 <div class="ir-btn-row">
@@ -5955,7 +6047,7 @@ independent samples.<br><br>
                   <span>Gaussian feature noise</span>
                   <span class="ir-slider-value" id="ni-gauss-val">0.3</span>
                 </div>
-                <input id="ni-gauss" type="range" min="0" max="1" step="0.05" value="0.3" />
+                <input id="ni-gauss" type="range" min="0" max="1" step="0.05" value="0.3" aria-label="Toy noise illustration Gaussian feature noise" />
               </div>
 
               <div class="ir-controls-row">
@@ -5963,7 +6055,7 @@ independent samples.<br><br>
                   <span>Random label flips</span>
                   <span class="ir-slider-value" id="ni-label-val">0.05</span>
                 </div>
-                <input id="ni-label" type="range" min="0" max="0.4" step="0.01" value="0.05" />
+                <input id="ni-label" type="range" min="0" max="0.4" step="0.01" value="0.05" aria-label="Toy noise illustration random label flips" />
               </div>
 
               <div class="ir-controls-row">
@@ -5971,7 +6063,7 @@ independent samples.<br><br>
                   <span>Feature noise (jitter)</span>
                   <span class="ir-slider-value" id="ni-feature-val">0.2</span>
                 </div>
-                <input id="ni-feature" type="range" min="0" max="1" step="0.05" value="0.2" />
+                <input id="ni-feature" type="range" min="0" max="1" step="0.05" value="0.2" aria-label="Toy noise illustration feature jitter" />
               </div>
 
               <div class="ir-controls-row">
@@ -5979,7 +6071,7 @@ independent samples.<br><br>
                   <span># Irrelevant features</span>
                   <span class="ir-slider-value" id="ni-irrelevant-val">5</span>
                 </div>
-                <input id="ni-irrelevant" type="range" min="0" max="30" step="1" value="5" />
+                <input id="ni-irrelevant" type="range" min="0" max="30" step="1" value="5" aria-label="Toy noise illustration number of irrelevant features" />
               </div>
 
               <p class="ir-note">
@@ -6293,7 +6385,7 @@ independent samples.<br><br>
                   <span># of tests (m)</span>
                   <span class="ir-slider-value" id="bf-m-val">20</span>
                 </div>
-                <input id="bf-m" type="range" min="1" max="200" step="1" value="20" />
+                <input id="bf-m" type="range" min="1" max="200" step="1" value="20" aria-label="Bonferroni demonstration number of tests" />
               </div>
 
               <div class="ir-controls-row">
@@ -6301,7 +6393,7 @@ independent samples.<br><br>
                   <span>Per-test α (uncorrected)</span>
                   <span class="ir-slider-value" id="bf-alpha-val">0.05</span>
                 </div>
-                <input id="bf-alpha" type="range" min="0.001" max="0.10" step="0.001" value="0.05" />
+                <input id="bf-alpha" type="range" min="0.001" max="0.10" step="0.001" value="0.05" aria-label="Bonferroni demonstration uncorrected alpha" />
               </div>
 
               <div class="ir-kpi">
@@ -6342,7 +6434,7 @@ independent samples.<br><br>
                   <span>Correlation between similar features (ρ)</span>
                   <span class="ir-slider-value" id="vif-rho-val">0.7</span>
                 </div>
-                <input id="vif-rho" type="range" min="0" max="0.99" step="0.01" value="0.70" />
+                <input id="vif-rho" type="range" min="0" max="0.99" step="0.01" value="0.70" aria-label="VIF demonstration feature correlation rho" />
               </div>
 
               <div class="ir-controls-row">
@@ -6350,7 +6442,7 @@ independent samples.<br><br>
                   <span># of similarly correlated features (k)</span>
                   <span class="ir-slider-value" id="vif-k-val">3</span>
                 </div>
-                <input id="vif-k" type="range" min="1" max="10" step="1" value="3" />
+                <input id="vif-k" type="range" min="1" max="10" step="1" value="3" aria-label="VIF demonstration number of correlated features" />
               </div>
 
               <div class="ir-kpi">
@@ -7056,7 +7148,7 @@ independent samples.<br><br>
 <!-- ===================================== -->
 <!-- 7. MODEL SELECTION CRITERIA           -->
 <!-- ===================================== -->
-<details open>
+<details open id="model-selection">
 <summary>Model Selection Criteria</summary>
 <div class="table-responsive">
 <table>
@@ -7216,7 +7308,7 @@ implementations.<br><br>
 <!-- ================================
      Advanced & Research Diagnostics
      ================================ -->
-<details class="metric-section">
+<details class="metric-section" id="advanced-diagnostics">
   <summary>Advanced &amp; Research Diagnostics</summary>
   <section class="ref-card" style="background-color: #f8f9fa">
     <p class="ref-description">
@@ -7273,7 +7365,7 @@ implementations.<br><br>
 <!-- ===================================== -->
 <!-- 8. MODEL INTERPRETABILITY & EXPLAINS  -->
 <!-- ===================================== -->
-<details open>
+<details open id="interpretability">
   <summary>Model Interpretability &amp; Explainability</summary>
   <div class="table-responsive">
     <table>
@@ -7396,7 +7488,7 @@ implementations.<br><br>
   <!-- ===================================== -->
   <!-- 9. PYTHON CODE SNIPPETS               -->
   <!-- ===================================== -->
-  <details open>
+  <details open id="python-examples">
     <summary>Python Code Snippets (scikit‑learn / SciPy / SHAP / LIME)</summary>
 
     <h2>Classification Metrics & Confusion Matrix</h2>
@@ -7505,7 +7597,7 @@ print("Cohen's Kappa:", kappa)
 
 
 <h2>Statistical Tests (t-test, ANOVA, chi-square)</h2>
-<a href="https://mybinder.org/v2/gh/slashennui/Statistical-Tests-t-test-ANOVA-chi-square-/main?urlpath=%2Fdoc%2Ftree%2FStatistical+Tests+%28t-test%2C+ANOVA%2C+chi-square%29.ipynb"
+<a href="https://mybinder.org/v2/gh/slashennui/Statistical-Tests-t-test-ANOVA-chi-square-/main?urlpath=lab%2Ftree%2FStatistical+Tests+%28t-test%2C+ANOVA%2C+chi-square%29.ipynb"
    target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
@@ -7621,7 +7713,7 @@ print("Brown-Forsythe / median Levene:", lev_stat, p_lev)
 
 
     <h2>Regression Metrics (MAE vs RMSE)</h2>
-  <a href="https://mybinder.org/v2/gh/slashennui/Regression-Metrics-MAE-vs-RMSE-/main?urlpath=%2Fdoc%2Ftree%2FRegression+Metrics+%28MAE+vs+RMSE%29.ipynb"
+  <a href="https://mybinder.org/v2/gh/slashennui/Regression-Metrics-MAE-vs-RMSE-/main?urlpath=lab%2Ftree%2FRegression+Metrics+%28MAE+vs+RMSE%29.ipynb"
    target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
@@ -7705,7 +7797,7 @@ print(f"R²: {r2:.4f}")
 
 
     <h2>SHAP / LIME Basics</h2>
-    <a href="https://mybinder.org/v2/gh/slashennui/SHAP-LIME-Basics/main?urlpath=%2Fdoc%2Ftree%2FSHAP-LIME+Basics.ipynb"
+    <a href="https://mybinder.org/v2/gh/slashennui/SHAP-LIME-Basics/main?urlpath=lab%2Ftree%2FSHAP-LIME+Basics.ipynb"
    target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
@@ -7817,6 +7909,23 @@ print(exp.as_list())
 
 
 
+
+
+<details id="references">
+  <summary>Selected Authoritative References &amp; Documentation</summary>
+  <div class="ref-card">
+    <p>These are starting points for definitions, APIs and evaluation workflow; individual methods may require more specialised methodological literature.</p>
+    <ul class="ref-list">
+      <li><a href="https://scikit-learn.org/stable/model_selection.html" target="_blank" rel="noopener noreferrer">scikit-learn: Model selection and evaluation</a> — cross-validation, threshold tuning, metrics, baselines and model selection.</li>
+      <li><a href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank" rel="noopener noreferrer">scikit-learn: Probability calibration</a> — reliability diagrams, calibration and proper scoring-rule context.</li>
+      <li><a href="https://docs.scipy.org/doc/scipy/reference/stats.html" target="_blank" rel="noopener noreferrer">SciPy: Statistical functions</a> — current statistical-test and distribution APIs used in the examples.</li>
+      <li><a href="https://arxiv.org/abs/1705.07874" target="_blank" rel="noopener noreferrer">Lundberg &amp; Lee: SHAP / unified feature attribution</a>.</li>
+      <li><a href="https://arxiv.org/abs/1602.04938" target="_blank" rel="noopener noreferrer">Ribeiro, Singh &amp; Guestrin: LIME</a>.</li>
+      <li><a href="https://mybinder.readthedocs.io/en/latest/howto/user_interface.html" target="_blank" rel="noopener noreferrer">Binder: Configure the user interface</a> — documented JupyterLab launch-link form used by the companion notebooks.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- Limits of Models, Metrics & Science -->
 <div id="limits-reference" class="ref-section soft-yellow" style="background-color: #f8f9fa; padding: 20px;">
   <div class="ref-header">
@@ -7831,6 +7940,14 @@ print(exp.as_list())
       This dashboard summarises many of the tools we currently use to make
       sense of data – from classical statistics to modern ML metrics. They
       are powerful, but they are not the whole story.
+    </p>
+
+    <p>
+      <strong>Specialised scope:</strong> forecasting, recommender/information-retrieval ranking,
+      clustering, multilabel learning, causal inference and reinforcement learning each have their own
+      evaluation families and validation designs. Examples include MASE/pinball loss/CRPS for forecasting,
+      NDCG/MAP@K/MRR for ranking, and silhouette or Davies–Bouldin diagnostics for clustering. They are
+      intentionally not compressed into generic “good/bad” bands here; use a domain-specific reference when those are the primary task.
     </p>
 
     <p>
@@ -7913,12 +8030,12 @@ print(exp.as_list())
         placeholder="Search terms (e.g. p-value, Brier, CI)…"
         aria-label="Search glossary terms"
       />
-      <button id="glossary-collapse-btn" title="Collapse glossary">−</button>
-      <button id="glossary-minimize-btn" title="Shrink to tiny button">▢</button>
+      <button id="glossary-collapse-btn" type="button" aria-label="Collapse glossary" aria-expanded="true" aria-controls="glossary-body" title="Collapse glossary">−</button>
+      <button id="glossary-minimize-btn" type="button" aria-label="Minimize glossary" title="Minimize glossary">▢</button>
     </div>
   </div>
 
-  <div class="glossary-body">
+  <div id="glossary-body" class="glossary-body">
     <section class="glossary-current">
       <div class="glossary-current-title">Terms on this part of the page</div>
       <div id="glossary-current-list" class="glossary-current-list">
@@ -7942,7 +8059,7 @@ print(exp.as_list())
   </div>
 
   <!-- Tiny icon when minimized -->
-  <div class="glossary-mini-icon" title="Click to reopen glossary">?</div>
+  <button type="button" class="glossary-mini-icon" aria-label="Reopen glossary" title="Reopen glossary">?</button>
 </div>
 
 <style>
@@ -8149,6 +8266,10 @@ print(exp.as_list())
 
   .glossary-mini-icon {
     display: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
     font-weight: 700;
     font-size: 18px;
     color: #f9fafb;
@@ -8215,9 +8336,9 @@ print(exp.as_list())
       "ACE (Adaptive Calibration Error)": "A calibration error that uses adaptive bins instead of fixed ones, reducing bias in the estimate.",
       "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
       "Adam optimization": "An extension of stochastic gradient descent that keeps running averages of gradients and squared gradients to give each parameter its own adaptive learning rate.",
-      "Adjusted R²": "A version of R² that penalises adding extra features. It increases only if a new feature improves the model more than expected by chance.",
+      "Adjusted R²": "A version of R² adjusted for model degrees of freedom. On the same response/data it rises only when the reduction in residual error is large enough to offset the penalty for added parameters; it is not an out-of-sample validation score.",
       "Aleatoric uncertainty": "Uncertainty that comes from inherent randomness or noise in the data-generating process; it cannot be reduced even with infinite data.",
-      "Alpha (α)": "The chosen significance level (often 0.05). It is the tolerated probability of a Type I error per test under the null hypothesis.",
+      "Alpha (α)": "A pre-specified Type-I error level for a testing procedure. Under a true null and valid test assumptions, it controls the probability of rejecting that null according to the procedure; 0.05 is common, not universal.",
       "Anderson–Darling test": "A statistical test that checks whether data follow a specific distribution, giving more weight to deviations in the tails than tests like KS.",
       "ANOVA (Analysis of Variance)": "A family of tests that compare means across multiple groups by checking whether between-group variation is larger than expected from within-group noise.",
       "Apache Spark": "A distributed computing framework for big data that supports SQL, streaming, machine learning and works with Python, R, Scala and Java.",
@@ -8242,7 +8363,7 @@ print(exp.as_list())
       "Bootstrapping": "Resampling with replacement from the data to estimate uncertainty (for example confidence intervals) or stability of a statistic or model.",
       "Boosting": "An ensemble method that trains models sequentially, each focusing on errors of the previous ones, and combines them to improve performance.",
       "Box plot": "A visual summary of a distribution showing median, quartiles, range and potential outliers.",
-      "Brier score": "A metric for probabilistic predictions between 0 and 1: the mean squared difference between predicted probabilities and actual outcomes (0 or 1). Lower is better.",
+      "Brier score": "Mean squared error of probabilistic binary forecasts. Lower is better on the same evaluation problem, but absolute magnitude depends on prevalence and should be interpreted against a reference forecast and calibration/discrimination diagnostics.",
       "Brier Skill Score (BSS)": "Compares a model’s Brier score to that of a baseline (for example predicting the base rate). Positive values mean improvement over the baseline.",
       "Brown–Forsythe test": "A robust variant of Levene’s test that uses medians instead of means to check equality of variances; more robust when distributions are skewed or heavy-tailed.",
       "Business analytics": "Using data, statistics and modelling to understand performance and support business decisions.",
@@ -8251,7 +8372,7 @@ print(exp.as_list())
       // ---------- C ----------
       "C-index (Concordance Index)": "A rank-based discrimination measure. In survival analysis, it is based on concordance among comparable subject pairs while accounting for the estimator’s censoring rules; higher values mean better risk ordering.",
       "Calibration": "How well predicted probabilities match observed frequencies (for example, among predictions of 0.7, about 70% are actually positive).",
-      "Calibration within groups": "Calibration checked separately in subgroups (for example by gender or age) to test whether probabilities are fair and well calibrated for everyone.",
+      "Calibration within groups": "Calibration checked separately in subgroups (for example by gender or age) to assess whether calibration differs across groups. It is one fairness-relevant diagnostic, not a complete definition or guarantee of fairness.",
       "CART (Classification and Regression Trees)": "A popular decision-tree algorithm used for both classification and regression.",
       "Categorical variable": "A variable whose values are labels or categories (for example city, colour).",
       "Categorical data tests": "Chi-square test of independence, Chi-square goodness-of-fit, Fisher’s exact test",
@@ -8263,7 +8384,7 @@ print(exp.as_list())
       "Classification threshold": "The probability cutoff used to turn a predicted probability into a class label (for example ≥0.5 → positive).",
       "Clustering": "An unsupervised learning task that groups similar observations together without using labels.",
       "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
-      "Coefficient": "A number that multiplies a feature in a model. It describes how the prediction changes when that feature increases by one unit, holding others fixed.",
+      "Coefficient": "A fitted model parameter whose interpretation depends on the model, link, transformations and interactions. In a simple linear model, a slope is the expected outcome change per unit predictor change conditional on the other included terms.",
       "Competing risks": "When multiple mutually exclusive events can occur (e.g., death from different causes). Standard survival methods may overestimate risk unless competing-risk models are used.",
       "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
       "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
@@ -8279,7 +8400,7 @@ print(exp.as_list())
       "Cost function": "A formula that measures how wrong a model’s predictions are; training minimises this quantity.",
       "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
       "Covariance": "A measure of how two variables vary together. Positive covariance means they tend to increase or decrease together.",
-      "Cox proportional hazards model": "A regression model for time-to-event outcomes. Estimates hazard ratios without making assumptions about the baseline hazard. Assumes proportional hazards over time.",
+      "Cox proportional hazards model": "A semiparametric time-to-event regression model that leaves the baseline hazard unspecified and models covariate associations through hazard ratios. Standard interpretation assumes proportional hazards; causal interpretation requires additional design and causal assumptions.",
       "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
       "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
       "Cumulative distribution function (CDF)": "Function that gives the probability that a random variable is less than or equal to a given value.",
@@ -8338,7 +8459,7 @@ print(exp.as_list())
       "Feature selection": "Choosing a subset of informative features and dropping irrelevant or redundant ones.",
       "Feature space": "The multidimensional space defined by all features; each observation is a point in this space.",
       "Few-shot learning": "Training models to generalise from only a handful of labelled examples per class.",
-      "Fisher’s exact test": "An exact test for 2×2 contingency tables, especially when expected counts are small. It avoids large-sample approximations.",
+      "Fisher’s exact test": "For the usual 2×2 formulation, an exact conditional test that conditions on the margins and avoids the large-sample chi-square approximation. It is useful for sparse 2×2 tables, but two-sided conventions can differ and effect estimates/confidence intervals still matter.",
       "Flume": "A tool for collecting, aggregating and moving large volumes of log data into systems like Hadoop.",
       "Frequentist statistics": "Classical statistics that interprets probability as long-run relative frequency and uses sampling distributions and p-values.",
 
@@ -8499,7 +8620,7 @@ print(exp.as_list())
       // ---------- R ----------
       "R": "An open-source language and environment for statistical computing, graphics and data analysis.",
       "Range": "The difference between the largest and smallest value in a dataset.",
-      "Rank-based test": "A non-parametric test that uses the ordering (ranks) of values instead of the raw values, making it robust to outliers and non-normality.",
+      "Rank-based test": "A procedure based on ranks/orderings rather than raw magnitudes. Rank methods often reduce sensitivity to extreme magnitudes and can require fewer distributional assumptions, but they test their own rank/distribution hypotheses and are not assumption-free.",
       "Recommendation engine": "A system that suggests items (products, movies, etc.) likely to interest a user based on behaviour or similarity.",
       "Recall (Sensitivity)": "Of all true positives in the data, how many did we catch? Focuses on avoiding false negatives.",
       "Regression": "Supervised learning where the target is numeric (for example price, weight).",
@@ -8512,7 +8633,7 @@ print(exp.as_list())
       "Response variable": "Another term for dependent variable or target; the outcome we model.",
       "Restricted Mean Survival Time (RMST)": "Average survival time up to a specified horizon. A robust alternative to comparing medians or hazard ratios.",
       "Ridge regression": "Regression with L2 regularisation that shrinks coefficients toward zero but rarely to exactly zero.",
-      "RMSE": "Root Mean Squared Error – the square root of MSE. A typical size of prediction error, in the same units as the target.",
+      "RMSE": "Root Mean Squared Error – the square root of mean squared prediction error, in the target units. It gives extra weight to large residuals; interpret it against a baseline and application tolerance rather than as a universal typical-error threshold.",
       "Robustness": "How resistant a method or metric is to outliers, noise and assumption violations.",
       "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across thresholds (0.5 = random, 1.0 = perfect).",
       "Root Mean Squared Error (RMSE)": "Same as RMSE; included for people searching by the long name.",
@@ -8669,7 +8790,11 @@ print(exp.as_list())
   /* ========= 3. COLLAPSE / MINIMISE ========= */
   collapseBtn.addEventListener("click", (ev) => {
     ev.stopPropagation();
-    panel.classList.toggle("collapsed");
+    const isCollapsed = panel.classList.toggle("collapsed");
+    collapseBtn.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+    collapseBtn.setAttribute("aria-label", isCollapsed ? "Expand glossary" : "Collapse glossary");
+    collapseBtn.setAttribute("title", isCollapsed ? "Expand glossary" : "Collapse glossary");
+    collapseBtn.textContent = isCollapsed ? "+" : "−";
   });
 
   minimizeBtn.addEventListener("click", (ev) => {
@@ -9372,7 +9497,7 @@ details.model-selection-no-scroll .model-selection-table-wrap td {
 })();
 </script>
 
-<!-- FINAL_QUALITY_POLISH_V3_1_2026_08_16 -->
+<!-- FINAL_HARDENING_V4_1_2026_08_16 -->
 </body>
 </html>
 

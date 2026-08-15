@@ -52,6 +52,13 @@ For multiclass problems, class-specific metrics need an averaging or aggregation
 - Feature-selection stability
 - Interactive bootstrap-vs-jackknife demonstrations
 
+### Validation, uncertainty, and deployment
+- Stratified, grouped, temporal, spatial, nested, and external validation principles
+- Training-fold-only preprocessing and feature-selection discipline
+- Validation-set threshold selection before final untouched test evaluation
+- Design-appropriate uncertainty estimation and resampling
+- Subgroup checks, label/data quality, leakage, and post-deployment drift
+
 ### Regression and correlation
 - R² and adjusted R²
 - MAE, MSE, RMSE, RMSLE
@@ -141,7 +148,7 @@ tests_and_metrics/
 └── README.md    # Project documentation
 ```
 
-There is no build system. The page is static, but it loads MathJax and syntax-highlighting assets from CDNs, so an internet connection is required for those external assets.
+There is no build system. The page is static, but it loads MathJax and syntax-highlighting assets from CDNs and contains an optional collapsed Spotify embed; an internet connection is required for those external assets. Binder launch badges also depend on the external Binder service.
 
 ---
 
@@ -159,11 +166,23 @@ You can also open `index.html` directly in a browser, although serving it locall
 
 ---
 
+## Selected technical references
+
+The dashboard includes a short, non-exhaustive reference section. Core implementation/documentation sources include:
+- [scikit-learn: Model selection and evaluation](https://scikit-learn.org/stable/model_selection.html)
+- [scikit-learn: Probability calibration](https://scikit-learn.org/stable/modules/calibration.html)
+- [SciPy: Statistical functions](https://docs.scipy.org/doc/scipy/reference/stats.html)
+- [SHAP paper](https://arxiv.org/abs/1705.07874)
+- [LIME paper](https://arxiv.org/abs/1602.04938)
+- [Binder: Configure the user interface](https://mybinder.readthedocs.io/en/latest/howto/user_interface.html)
+
+---
+
 ## Scope and limitations
 
 This is a practical reference, not a substitute for a statistical analysis plan or domain-specific validation standard.
 
-The dashboard focuses on broadly used classical-statistics and machine-learning evaluation tools. It does not attempt to cover every specialised metric, such as the full family of information-retrieval ranking metrics, computer-vision segmentation metrics, language-model evaluation suites, or every causal-inference diagnostic.
+The dashboard focuses on broadly used classical-statistics and machine-learning evaluation tools. It does not attempt to cover every specialised family, including forecasting scores, information-retrieval/recommender ranking metrics, clustering validation, multilabel evaluation, computer-vision segmentation metrics, language-model evaluation suites, reinforcement-learning evaluation, or every causal-inference diagnostic.
 
 Interactive playgrounds that use illustrative heuristics are explicitly labelled as such and should not be interpreted as estimators or formal hypothesis tests.
 
