@@ -1328,12 +1328,20 @@ function toggleDetails(shouldOpen) {
 
 <script>
 function updateConfusionMetrics() {
-  const tp = Number(document.getElementById('cm-tp')?.value) || 0;
-  const fp = Number(document.getElementById('cm-fp')?.value) || 0;
-  const fn = Number(document.getElementById('cm-fn')?.value) || 0;
-  const tn = Number(document.getElementById('cm-tn')?.value) || 0;
+  function readCount(id) {
+    const raw = document.getElementById(id)?.value;
+    if (raw == null || raw.trim() === '') return NaN;
+    const value = Number(raw);
+    return Number.isInteger(value) && value >= 0 ? value : NaN;
+  }
 
-  const total = tp + fp + fn + tn || 0;
+  const tp = readCount('cm-tp');
+  const fp = readCount('cm-fp');
+  const fn = readCount('cm-fn');
+  const tn = readCount('cm-tn');
+
+  const countsValid = [tp, fp, fn, tn].every(Number.isFinite);
+  const total = countsValid ? tp + fp + fn + tn : NaN;
 
   function safeDiv(num, den) {
     // A zero denominator means the metric is mathematically undefined.
@@ -2434,7 +2442,7 @@ Report both rates at the deployed threshold and show the threshold trade-off. Ac
 <strong>Common pitfalls:</strong>
 <ul>
   <li>Optimising only one of FPR or FNR without considering the business/clinical cost of the other side.</li>
-  <li>Reporting FPR but not stating what threshold or prevalence it corresponds to.</li>
+  <li>Reporting FPR without stating the decision threshold and the evaluation population/data distribution.</li>
 </ul>
 </td>
 </tr>
@@ -2665,22 +2673,22 @@ A standard multiclass generalisation also exists.</td>
         <th>Actual Positive</th>
         <td>
           TP:
-          <input id="cm-tp" class="cm-input" type="number" min="0" value="50" style="width: 80px;" aria-label="True positives (TP)">
+          <input id="cm-tp" class="cm-input" type="number" min="0" step="1" value="50" style="width: 80px;" aria-label="True positives (TP)">
         </td>
         <td>
           FN:
-          <input id="cm-fn" class="cm-input" type="number" min="0" value="10" style="width: 80px;" aria-label="False negatives (FN)">
+          <input id="cm-fn" class="cm-input" type="number" min="0" step="1" value="10" style="width: 80px;" aria-label="False negatives (FN)">
         </td>
       </tr>
       <tr>
         <th>Actual Negative</th>
         <td>
           FP:
-          <input id="cm-fp" class="cm-input" type="number" min="0" value="5" style="width: 80px;" aria-label="False positives (FP)">
+          <input id="cm-fp" class="cm-input" type="number" min="0" step="1" value="5" style="width: 80px;" aria-label="False positives (FP)">
         </td>
         <td>
           TN:
-          <input id="cm-tn" class="cm-input" type="number" min="0" value="100" style="width: 80px;" aria-label="True negatives (TN)">
+          <input id="cm-tn" class="cm-input" type="number" min="0" step="1" value="100" style="width: 80px;" aria-label="True negatives (TN)">
         </td>
       </tr>
     </tbody>
@@ -2991,8 +2999,7 @@ A significant omnibus result says at least one mean differs under the model assu
 <td>Compares between‑group variance to within‑group variance.</td>
 <td>Large F implies between‑group differences are large relative to noise.</td>
 <td>Follow significant F with post‑hoc tests to identify which groups differ.</td>
-<td>Assumes normality and equal variances; does not identify specific groups
-or effect sizes by itself.<br><br>
+<td>Requires an appropriate independent-observation/sampling structure and is sensitive to strong non-normality/outliers in small samples. Classical one-way ANOVA assumes equal variances; Welch ANOVA relaxes that equal-variance assumption. The omnibus test does not identify specific groups or effect sizes by itself.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
   <li>Stopping at a significant overall F without reporting effect sizes or post‑hoc comparisons.</li>
@@ -3317,8 +3324,9 @@ than differences in means.<br><br>
             <td>3+ groups, continuous outcome</td>
             <td>
               Global test; if significant, follow with post-hoc comparisons
-              (and multiple-testing correction). Assumes normal residuals &
-              equal variances.
+              (and multiple-testing correction). Requires independent observations
+              under the study design; classical ANOVA assumes approximately normal
+              residuals and equal variances, while Welch ANOVA relaxes equal variances.
             </td>
           </tr>
           <tr>
@@ -3348,7 +3356,8 @@ than differences in means.<br><br>
       <h3>Categorical data & independence</h3>
       <p>
         These tests work on <strong>counts</strong> in contingency tables and
-        ask whether patterns could be explained by chance alone.
+        compare observed counts with expectations under a specified null model,
+        such as independence or a specified categorical distribution.
       </p>
 
       <table class="metrics-table metrics-table-compact">
@@ -5195,8 +5204,7 @@ some redundancy exists.<br><br>
 ratio).</td>
 <td>Large condition number means XᵀX is ill‑conditioned; coefficient estimates
 can be unstable.</td>
-<td>Condition number ≈ 50 suggests strong collinearity somewhere among
-predictors.</td>
+<td>On an appropriately scaled design, condition number ≈ 50 can indicate severe ill-conditioning and possible strong collinearity among predictors.</td>
 <td>Scaling affects value; interpret with standardised predictors. Does not
 pinpoint which variables are problematic.<br><br>
 <strong>Common pitfalls:</strong>
@@ -6466,9 +6474,9 @@ independent samples.<br><br>
                   predictors.
                 </p>
                 <ul>
-                  <li>VIF ≈ 1 – almost no collinearity.</li>
-                  <li>VIF 5–10 – concerning; coefficients unstable and hard to interpret.</li>
-                  <li>VIF &gt; 10 – strong collinearity, rethink your design/features.</li>
+                  <li>VIF ≈ 1 – little linear redundancy with the other predictors.</li>
+                  <li>VIF 5–10 – a common screening range that often motivates closer inspection; context and model purpose matter.</li>
+                  <li>VIF &gt; 10 – a common severe-screening heuristic; investigate the design/features rather than deleting variables mechanically.</li>
                 </ul>
                 <p class="ir-note">
                   This toy setup assumes the focal predictor and all k companion predictors are
@@ -8387,7 +8395,7 @@ print(exp.as_list())
       "Clustering": "An unsupervised learning task that groups similar observations together without using labels.",
       "Cohen’s kappa": "Agreement between predictions and true labels, adjusted for agreement expected by chance. 0 = chance level, 1 = perfect agreement.",
       "Coefficient": "A fitted model parameter whose interpretation depends on the model, link, transformations and interactions. In a simple linear model, a slope is the expected outcome change per unit predictor change conditional on the other included terms.",
-      "Competing risks": "When multiple mutually exclusive events can occur (e.g., death from different causes). Standard survival methods may overestimate risk unless competing-risk models are used.",
+      "Competing risks": "When multiple mutually exclusive events can occur (for example death from different causes). For cumulative-incidence estimation, treating competing events as ordinary censoring in a Kaplan–Meier analysis can overstate the event probability; use a competing-risks method matched to the scientific question.",
       "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
       "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
       "Concordance index (C-index)": "A discrimination metric for survival models based on correctly ordered comparable pairs. The exact estimator determines how censoring and ties are handled; 0.5 is often a no-discrimination reference and 1.0 is perfect concordance.",
@@ -9356,6 +9364,7 @@ details.model-selection-no-scroll .model-selection-table-wrap td {
 <!-- FINAL_HARDENING_V4_1_2026_08_16 -->
 <!-- FINAL_QUALITY_POLISH_V5_2026_08_16 -->
 <!-- FINAL_WORDING_CONSISTENCY_V6_2026_08_16 -->
+<!-- FINAL_BOUNDED_CORRECTIONS_V7_2026_08_16 -->
 </body>
 </html>
 
