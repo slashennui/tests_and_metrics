@@ -136,7 +136,7 @@ The dashboard links to Binder-ready companion repositories for:
 - regression metrics,
 - SHAP and LIME.
 
-Those notebooks are intended to be standalone and reproducible: they generate their own data, split training/evaluation data correctly, use current APIs, and do not rely on hidden notebook state.
+Those notebooks are intended to be standalone and reproducible: they use self-contained generated or bundled example data, apply appropriate train/evaluation separation where predictive models are fitted, use current APIs, and do not rely on hidden notebook state.
 
 ---
 

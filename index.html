@@ -1875,7 +1875,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             <tr>
               <td>AIC</td>
               <td>Lower is better</td>
-              <td>Prediction quality, larger models</td>
+              <td>Information-theoretic comparison of candidate models balancing fit and complexity</td>
             </tr>
             <tr>
               <td>BIC</td>
@@ -1885,7 +1885,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             <tr>
               <td>Cross-validated Error</td>
               <td>Lower is better</td>
-              <td>Direct out-of-sample performance</td>
+              <td>Resampling-based estimate of generalization error; use nested or separate evaluation when the same CV is used for tuning</td>
             </tr>
             <tr>
               <td>Adjusted R²</td>
@@ -2470,10 +2470,10 @@ For ordinary binary ranking, <strong>0.5 is the random-ranking expectation</stro
 Beyond those anchors, usefulness is domain-specific. Report uncertainty and evaluate the operating region that matters.
 </td>
 <td>Measures how well model ranks positives above negatives across thresholds.</td>
-<td>Equivalent to probability a random positive has higher score than a random
-negative.</td>
+<td>Equivalent to the probability a random positive has a higher score than a random
+negative, with score ties contributing half credit in the usual empirical AUC.</td>
 <td>Integrates TPR vs FPR curve over all thresholds.</td>
-<td>AUC 0.85 → model ranks positives higher 85% of the time.</td>
+<td>AUC 0.85 → across random positive–negative pairs, correct ordering receives about 85% average credit when ties count as half.</td>
 <td>Doesn’t reflect calibration; can look good on heavily imbalanced data even
 if practical performance is poor.<br><br>
 <strong>Common pitfalls:</strong>
@@ -8335,7 +8335,7 @@ print(exp.as_list())
   /* ========= 1. GLOSSARY TERMS (A–Z) ========= */
     const GLOSSARY = {
       // ---------- A ----------
-      "ACE (Adaptive Calibration Error)": "A calibration error that uses adaptive bins instead of fixed ones, reducing bias in the estimate.",
+      "ACE (Adaptive Calibration Error)": "A binning-based calibration error that uses adaptive bins rather than fixed-width bins. Its estimate still depends on the binning rule, sample size and implementation.",
       "Accuracy": "Share of predictions that are correct. Can be misleading when one class is much more common than the other.",
       "Adam optimization": "An extension of stochastic gradient descent that keeps running averages of gradients and squared gradients to give each parameter its own adaptive learning rate.",
       "Adjusted R²": "A version of R² adjusted for model degrees of freedom. On the same response/data it rises only when the reduction in residual error is large enough to offset the penalty for added parameters; it is not an out-of-sample validation score.",
@@ -8444,7 +8444,7 @@ print(exp.as_list())
       "ETL": "Extract, Transform, Load – pipelines that pull data from sources, clean/transform it, and load it into a destination system.",
       "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
       "Event (in survival analysis)": "The outcome of interest occurring in time-to-event data — for example death, relapse, churn, equipment failure.",
-      "Expected counts": "Theoretical cell counts a chi-square test uses to see how far observed counts deviate from what chance alone would produce.",
+      "Expected counts": "Cell counts expected under the null model used by a chi-square test; for a test of independence, they are the counts expected if the row and column variables were independent.",
 
       // ---------- F ----------
       "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
@@ -8601,7 +8601,7 @@ print(exp.as_list())
       "Polynomial regression": "Regression where the predictors include powers of a variable (for example x, x², x³) to model curves.",
       "Population Stability Index (PSI)": "A measure of distribution shift between two datasets (for example training vs production); larger PSI indicates more drift.",
       "Post-hoc test": "A follow-up test performed after a significant global test (such as ANOVA) to determine which specific groups differ, usually with multiple-testing correction.",
-      "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
+      "Power": "For a specified alternative/effect size, design, sample size and testing procedure, the probability of rejecting the null when that alternative is true; equivalently 1 − β for that specification.",
       "PR AUC": "Area under a precision–recall curve. State how it is computed: trapezoidal PR AUC and Average Precision (AP) are different summaries. PR summaries are especially useful when the positive class is rare.",
       "Pre-trained model": "A model already trained on a large related dataset and reused as a starting point for a new task.",
       "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
@@ -8611,7 +8611,7 @@ print(exp.as_list())
       "Principal Component Analysis (PCA)": "A dimensionality reduction method that transforms correlated variables into a smaller set of uncorrelated components.",
       "Proportional hazards assumption": "The assumption in a Cox model that hazard ratios between groups remain constant over time. Violations can invalidate inference.",
       "PSIS-LOO": "Pareto-smoothed importance-sampling leave-one-out cross-validation; an efficient approximation to full LOO with diagnostics.",
-      "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data are hard to explain under ‘no effect’.",
+      "P-value": "Under a specified null model and valid test assumptions, the probability of obtaining a test statistic at least as extreme as the observed one, according to the test’s definition of ‘extreme’. It is not the probability that the null hypothesis is true.",
       "Python": "A widely used high-level programming language, very popular for data science and machine learning.",
       "PyTorch": "A deep-learning framework in Python that uses dynamic computation graphs and is widely used in research.",
 
@@ -9355,6 +9355,7 @@ details.model-selection-no-scroll .model-selection-table-wrap td {
 
 <!-- FINAL_HARDENING_V4_1_2026_08_16 -->
 <!-- FINAL_QUALITY_POLISH_V5_2026_08_16 -->
+<!-- FINAL_WORDING_CONSISTENCY_V6_2026_08_16 -->
 </body>
 </html>
 
