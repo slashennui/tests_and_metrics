@@ -1548,7 +1548,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <li><strong>Is the dataset imbalanced?</strong>
       <ul>
         <li>Yes → emphasise <strong>recall</strong>, <strong>precision</strong>, <strong>F1</strong>, <strong>PR AUC</strong>, <strong>MCC</strong>; avoid relying on plain accuracy.</li>
-        <li>No → accuracy + ROC AUC + F1 are typically fine.</li>
+        <li>No → accuracy, ROC AUC and F1 may all be useful, but choose them from the error costs, probability/ranking needs and deployment objective rather than class balance alone.</li>
       </ul>
     </li>
     <li><strong>Threshold‑free ranking vs threshold‑specific performance?</strong>
@@ -1643,7 +1643,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <li>
           <strong>Dataset Imbalance?</strong><br>
           Yes → Focus on <strong>Recall, Precision, F1, PR AUC, MCC</strong>; avoid plain Accuracy<br>
-          No → <strong>Accuracy, ROC AUC, F1</strong> are fine
+          No → <strong>Accuracy, ROC AUC and F1</strong> may all be useful; choose among them from the deployment objective and error costs
         </li>
         <li>
           <strong>Ranking vs. Threshold Performance</strong><br>
@@ -1868,7 +1868,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
     <section class="ref-card">
       <h3>Interpretability Methods</h3>
       <p class="ref-warning">
-        These show <strong>association</strong>, not <strong>causation</strong>!
+        These describe <strong>fitted-model behaviour / attribution</strong>, not <strong>causal effects</strong>.
       </p>
 
       <div class="ref-table-wrapper narrow">
@@ -2985,7 +2985,7 @@ evidence of real signal.</td>
 d = \frac{\bar{x}_1 - \bar{x}_2}{s_{pooled}}.
 \]</td>
 <td>Helps separate statistical from practical significance.</td>
-<td>d = 0.6 for treatment vs control often considered practically important.</td>
+<td>d = 0.6 means the group means differ by 0.6 pooled-SD units; practical importance depends on the outcome and domain.</td>
 <td>Assumes similar SDs; thresholds are rough and context‑dependent.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
@@ -3587,12 +3587,12 @@ than differences in means.<br><br>
 
       <p class="rp-hint">
         Try: <em>1, 2, 3, 4, 5</em> then add an outlier like <em>+30</em>.
-        The mean moves a lot; the median barely moves.        The "Robustness Playground" is a visual tool proving that the median is generally a better measure of the "typical" center for data that might contain errors or extreme values, because it resists the pull of outliers much better than the mean.
+        The mean moves a lot; the median barely moves.        This playground illustrates how the mean and median react differently to extreme values. The median is more resistant to isolated outliers, while the mean uses every magnitude and estimates a different population quantity. Neither is universally "better"; the appropriate measure depends on the estimand, data-generating process and decision problem.
 
 
-Robustness in statistics means that a measurement (like the median) remains relatively unchanged even if a few data points are very unusual or extreme (outliers).
+In robust statistics, an estimator is considered more robust when a limited amount of contamination or a few extreme observations have less influence on its value.
 
-Non-robust measurements (like the mean) are highly sensitive to these extreme values and can be pulled significantly in one direction.
+The mean is less resistant to isolated extreme values than the median, but that does not make it an inferior estimator in general.
 
       </p>
     </div>
@@ -3922,7 +3922,10 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
       width: 10px;
       height: 10px;
       margin-right: 0.25rem;
-      border-radius: 2px;\n    }\n\n    #resampling-stability-playground .rsp-left-col {
+      border-radius: 2px;
+    }
+
+    #resampling-stability-playground .rsp-left-col {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -3955,7 +3958,9 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
     body:not(.dark) #resampling-stability-playground .rsp-info-card p,
     body:not(.dark) #resampling-stability-playground .rsp-info-card ul {
       color: #4b5563;
-    }\n\n    /* Light mode override – looks like your mean/median section */
+    }
+
+    /* Light mode override – looks like your mean/median section */
     body:not(.dark) #resampling-stability-playground {
       background: #f9fafb;
       color: #111827;
@@ -4576,9 +4581,9 @@ Interpret the SE on the estimator's scale; there is no universal “low/high” 
     </div>
   </div>
 
-  <span class="good">Narrow bootstrap CI</span> = precise estimate.<br><br>
-  <span class="moderate">Medium width</span> = acceptable uncertainty.<br><br>
-  <span class="poor">Very wide or irregular CI</span> = high uncertainty / instability.
+  A <span class="good">narrower bootstrap CI</span> indicates greater precision only relative to the parameter’s meaningful scale and under a valid resampling design.<br><br>
+  <span class="moderate">Intermediate width</span> = intermediate precision; “acceptable” is context-dependent.<br><br>
+  <span class="poor">Very wide or irregular CI</span> can flag high uncertainty or an irregular/unstable sampling distribution; inspect the resampling distribution rather than applying a universal width cutoff.
 </td>
 <td>Non‑parametric uncertainty quantification for statistics and model
 parameters.</td>
@@ -4688,7 +4693,7 @@ Interpret RMSE against a simple out-of-sample baseline and domain error toleranc
 \text{RMSE} = \sqrt{\frac{1}{n}\sum (y_i - \hat{y}_i)^2 }.
 \]</td>
 <td>Squares errors (emphasising large ones), then square‑roots.</td>
-<td>RMSE \$20k on houses with SD \$60k is good; \$55k is poor.</td>
+<td>On the same held-out housing dataset, RMSE \$20k is lower than \$55k, but neither value is universally “good” or “poor”; compare with a baseline and the application’s error tolerance.</td>
 <td>Highly sensitive to outliers; needs baseline to interpret magnitude.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
@@ -4710,7 +4715,7 @@ Compare with a naive baseline and a domain-defined tolerable error; percentages 
 \text{MAE} = \frac{1}{n}\sum |y_i - \hat{y}_i|.
 \]</td>
 <td>Each error contributes linearly.</td>
-<td>MAE of 1.5k on 20k prices ≈ 7.5% typical error (good).</td>
+<td>MAE of 1.5k means the average absolute error is 1.5k; whether that is acceptable depends on a relevant baseline and the application’s error tolerance.</td>
 <td>Doesn’t strongly penalise rare huge errors.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
@@ -6069,15 +6074,15 @@ independent samples.<br><br>
       <h4>1. Multiple testing &amp; Bonferroni</h4>
 
       <p>
-        If you test one hypothesis at <code>α = 0.05</code>, there is a 5% chance of a
-        <strong>false positive</strong> (a Type I error). If you test many hypotheses at the
-        same threshold, the chance that <em>at least one</em> of them is a false positive
-        grows very quickly.
+        For a valid test whose null hypothesis is true, testing at <code>α = 0.05</code>
+        gives a 5% Type-I error probability under the testing procedure. If many true null
+        hypotheses are tested at the same uncorrected threshold, the chance of making
+        <em>at least one</em> false rejection can grow quickly.
       </p>
 
       <ul>
-        <li>1 test at α = 0.05 → about <strong>5%</strong> chance of a false positive.</li>
-        <li>100 independent tests at α = 0.05 → about <strong>99%</strong> chance that at least one is “significant” just by luck.</li>
+        <li>1 valid test of a true null at α = 0.05 → <strong>5%</strong> Type-I error probability.</li>
+        <li>100 independent valid tests with all nulls true at α = 0.05 → about <strong>99.4%</strong> chance of at least one false rejection.</li>
       </ul>
 
       <h5>What is family-wise error (FWE / FWER)?</h5>
@@ -6104,7 +6109,7 @@ independent samples.<br><br>
       </p>
 
       <ul>
-        <li><strong>Pros:</strong> very safe; strong control of FWER (false discoveries are rare).</li>
+        <li><strong>Pros:</strong> simple; guarantees FWER ≤ α for valid tests under arbitrary dependence.</li>
         <li><strong>Cons:</strong> conservative; with many tests it can hide real signals.</li>
       </ul>
 
@@ -8244,7 +8249,7 @@ print(exp.as_list())
       "Business intelligence": "Tools and processes that collect, integrate and visualise data to support reporting and high-level decision making.",
 
       // ---------- C ----------
-      "C-index (Concordance Index)": "A rank-based performance measure (often in survival analysis) similar to ROC AUC; probability that a randomly chosen case with the event gets a higher predicted risk.",
+      "C-index (Concordance Index)": "A rank-based discrimination measure. In survival analysis, it is based on concordance among comparable subject pairs while accounting for the estimator’s censoring rules; higher values mean better risk ordering.",
       "Calibration": "How well predicted probabilities match observed frequencies (for example, among predictions of 0.7, about 70% are actually positive).",
       "Calibration within groups": "Calibration checked separately in subgroups (for example by gender or age) to test whether probabilities are fair and well calibrated for everyone.",
       "CART (Classification and Regression Trees)": "A popular decision-tree algorithm used for both classification and regression.",
@@ -8262,7 +8267,7 @@ print(exp.as_list())
       "Competing risks": "When multiple mutually exclusive events can occur (e.g., death from different causes). Standard survival methods may overestimate risk unless competing-risk models are used.",
       "Computer vision": "Field that teaches computers to interpret images and video (for example object detection, face recognition).",
       "Concordant–discordant ratio": "A measure comparing how often pairs of observations are ranked in the same order (concordant) or opposite order (discordant).",
-      "Concordance index (C-index)": "A discrimination metric for survival models: the probability that a subject who experiences the event earlier receives a higher predicted risk. 0.5 = random, 1.0 = perfect.",
+      "Concordance index (C-index)": "A discrimination metric for survival models based on correctly ordered comparable pairs. The exact estimator determines how censoring and ties are handled; 0.5 is often a no-discrimination reference and 1.0 is perfect concordance.",
       "Confidence interval (CI)": "A range of plausible values for a parameter, given the data and a chosen confidence level (for example 95%). Narrow intervals indicate more precision.",
       "Contingency table": "A table of counts for combinations of categories (for example treatment × outcome) used in chi-square and Fisher’s exact tests.",
       "Confusion matrix": "A table with counts of true positives, false positives, true negatives and false negatives. It is the raw bookkeeping for classification performance.",
@@ -8385,7 +8390,7 @@ print(exp.as_list())
       "Keras": "A high-level neural-network API in Python that runs on backends like TensorFlow.",
       "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
       "Kolmogorov–Smirnov test": "A non-parametric test that compares a sample to a reference distribution or compares two samples to check for distributional differences.",
-      "Kruskal–Wallis test": "A non-parametric analogue of one-way ANOVA for 3+ groups based on ranks, useful when normality or equal-variance assumptions fail.",
+      "Kruskal–Wallis test": "A rank-based test for distributional differences among 3+ independent groups. It is not automatically a drop-in test of mean differences when ANOVA assumptions fail.",
       "Kurtosis": "A measure of tail heaviness relative to a normal distribution: high kurtosis = more extreme outliers.",
 
       // ---------- L ----------
@@ -8411,7 +8416,7 @@ print(exp.as_list())
       "Machine learning": "Using algorithms that learn patterns from data to make predictions or decisions without explicit rules.",
       "Mahout": "An Apache project providing scalable machine-learning algorithms, especially on Hadoop.",
       "MapReduce": "A programming model for distributed data processing using map and reduce steps over large datasets.",
-      "Mann–Whitney U test": "A non-parametric test that compares whether two independent groups differ in their typical (median/rank) values.",
+      "Mann–Whitney U test": "A rank-based test for two independent groups that tests their relative ordering/distributions. Interpreting it specifically as a median test requires additional shape/location-shift assumptions.",
       "Market basket analysis": "Finding products that are often purchased together to drive recommendations or bundling.",
       "Market mix modeling": "Using regression-style models to decompose sales into contributions from price, promotion, distribution, etc.",
       "Matthews correlation coefficient (MCC)": "A balanced measure for binary classification using all four confusion-matrix cells; works well with imbalanced data.",
@@ -8474,7 +8479,7 @@ print(exp.as_list())
       "Population Stability Index (PSI)": "A measure of distribution shift between two datasets (for example training vs production); larger PSI indicates more drift.",
       "Post-hoc test": "A follow-up test performed after a significant global test (such as ANOVA) to determine which specific groups differ, usually with multiple-testing correction.",
       "Power": "The probability that a study will detect a real effect (reject the null when it is false). Higher power means fewer missed effects.",
-      "PR AUC": "Area under the precision–recall curve; more informative than ROC AUC when the positive class is rare.",
+      "PR AUC": "Area under a precision–recall curve. State how it is computed: trapezoidal PR AUC and Average Precision (AP) are different summaries. PR summaries are especially useful when the positive class is rare.",
       "Pre-trained model": "A model already trained on a large related dataset and reused as a starting point for a new task.",
       "Precision": "Of all predicted positives, how many are actually positive? Focuses on avoiding false positives.",
       "Precision and recall": "Paired metrics: precision focuses on quality of positive predictions; recall focuses on finding all true positives.",
@@ -9367,6 +9372,7 @@ details.model-selection-no-scroll .model-selection-table-wrap td {
 })();
 </script>
 
+<!-- FINAL_QUALITY_POLISH_V3_1_2026_08_16 -->
 </body>
 </html>
 
