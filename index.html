@@ -154,13 +154,12 @@ tbody tr:nth-child(even) {
   );
 }
 
-/* P-values for assumption checks: small p (violation) = bad, large p (no violation) = good */
+/* Assumption-check p-values: low values flag evidence against the null assumption;
+   larger values are neutral (failure to detect a violation), not proof the assumption is true. */
 .colorbar-pvalue-assump {
   background: linear-gradient(to right,
-    #ffccbc 0%,    /* 0–0.05 violation (bad) */
-    #ffccbc 5%,
-    #c8e6c9 5%,    /* >0.05 no evidence of violation (good) */
-    #c8e6c9 100%
+    #fecaca 0%, #fecaca 5%,
+    #e5e7eb 5%, #e5e7eb 100%
   );
 }
 
@@ -389,19 +388,19 @@ tbody tr:nth-child(even) {
   color: #3730a3;
 }
 
-.dark-mode .cutting-badge--prod {
+body.dark .cutting-badge--prod {
   background: rgba(22, 163, 74, 0.15);
   border-color: rgba(22, 163, 74, 0.4);
   color: #bbf7d0;
 }
 
-.dark-mode .cutting-badge--practice {
+body.dark .cutting-badge--practice {
   background: rgba(202, 138, 4, 0.15);
   border-color: rgba(202, 138, 4, 0.4);
   color: #facc15;
 }
 
-.dark-mode .cutting-badge--research {
+body.dark .cutting-badge--research {
   background: rgba(59, 130, 246, 0.12);
   border-color: rgba(59, 130, 246, 0.45);
   color: #bfdbfe;
@@ -711,9 +710,7 @@ body.dark .poor {
   background-color: #c62828;
   color: #ffebee;
 }
-  <title>Python Code Snippets</title>
-  <style>
-    /* General styling for code blocks */
+/* General styling for code blocks */
     pre {
       background: #f8f8f8;
       padding: 15px;
@@ -731,9 +728,7 @@ body.dark .poor {
     .function { color: #7d9029; }
     .number { color: #009999; }
     .operator { color: #aa22ff; }
-        <title>Embed Google Colab Notebook</title>
-    <style>
-        body {
+body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -755,9 +750,7 @@ body.dark .poor {
             height: 600px;
             border: none;
         }
-            <title>Interactive Python Notebook</title>
-    <style>
-        body {
+body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -780,9 +773,7 @@ body.dark .poor {
             height: 600px;
             border: none;
         }
-            <title>Embed GitHub Gist</title>
-    <style>
-        body {
+body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -845,11 +836,11 @@ body.dark .poor {
           border-left-color: #81c784;
           box-shadow: 0 2px 6px rgba(0,0,0,0.6);
         }
-        
+
         body.dark .legend-title {
           color: #fff;
         }
-        
+
         body.dark .legend-note {
           color: #ccc;
           border-top-color: #444;
@@ -863,17 +854,17 @@ body.dark .poor {
           font-size: 0.9rem;
           line-height: 1.4;
         }
-        
+
         .pitfall-intro ul {
           margin: 6px 0 0 1.25rem;
           padding: 0;
         }
-        
+
         .pitfall-intro li {
           margin-bottom: 4px;
         }
-        
-        
+
+
                 .card.quick-overview {
           margin: 1rem 0 1.5rem;
           padding: 1rem 1.25rem;
@@ -882,31 +873,31 @@ body.dark .poor {
           border: 1px solid var(--border-soft, #e0e0e7);
           font-size: 0.9rem;
         }
-        
+
         .card.quick-overview details > summary {
           cursor: pointer;
           font-weight: 600;
           list-style: none;
         }
-        
+
         .card.quick-overview details > summary::-webkit-details-marker {
           display: none;
         }
-        
+
         .card.quick-overview details[open] > summary::after {
           content: " ▴";
         }
-        
+
         .card.quick-overview details:not([open]) > summary::after {
           content: " ▾";
         }
-        
+
         .quick-overview-content h4 {
           margin-top: 0.75rem;
           margin-bottom: 0.3rem;
           font-size: 0.9rem;
         }
-        
+
         .quick-overview-content ul,
         .quick-overview-content ol {
           margin-top: 0;
@@ -924,20 +915,20 @@ body.dark .poor {
           color: #111827;
           border-bottom: 1px solid #e5e7eb;
         }
-        
+
         /* optional: keep header layout tight */
         .page-header {
           margin: 0 0 0.5rem 0;
         }
-        
+
         /* --- Page title: dark mode override --- */
-        body.dark-mode .page-title {
+        body.dark .page-title {
           background: #020617;   /* dark panel */
           color: #f9fafb;        /* light text */
           border-color: #1f2937;
         }
-        
-                
+
+
 
 
 
@@ -953,27 +944,27 @@ body.dark .poor {
           border-top: 1px solid #e5e7eb;
           border-bottom: 1px solid #e5e7eb;
         }
-        
+
         /* dark mode */
-        body.dark-mode .section-banner.condensed-banner {
+        body.dark .section-banner.condensed-banner {
           background: #020617;
           color: #f9fafb;
           border-color: #1f2937;
         }
-        
-        
 
 
 
-        
+
+
+
         /* ============================
            Condensed Reference: base (light mode)
            ============================ */
-        
+
         #condensed-reference-wrapper {
           margin: 1.5rem 0 2rem;
         }
-        
+
         .ref-toggle-btn {
           display: inline-block;
           width: 100%;
@@ -988,12 +979,12 @@ body.dark .poor {
           cursor: pointer;
           transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
         }
-        
+
         .ref-toggle-btn:hover {
           background: #eef2ff;
           border-color: #c7d2fe;
         }
-        
+
         /* The expanded content panel */
         .ref-section {
           margin-top: 0.6rem;
@@ -1002,7 +993,7 @@ body.dark .poor {
           border: 1px solid #e5e7eb;
           background: #ffffff;
         }
-        
+
         /* Header inside the condensed sheet */
         .ref-header h2 {
           margin: 0;
@@ -1010,83 +1001,81 @@ body.dark .poor {
           font-weight: 650;
           color: #111827;
         }
-        
+
         .ref-subtitle {
           margin: 0.25rem 0 0.75rem;
           font-size: 0.85rem;
           color: #4b5563;
         }
-        
+
         /* Cards / subsections inside the sheet */
         .ref-card {
           padding: 0.75rem 0 0.4rem;
           border-top: 1px solid #e5e7eb;
         }
-        
+
         .ref-card:first-of-type {
           border-top: none;
           padding-top: 0;
         }
-        
+
         .ref-card h3 {
           margin: 0 0 0.4rem;
           font-size: 0.9rem;
           font-weight: 600;
           color: #111827;
         }
-        
+
         .ref-list {
           padding-left: 1.2rem;
           margin: 0;
           font-size: 0.85rem;
           color: #111827;
         }
-        
+
         .ref-list li {
           margin-bottom: 0.4rem;
         }
-        
+
         /* ============================
            Condensed Reference: dark mode
            ============================ */
-        
-        body.dark-mode .ref-toggle-btn {
+
+        body.dark .ref-toggle-btn {
           background: #020617;
           color: #e5e7eb;
           border-color: #1f2937;
         }
-        
-        body.dark-mode .ref-toggle-btn:hover {
+
+        body.dark .ref-toggle-btn:hover {
           background: #0f172a;
           border-color: #4b5563;
         }
-        
-        body.dark-mode .ref-section {
+
+        body.dark .ref-section {
           background: #020617;
           border-color: #1f2937;
         }
-        
-        body.dark-mode .ref-header h2 {
+
+        body.dark .ref-header h2 {
           color: #f9fafb;
         }
-        
-        body.dark-mode .ref-subtitle {
+
+        body.dark .ref-subtitle {
           color: #9ca3af;
         }
-        
-        body.dark-mode .ref-card {
+
+        body.dark .ref-card {
           border-top-color: #1f2937;
         }
-        
-        body.dark-mode .ref-card h3 {
+
+        body.dark .ref-card h3 {
           color: #e5e7eb;
         }
-        
-        body.dark-mode .ref-list {
+
+        body.dark .ref-list {
           color: #e5e7eb;
         }
-        
-        
 
 
 
@@ -1108,13 +1097,15 @@ body.dark .poor {
 
 
 
-        
-        
-        
+
+
+
+
+
         /* =========================================
            Fix dark-mode for header + ref sheet
            ========================================= */
-        
+
 /* Default (light mode) page header */
 .page-header {
   display: flex;
@@ -1127,15 +1118,15 @@ body.dark .poor {
 }
 
 /* Dark mode override for the header bar */
-body.dark-mode .page-header {
+body.dark .page-header {
   background: #020617;          /* very dark navy/black */
   color: #f9fafb;               /* light text */
   border-bottom: 1px solid #1f2937;
 }
 
 /* Make sure inner text picks up the dark-mode color */
-body.dark-mode .page-header h1,
-body.dark-mode .page-header .legend-note {
+body.dark .page-header h1,
+body.dark .page-header .legend-note {
   color: inherit;
 }
 
@@ -1151,12 +1142,12 @@ body.dark-mode .page-header .legend-note {
 }
 
 /* Dark mode overrides */
-body.dark-mode #condensed-reference-wrapper {
+body.dark #condensed-reference-wrapper {
   background: #020617;
   color: #e5e7eb;
 }
 
-body.dark-mode #condensed-reference {
+body.dark #condensed-reference {
   background: #020617;
   border-color: #1f2937;
 }
@@ -1174,7 +1165,7 @@ body.dark-mode #condensed-reference {
 }
 
 /* Dark-mode styling for the toggle button */
-body.dark-mode #condensed-ref-toggle {
+body.dark #condensed-ref-toggle {
   background: #111827;
   color: #e5e7eb;
   border-bottom: 1px solid #1f2937;
@@ -1190,7 +1181,7 @@ body.dark-mode #condensed-ref-toggle {
 }
 
 /* Dark-mode version */
-body.dark-mode .ref-card {
+body.dark .ref-card {
   background: #020617;
   border-color: #1f2937;
 }
@@ -1204,8 +1195,8 @@ body.dark-mode .ref-card {
 }
 
 /* Dark-mode tables */
-body.dark-mode .ref-table th,
-body.dark-mode .ref-table td {
+body.dark .ref-table th,
+body.dark .ref-table td {
   background: #020617;
   color: #e5e7eb;
   border-color: #1f2937;
@@ -1250,7 +1241,7 @@ body.dark-mode .ref-table td {
 }
 
 /* Dark mode tweak */
-.dark-mode .glossary-inline-term {
+body.dark .glossary-inline-term {
   border-bottom-color: rgba(45, 212, 191, 0.9);
 }
 
@@ -1351,9 +1342,31 @@ body.dark-mode .ref-table td {
 
 <script>
 function toggleDetails(shouldOpen) {
-  const detailsElements = document.querySelectorAll('details');
-  detailsElements.forEach(detail => {
+  document.querySelectorAll('details').forEach(detail => {
     detail.open = shouldOpen;
+  });
+
+  const customPanels = [
+    {
+      contentId: 'condensed-reference',
+      buttonId: 'condensed-ref-toggle',
+      label: 'Data Science Model Evaluation – Condensed Reference Sheet'
+    },
+    {
+      contentId: 'stat-tests-section',
+      buttonId: 'stat-tests-toggle',
+      label: 'Statistical Tests & Assumptions – Quick Reference'
+    }
+  ];
+
+  customPanels.forEach(({ contentId, buttonId, label }) => {
+    const content = document.getElementById(contentId);
+    const button = document.getElementById(buttonId);
+    if (!content || !button) return;
+
+    content.style.display = shouldOpen ? 'block' : 'none';
+    button.textContent = (shouldOpen ? '▼ ' : '▸ ') + label;
+    button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
   });
 }
 </script>
@@ -1377,6 +1390,11 @@ function updateConfusionMetrics() {
   const rec   = safeDiv(tp, tp + fn);
   const spec  = safeDiv(tn, tn + fp);
   const f1    = safeDiv(2 * tp, 2 * tp + fp + fn);
+  const fpr   = safeDiv(fp, fp + tn);
+  const fnr   = safeDiv(fn, fn + tp);
+  const balAcc = (Number.isFinite(rec) && Number.isFinite(spec)) ? 0.5 * (rec + spec) : NaN;
+  const mccDen = Math.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn));
+  const mcc = mccDen === 0 ? NaN : (tp * tn - fp * fn) / mccDen;
 
   const fmt = v => (isFinite(v) ? v.toFixed(3) : 'NA');
 
@@ -1385,7 +1403,11 @@ function updateConfusionMetrics() {
     'cm-prec': prec,
     'cm-rec':  rec,
     'cm-spec': spec,
-    'cm-f1':   f1
+    'cm-f1':   f1,
+    'cm-fpr':  fpr,
+    'cm-fnr':  fnr,
+    'cm-balacc': balAcc,
+    'cm-mcc':  mcc
   };
 
   Object.keys(map).forEach(id => {
@@ -1435,10 +1457,10 @@ document.addEventListener('DOMContentLoaded', function () {
 </head>
 
 <body>
-  
-  
-  
-  
+
+
+
+
 <div class="spotify-wrapper">
   <iframe
     src="https://open.spotify.com/embed/playlist/5qggnZgnAAPIa50DQSKe3a?utm_source=generator&theme=0&highlight=0Y0spT0fowl50Ob4Y4VOCW"
@@ -1459,7 +1481,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   .spotify-wrapper iframe {
     width: 100%;
-    height: 152px;           
+    height: 152px;
     transform: scale(0.75);
     transform-origin: top center;  /* keep it centered while scaling */
     border-radius: 12px;
@@ -1474,14 +1496,14 @@ document.addEventListener('DOMContentLoaded', function () {
 </style>
 
 
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
 <header class="page-header">
   <h1 class="page-title" style="font-size: 3em;">Comprehensive Model Evaluation Metrics Dashboard</h1>
     <p class="legend-note">
@@ -1643,150 +1665,64 @@ document.addEventListener('DOMContentLoaded', function () {
     </section>
 
     <!-- 2. Classification Metrics Table -->
+
     <section class="ref-card">
       <h3>Classification Metrics (Quick Reference)</h3>
+      <p class="ref-warning"><strong>Interpretation rule:</strong> there is no universal
+      “good/fair/poor” score for most classification metrics. Compare against a relevant baseline,
+      report uncertainty, and choose operating thresholds from error costs and deployment constraints.</p>
 
-      <p class="ref-warning"><strong>Threshold note:</strong> the numeric “good/fair/poor”
-      bands below are only rough teaching heuristics, not universal model-quality standards.
-      Prefer comparison with a task-relevant baseline, confidence interval and operating-cost target.</p>
-
-      <p><strong>Key formulas</strong></p>
+      <p><strong>Binary formulas</strong></p>
       <pre class="ref-code">
 Accuracy  = (TP + TN) / (TP + FP + TN + FN)
 Precision = TP / (TP + FP)
 Recall    = TP / (TP + FN)
 F1        = 2 × (Precision × Recall) / (Precision + Recall)
+Balanced accuracy = (Recall + Specificity) / 2
 MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
+
+      <p class="ref-footnote">For multiclass problems, balanced accuracy is the macro-average
+      recall across classes. Precision/recall/F1 require an averaging convention such as macro,
+      weighted or micro. The binary MCC formula above has a standard multiclass generalisation.</p>
 
       <div class="ref-table-wrapper">
         <table class="ref-table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Range</th>
-              <th>Good</th>
-              <th>Fair</th>
-              <th>Poor</th>
-              <th>When to Use</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Metric</th><th>Range / anchor</th><th>Interpretation</th><th>When useful</th></tr></thead>
           <tbody>
-            <tr>
-              <td>Accuracy</td>
-              <td>0 – 1</td>
-              <td>&gt; 0.8</td>
-              <td>0.7 – 0.8</td>
-              <td>&lt; 0.5</td>
-              <td>Balanced data only</td>
-            </tr>
-            <tr>
-              <td>Precision</td>
-              <td>0 – 1</td>
-              <td>&gt; 0.8</td>
-              <td>0.7 – 0.8</td>
-              <td>&lt; 0.5</td>
-              <td>False positives costly</td>
-            </tr>
-            <tr>
-              <td>Recall</td>
-              <td>0 – 1</td>
-              <td>&gt; 0.8</td>
-              <td>0.7 – 0.8</td>
-              <td>&lt; 0.5</td>
-              <td>False negatives costly</td>
-            </tr>
-            <tr>
-              <td>F1 Score</td>
-              <td>0 – 1</td>
-              <td>&gt; 0.8</td>
-              <td>0.5 – 0.8</td>
-              <td>&lt; 0.5</td>
-              <td>Imbalanced data</td>
-            </tr>
-            <tr>
-              <td>ROC AUC</td>
-              <td>0 – 1</td>
-              <td>&gt; 0.8</td>
-              <td>0.7 – 0.8</td>
-              <td>&lt; 0.7</td>
-              <td>Ranking problems</td>
-            </tr>
-            <tr>
-              <td>PR AUC</td>
-              <td>0 – 1</td>
-              <td>Much &gt; baseline</td>
-              <td>Moderate &gt; baseline</td>
-              <td>≈ baseline</td>
-              <td>Imbalanced binary</td>
-            </tr>
-            <tr>
-              <td>MCC</td>
-              <td>−1 to 1</td>
-              <td>&gt; 0.5</td>
-              <td>0.3 – 0.5</td>
-              <td>&lt; 0</td>
-              <td>Imbalanced binary</td>
-            </tr>
+            <tr><td>Accuracy</td><td>0–1</td><td>Compare with majority/simple baselines and class balance.</td><td>Balanced classes and symmetric error costs.</td></tr>
+            <tr><td>Precision</td><td>0–1</td><td>Choose target from false-positive cost and required recall.</td><td>False positives costly.</td></tr>
+            <tr><td>Recall</td><td>0–1</td><td>Choose target from false-negative cost and corresponding precision/FPR.</td><td>False negatives costly.</td></tr>
+            <tr><td>F1</td><td>0–1</td><td>Compare models at relevant thresholds; no universal cutoff.</td><td>Precision and recall are similarly weighted.</td></tr>
+            <tr><td>Balanced accuracy</td><td>0–1</td><td>Average class recall; inspect per-class recalls too.</td><td>Class imbalance.</td></tr>
+            <tr><td>ROC AUC</td><td>0.5 random, 1 perfect for ordinary binary ranking</td><td>Ranking quality; usefulness is domain-specific.</td><td>Threshold-free ranking.</td></tr>
+            <tr><td>AP / PR curve</td><td>No-skill level tied to prevalence</td><td>Compare with prevalence and the relevant recall region.</td><td>Imbalanced positive class.</td></tr>
+            <tr><td>MCC</td><td>−1 to 1</td><td>0 is chance-like; ±1 are perfect/directly inverted in binary classification.</td><td>Balanced summary using all confusion cells.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
     <!-- 3. Regression Metrics Table -->
+
     <section class="ref-card">
       <h3>Regression Metrics (Quick Reference)</h3>
-
-      <p class="ref-warning"><strong>Threshold note:</strong> regression-error and R²
-      magnitudes are domain- and scale-dependent. Compare against simple out-of-sample baselines
-      and report uncertainty rather than treating the bands as universal cutoffs.</p>
-
+      <p class="ref-warning"><strong>Interpretation rule:</strong> error magnitudes are scale-
+      and application-dependent. Compare them with a simple out-of-sample baseline and with the
+      size of errors the application can tolerate.</p>
       <p><strong>When to use:</strong></p>
       <ul class="ref-list">
-        <li><strong>RMSE</strong> → Large errors are critically bad</li>
-        <li><strong>MAE</strong> → Want “average error” interpretation</li>
-        <li><strong>RMSLE</strong> → Targets span orders of magnitude</li>
+        <li><strong>RMSE</strong> → large errors deserve extra weight.</li>
+        <li><strong>MAE</strong> → absolute errors map naturally to the decision problem.</li>
+        <li><strong>RMSLE</strong> → non-negative targets where multiplicative/log-scale error is meaningful.</li>
       </ul>
-
       <div class="ref-table-wrapper">
         <table class="ref-table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Good</th>
-              <th>Fair</th>
-              <th>Poor</th>
-              <th>Characteristics</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Metric</th><th>Reference</th><th>Interpretation</th><th>Characteristics</th></tr></thead>
           <tbody>
-            <tr>
-              <td>R²</td>
-              <td>Closer to 1 vs baseline</td>
-              <td>0 = mean baseline</td>
-              <td>&lt; 0 = worse than mean baseline</td>
-              <td>Can be negative; no universal “good” cutoff</td>
-            </tr>
-            <tr>
-              <td>Adjusted R²</td>
-              <td>Close to R²</td>
-              <td>Lower than R²</td>
-              <td>Much lower</td>
-              <td>Accounts for predictors</td>
-            </tr>
-            <tr>
-              <td>RMSE</td>
-              <td>&lt;&lt; target SD</td>
-              <td>≈ target SD</td>
-              <td>≥ target SD</td>
-              <td>Penalizes large errors</td>
-            </tr>
-            <tr>
-              <td>MAE</td>
-              <td>&lt;&lt; target mean</td>
-              <td>≈ 10–20% mean</td>
-              <td>≥ 30% mean</td>
-              <td>Robust to outliers</td>
-            </tr>
+            <tr><td>R²</td><td>1 perfect; 0 mean baseline; &lt;0 worse than mean baseline</td><td>No universal “good” cutoff.</td><td>Can be negative out of sample.</td></tr>
+            <tr><td>Adjusted R²</td><td>Same response/data</td><td>Higher can support added predictors, but is not predictive validation.</td><td>Penalises added degrees of freedom.</td></tr>
+            <tr><td>RMSE</td><td>Baseline RMSE + domain tolerance</td><td>Lower is better for the same target/sample.</td><td>Weights large residuals strongly.</td></tr>
+            <tr><td>MAE</td><td>Baseline MAE + domain tolerance</td><td>Lower is better for the same target/sample.</td><td>Linear error penalty.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1829,7 +1765,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             <tr>
               <td>Chi-square</td>
               <td>Test independence in categorical data</td>
-              <td>Expected counts ≥ 5</td>
+              <td>Adequate expected counts for the χ² approximation; use exact/simulation methods when sparse</td>
             </tr>
             <tr>
               <td>Permutation Test</td>
@@ -1891,7 +1827,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
     <!-- 5. Model Selection Criteria -->
     <section class="ref-card">
       <h3>Model Selection Criteria</h3>
-      <p>Rule of thumb: <strong>ΔAIC/BIC &lt; 2</strong> → models are essentially equivalent.</p>
+      <p><strong>Rule-of-thumb only:</strong> small ΔAIC/ΔBIC values indicate similar support under their respective criteria, but conventional bands are approximations and AIC/BIC target different model-selection goals.</p>
 
       <div class="ref-table-wrapper narrow">
         <table class="ref-table">
@@ -1911,7 +1847,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             <tr>
               <td>BIC</td>
               <td>Lower is better</td>
-              <td>True model identification, smaller models</td>
+              <td>Parsimonious selection under BIC's asymptotic assumptions</td>
             </tr>
             <tr>
               <td>Cross-validated Error</td>
@@ -2031,8 +1967,8 @@ r2   = r2_score(y_true, y_pred)      </pre>
       <pre class="ref-code">
 from scipy import stats
 
-# t-test (two independent groups, equal variance assumed)
-t_stat, p_value = stats.ttest_ind(group1, group2)
+# Welch t-test (two independent groups; does not assume equal variances)
+t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=False)
 
 # Chi-square test of independence for a contingency table
 chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
@@ -2040,9 +1976,11 @@ chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
 # Normality: Shapiro–Wilk (combine with a Q–Q plot)
 w_stat, p_shapiro = stats.shapiro(sample)
 
-# 1-sample KS compares against a FULLY SPECIFIED reference distribution.
-# Example: compare standardized observations to N(0, 1).
-ks_stat, p_ks = stats.kstest(standardized_sample, 'norm')
+# 1-sample KS compares against a FULLY SPECIFIED continuous reference distribution.
+# These parameters are pre-specified, not estimated from `sample`.
+mu0, sigma0 = 0.0, 1.0
+reference_cdf = stats.norm(loc=mu0, scale=sigma0).cdf
+ks_stat, p_ks = stats.kstest(sample, reference_cdf)
 
 # 2-sample KS: compare two independent samples' continuous distributions
 ks2_stat, p_ks2 = stats.ks_2samp(sample1, sample2)
@@ -2086,12 +2024,12 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
   .ref-toggle-btn:hover {
     background: #e5e7eb;
   }
-  .dark-mode .ref-toggle-btn {
+  body.dark .ref-toggle-btn {
     background: #111827;
     border-color: #1f2937;
     color: #e5e7eb;
   }
-  .dark-mode .ref-toggle-btn:hover {
+  body.dark .ref-toggle-btn:hover {
     background: #1f2937;
   }
 
@@ -2102,7 +2040,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     background: #f9fafb;
     border: 1px solid #e5e7eb;
   }
-  .dark-mode .ref-section {
+  body.dark .ref-section {
     background: #050816;
     border-color: #1f2937;
   }
@@ -2115,7 +2053,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     font-size: 0.9rem;
     color: #4b5563;
   }
-  .dark-mode .ref-subtitle {
+  body.dark .ref-subtitle {
     color: #9ca3af;
   }
   .ref-card {
@@ -2125,7 +2063,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     background: #ffffff;
     border: 1px solid #e5e7eb;
   }
-  .dark-mode .ref-card {
+  body.dark .ref-card {
     background: #0b1120;
     border-color: #111827;
   }
@@ -2166,15 +2104,15 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     text-align: left;
     white-space: nowrap;
   }
-  .dark-mode .ref-table th,
-  .dark-mode .ref-table td {
+  body.dark .ref-table th,
+  body.dark .ref-table td {
     border-color: #1f2937;
   }
   .ref-table th {
     background: #f3f4f6;
     font-weight: 600;
   }
-  .dark-mode .ref-table th {
+  body.dark .ref-table th {
     background: #111827;
   }
   .ref-code {
@@ -2185,7 +2123,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     font-size: 0.8rem;
     overflow-x: auto;
   }
-  .dark-mode .ref-code {
+  body.dark .ref-code {
     background: #020617;
   }
   .ref-warning {
@@ -2206,7 +2144,7 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
     font-size: 0.8rem;
     color: #6b7280;
   }
-  .dark-mode .ref-footnote {
+  body.dark .ref-footnote {
     color: #9ca3af;
   }
 </style>
@@ -2313,21 +2251,8 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
 <tr>
 <td><strong>Accuracy</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  <strong>No universal accuracy cutoff.</strong><br><br>
-  Compare accuracy with a relevant baseline (for example majority-class accuracy), class balance,
-  uncertainty and the cost of different errors. A numerically high accuracy can still be useless
-  on an imbalanced task.
+<strong>No universal accuracy cutoff.</strong><br><br>
+Compare with a relevant baseline (for example majority-class accuracy), class balance, uncertainty, and the costs of the different errors. High accuracy can still be useless on an imbalanced task.
 </td>
 <td>Gauge overall classification success rate. Useful for quick assessment on
 balanced data, but unreliable alone on strongly imbalanced data.</td>
@@ -2350,20 +2275,8 @@ have high accuracy but be useless.<br><br>
 <tr>
 <td><strong>Precision</strong> (Positive Predictive Value, PPV)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Higher precision means fewer false positives among predicted positives, but
-  <strong>there is no universal “good” cutoff</strong>.<br><br>
-  Choose a target from prevalence, false-positive cost and the required recall at the operating threshold.
+Higher precision means fewer false positives among predicted positives, but <strong>there is no universal “good” cutoff</strong>.<br><br>
+Choose the operating target from prevalence, false-positive cost, and the recall required at the deployed threshold.
 </td>
 <td>Measures how reliable positive predictions are, crucial when false
 positives are costly.</td>
@@ -2385,20 +2298,8 @@ positives are costly.</td>
 <tr>
 <td><strong>Recall</strong> (Sensitivity / True Positive Rate)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Higher recall means fewer true positives are missed, but
-  <strong>there is no universal “good” cutoff</strong>.<br><br>
-  Choose the required recall from the cost of false negatives and inspect the corresponding precision / false-positive rate.
+Higher recall means fewer true positives are missed, but <strong>there is no universal “good” cutoff</strong>.<br><br>
+Choose the required recall from the cost of false negatives and inspect the corresponding precision and false-positive rate.
 </td>
 <td>Measures completeness of positive detection; key when missing positives is
 costly.</td>
@@ -2420,20 +2321,8 @@ costly.</td>
 <tr>
 <td><strong>Specificity</strong> (True Negative Rate)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Higher specificity means fewer false positives among actual negatives, but
-  <strong>there is no universal “good” cutoff</strong>.<br><br>
-  Select the target from the real cost of false alarms and the corresponding sensitivity / recall requirement.
+Higher specificity means fewer false positives among actual negatives, but <strong>there is no universal “good” cutoff</strong>.<br><br>
+Choose the target from false-alarm costs and the corresponding sensitivity/recall requirement.
 </td>
 <td>Measures ability to correctly identify negatives; important when false
 positives are costly.</td>
@@ -2455,19 +2344,8 @@ positives are costly.</td>
 <tr>
 <td><strong>False Positive Rate / False Negative Rate</strong><br>(FPR / FNR)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">moderate</span>
-      <span class="tick-errhi">high</span>
-    </div>
-  </div>
-
-  Lower is better for both.<br><br>
-  <span class="good">&lt; 0.05</span> on either side = very low error rate there.<br><br>
-  <span class="moderate">≈ 0.10–0.20</span> = modest error rate.<br><br>
-  <span class="poor">&gt; 0.30</span> = high error rate; typically unacceptable.
+Lower is better only relative to the application's error costs; <strong>there is no universal acceptable rate</strong>.<br><br>
+Report both rates at the deployed threshold and show the threshold trade-off. Acceptable FPR/FNR can differ by orders of magnitude across applications.
 </td>
 <td>Quantify false alarms (FPR) and missed positives (FNR).</td>
 <td>
@@ -2489,18 +2367,8 @@ positives are costly.</td>
 <tr>
 <td><strong>F<sub>1</sub> Score</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-f1"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Higher is better for a fixed positive-class definition, but <strong>there is no universal F1 quality threshold</strong>.<br><br>
-  Compare F1 with baselines / alternative models at relevant thresholds. F1 weights precision and recall equally and ignores true negatives.
+Higher F1 is better for a fixed positive-class definition and thresholding setup, but <strong>there is no universal F1 quality threshold</strong>.<br><br>
+Compare models at relevant operating thresholds. F1 weights precision and recall equally and does not use true negatives.
 </td>
 <td>Single number that balances precision and recall, especially on imbalanced
 datasets.</td>
@@ -2523,19 +2391,8 @@ F_1 = 2 \frac{\text{Precision} \times \text{Recall}}
 <tr>
 <td><strong>ROC AUC</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-auc"></div>
-    <div class="colorbar-scale">
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  For ordinary binary ranking, <strong>0.5 = random ranking</strong> and <strong>1.0 = perfect ranking</strong>.<br><br>
-  Values below 0.5 indicate systematically reversed ranking. Beyond that, “good enough” is domain-specific;
-  compare models and uncertainty rather than relying on universal 0.7/0.8/0.9 labels.
+For ordinary binary ranking, <strong>0.5 is the random-ranking expectation</strong> and <strong>1.0 is perfect ranking</strong>; values below 0.5 can occur by chance or indicate reversed ranking.<br><br>
+Beyond those anchors, usefulness is domain-specific. Report uncertainty and evaluate the operating region that matters.
 </td>
 <td>Measures how well model ranks positives above negatives across thresholds.</td>
 <td>Equivalent to probability a random positive has higher score than a random
@@ -2555,19 +2412,8 @@ if practical performance is poor.<br><br>
 <tr>
 <td><strong>Negative Predictive Value</strong> (NPV)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Higher NPV means predicted negatives are more often truly negative, but <strong>there is no universal cutoff</strong>.<br><br>
-  NPV is strongly prevalence-dependent, so evaluate it in the deployment population and alongside sensitivity / specificity.
+Higher NPV means predicted negatives are more often truly negative, but <strong>there is no universal cutoff</strong>.<br><br>
+NPV depends strongly on prevalence, so evaluate it in the deployment population and alongside sensitivity/specificity.
 </td>
 <td>Probability that a predicted negative is truly negative; key when false
 negatives are costly.</td>
@@ -2575,7 +2421,7 @@ negatives are costly.</td>
 \[
 \text{NPV} = \frac{TN}{TN+FN}.
 \]</td>
-<td>Complements precision (PPV).</td>
+<td>Negative predictive counterpart to precision/PPV.</td>
 <td>In disease screening with low prevalence, NPV often very high even for
 moderate models.</td>
 <td>Strongly dependent on prevalence; high NPV doesn’t automatically imply a
@@ -2590,36 +2436,15 @@ good model.<br><br>
 
 <tr>
 <td><strong>Balanced Accuracy</strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  <span class="poor">0.5</span> = chance‑level performance (binary).<br><br>
-  <span class="moderate">0.6–0.7</span> = modest improvement over chance.<br><br>
-  <span class="good">&gt; 0.7</span> = good performance on both classes.
-</td>
-<td>Accounts for class imbalance by averaging recall over classes.</td>
-<td>
-\[
-\text{Balanced Acc} = \frac{\text{TPR} + \text{TNR}}{2}.
-\]</td>
-<td>Penalises models that perform well on majority but poorly on minority
-class.</td>
-<td>TPR 0.9, TNR 0.5 → balanced accuracy 0.7.</td>
-<td>Still hides which side is weak; always inspect TPR and TNR separately.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Reporting balanced accuracy without showing class‑specific recalls, hiding which class is performing poorly.</li>
-  <li>Comparing balanced accuracy across tasks with very different numbers of classes.</li>
-</ul>
-</td>
+<td>Higher is better, but <strong>there is no universal quality cutoff</strong>.<br><br>
+For K classes:
+\[\text{Balanced Accuracy}=\frac{1}{K}\sum_{k=1}^{K}\text{Recall}_k.\]
+For binary classification this is \((\text{TPR}+\text{TNR})/2\).</td>
+<td>Summarise class-wise recall without letting a large majority class dominate.</td>
+<td>Average the recall obtained on each class; valid for binary and multiclass classification.</td>
+<td>Each class contributes equally regardless of prevalence. A chance-adjusted variant can map random performance to 0.</td>
+<td>Binary TPR = 0.9 and TNR = 0.5 gives balanced accuracy 0.7; inspect both components because the average hides which side is weak.</td>
+<td>No scalar reveals which classes are weak. “Chance = 0.5” is a binary special case, not a universal multiclass baseline.</td>
 </tr>
 
 <tr>
@@ -2644,24 +2469,14 @@ class.</td>
 <tr>
 <td><strong>Calibration Error</strong> (ECE)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">0.1</span>
-      <span class="tick-errhi">0.3+</span>
-    </div>
-  </div>
-
-  Lower is better for a fixed estimator/binning scheme, but <strong>there is no universal ECE cutoff</strong>.<br><br>
-  Report the binning/estimator definition, sample size and a calibration plot; compare models on the same evaluation data.
+Lower is better only for a <strong>specified ECE estimator/binning scheme</strong>; there is no universal ECE cutoff.<br><br>
+Report the estimator definition, sample size and a calibration plot, and compare models on the same evaluation data.
 </td>
 <td>Measures mismatch between predicted probabilities and observed
 frequencies.</td>
 <td>Bins predictions by confidence; compares average predicted probability to
 empirical frequency in each bin, then averages absolute differences.</td>
-<td>Low ECE means that “70% probability” events do happen around 70% of the
-time.</td>
+<td>A low ECE means small average bin-level calibration discrepancy under the chosen estimator; coarse bins or limited data can still hide local miscalibration.</td>
 <td>Used for risk models in credit, medicine, etc. as a complement to AUC.</td>
 <td>Depends on binning; can be unstable with small sample sizes.<br><br>
 <strong>Common pitfalls:</strong>
@@ -2675,20 +2490,8 @@ time.</td>
 <tr>
 <td><strong>Confusion Matrix</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Interpreted via the share of counts on the diagonal (correct) vs off‑diagonal (errors).<br><br>
-  <span class="poor">Diagonal similar to off‑diagonal</span> = many misclassifications.<br><br>
-  <span class="moderate">Diagonal somewhat dominant</span> = moderate performance.<br><br>
-  <span class="good">Diagonal strongly dominant, off‑diagonals small</span> = strong performance across classes.
+A confusion matrix is <strong>not a scalar score</strong>, so there is no universal good/bad diagonal ratio.<br><br>
+Inspect class-specific counts and row/column-normalised rates, especially for minority classes and cost-asymmetric errors.
 </td>
 <td>Summarise classification results in terms of true positives, false positives,
 false negatives, and true negatives for each class.</td>
@@ -2705,34 +2508,14 @@ false negatives, and true negatives for each class.</td>
 </tr>
 
 <tr>
-<td><strong>Precision–Recall Curve</strong> (PR curve / PR AUC)</td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-auc"></div>
-    <div class="colorbar-scale">
-      <span class="tick-05">baseline</span>
-      <span class="tick-07">0.7</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Interpret relative to baseline positive rate π.<br><br>
-  <span class="poor">PR AUC ≈ π</span> = little better than random ranking.<br><br>
-  <span class="moderate">Clearly above π</span> = ranking skill beyond the no-skill prevalence baseline.<br><br>
-  <span class="good">Substantially above π for the application’s relevant recall region</span> = potentially useful; there is no universal 0.7 cutoff.
-</td>
-<td>Assess trade‑off between precision and recall across thresholds, especially for highly imbalanced binary classification.</td>
-<td>Curve of precision vs recall as the decision threshold moves; area under it (PR AUC) summarises overall performance on positives.</td>
-<td>Emphasises performance on the positive class; random classifier’s baseline is the prevalence π rather than 0.5.</td>
-<td>In fraud detection with 0.5% positives, PR AUC 0.65 is a huge improvement over baseline 0.005, even if ROC AUC is “only” moderate.</td>
-<td>Baseline depends on prevalence; PR AUC numbers are not directly comparable across datasets with different class balance.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Comparing PR AUC values across datasets without accounting for different positive rates.</li>
-  <li>Only inspecting a single operating point on PR curve instead of the region relevant to business constraints.</li>
-</ul>
-</td>
+<td><strong>Precision–Recall Curve</strong> (PR curve; AP / PR AUC summaries)</td>
+<td>Interpret relative to positive-class prevalence π and the recall region that matters operationally.<br><br>
+A random/no-skill ranking has expected precision near π. <strong>Average Precision (AP) and trapezoidal PR AUC are different summaries.</strong></td>
+<td>Assess the precision–recall trade-off across thresholds, especially with an imbalanced positive class.</td>
+<td>The PR curve plots precision against recall as the decision threshold changes.</td>
+<td>AP weights precision by increments in recall. Trapezoidal PR AUC numerically integrates the curve with linear interpolation; name the summary explicitly.</td>
+<td>With 0.5% positives, AP = 0.65 can be very strong relative to a no-skill level near 0.005.</td>
+<td>Strongly prevalence-dependent. Do not compare across differently sampled datasets without context, and do not label AP as “PR AUC” without saying which summary is used.</td>
 </tr>
 
 <tr>
@@ -2748,7 +2531,7 @@ false negatives, and true negatives for each class.</td>
     </div>
   </div>
 
-  Agreement beyond chance (−1 to 1).<br><br>
+  Agreement beyond chance (−1 to 1). The labels below are a <strong>traditional descriptive convention, not universal quality thresholds</strong>.<br><br>
   <span class="poor">≤ 0</span> = no better (or worse) than random.<br><br>
   <span class="moderate">0.01–0.40</span> = slight–fair agreement.<br><br>
   <span class="moderate">0.41–0.60</span> = moderate.<br><br>
@@ -2773,40 +2556,17 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
 
 <tr>
 <td><strong>Matthews Correlation Coefficient</strong> (MCC)</td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-mcc"></div>
-    <div class="colorbar-scale">
-      <span class="tick-m1">-1</span>
-      <span class="tick-0c">0</span>
-      <span class="tick-05c">0.5</span>
-      <span class="tick-1c">1</span>
-    </div>
-  </div>
-
-  −1 ≤ MCC ≤ 1.<br><br>
-  <span class="poor">≤ 0</span> = random or worse than random.<br><br>
-  <span class="moderate">0.1–0.3</span> = weak signal.<br><br>
-  <span class="moderate">0.3–0.5</span> = moderate.<br><br>
-  <span class="good">&gt; 0.5</span> = strong classifier, particularly on imbalanced data.
-</td>
-<td>Single‑number summary of binary classifier quality that is symmetric in classes and robust to class imbalance.</td>
-<td>Correlation between predicted and true labels using all four entries of the confusion matrix.</td>
-<td>
-\[
-\text{MCC} =
-\frac{TP \cdot TN - FP \cdot FN}
+<td>−1 ≤ MCC ≤ 1. <strong>+1</strong> = perfect agreement, <strong>0</strong> = chance-like/no association,
+and <strong>−1</strong> = perfectly inverted binary prediction. Magnitude requirements are application-specific.</td>
+<td>Balanced summary of classification agreement using the full confusion structure.</td>
+<td>In the binary case MCC is the phi correlation between predicted and true labels.</td>
+<td>\[
+\text{MCC}=\frac{TP \cdot TN-FP \cdot FN}
 {\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}.
 \]
-</td>
-<td>In a fraud‑detection setting with extreme imbalance, MCC distinguishes a useful classifier (e.g. 0.6) from one that just predicts the majority class (MCC ≈ 0).</td>
-<td>Less intuitive than accuracy or F1; defined for binary classification and needs generalisation for multiclass problems.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Ignoring the sign: a negative MCC means systematic misclassification, not just “slightly bad”.</li>
-  <li>Comparing MCC values from confusion matrices built at very different thresholds without explanation.</li>
-</ul>
-</td>
+A standard multiclass generalisation also exists.</td>
+<td>Useful when accuracy is dominated by a large majority class.</td>
+<td>The displayed TP/TN/FP/FN formula is specifically binary; multiclass MCC uses the full confusion matrix.</td>
 </tr>
 
 </tbody>
@@ -2859,6 +2619,10 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
   <li>Recall (TPR): <code id="cm-rec">–</code></li>
   <li>Specificity (TNR): <code id="cm-spec">–</code></li>
   <li>F<sub>1</sub> score: <code id="cm-f1">–</code></li>
+  <li>False positive rate (FPR): <code id="cm-fpr">–</code></li>
+  <li>False negative rate (FNR): <code id="cm-fnr">–</code></li>
+  <li>Balanced accuracy (binary): <code id="cm-balacc">–</code></li>
+  <li>Matthews correlation coefficient (MCC): <code id="cm-mcc">–</code></li>
 </ul>
 
 </details>
@@ -2878,17 +2642,10 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
 <details class="metric-section" >
   <summary>Survival / Time-to-Event Performance</summary>
   <div class="metric-section-body" style="background-color: #f8f9fa">
-    
-    
-       
-          <div class="cutting-header">
-          <strong> </strong>
-          <span  > </span>
-        </div>
-   
-  
-    
-    
+
+
+
+
     <p>
       Use these metrics when the outcome is a <strong>time until an event</strong>
       (death, relapse, failure, churn) and some observations are
@@ -2936,6 +2693,14 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
       </li>
     </ul>
 
+    <h4>Key assumptions and interpretation checks</h4>
+    <ul>
+      <li><strong>Proportional hazards</strong> – standard Cox hazard-ratio interpretation assumes covariate hazard ratios are approximately constant over time; check this rather than assuming it.</li>
+      <li><strong>Censoring mechanism</strong> – standard survival methods generally require censoring to be non-informative, often conditionally on included covariates.</li>
+      <li><strong>Log-rank weighting</strong> – ordinary log-rank is most naturally aligned with proportional-hazards-type differences; crossing hazards can make a single p-value hard to interpret.</li>
+      <li><strong>Metric definition</strong> – C-index and time-dependent AUC/Brier scores have censoring-aware variants; state the estimator and time horizon used.</li>
+    </ul>
+
     <h4>Common pitfalls</h4>
     <ul>
       <li>
@@ -2960,21 +2725,13 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
         and underpowered.
       </li>
     </ul>
-    
-    
-    
-       
-          <div class="cutting-header">
-          <strong> </strong>
-          <span  > </span>
-        </div>
-   
-  
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
   </div>
 </details>
 
@@ -3033,19 +2790,8 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
 <tr>
 <td><strong>Adjusted α</strong> (Bonferroni Correction)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-pvalue-effect"></div>
-    <div class="colorbar-scale">
-      <span class="tick-p0">0</span>
-      <span class="tick-p005">α/m</span>
-      <span class="tick-p1">1.0</span>
-    </div>
-  </div>
-
-  For m tests, use α<sub>adj</sub> = α / m.<br><br>
-  <span class="good">p &lt; α<sub>adj</sub></span> = significant even after strict multiple‑testing control.<br><br>
-  <span class="poor">p ≥ α<sub>adj</sub></span> = not significant after correction.<br><br>
-  By the Bonferroni inequality this controls <strong>FWER ≤ α</strong> for valid per-test p-values; independence is not required.
+For m tests, Bonferroni uses α<sub>adj</sub> = α/m for each test. Reject a null only when its valid p-value meets that threshold.<br><br>
+By the Bonferroni inequality this guarantees <strong>FWER ≤ α</strong> without requiring independence. “Significant after correction” is evidence relative to the null/testing procedure, not an intrinsically good outcome.
 </td>
 <td>Control family‑wise probability of any false positive across multiple tests.</td>
 <td>Divides α by number of tests; each test uses α<sub>adj</sub> as threshold.</td>
@@ -3062,51 +2808,21 @@ Large κ implies agreement much higher than chance, small κ close to or below 0
 
 <tr>
 <td><strong>Benjamini–Hochberg FDR</strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-pvalue-effect"></div>
-    <div class="colorbar-scale">
-      <span class="tick-p0">0</span>
-      <span class="tick-p005">q</span>
-      <span class="tick-p1">1.0</span>
-    </div>
-  </div>
-
-  Choose FDR <span class="good">q (e.g. 0.05)</span>.<br><br>
-  Sort p‑values p<sub>(1)</sub> ≤ … ≤ p<sub>(m)</sub>, find largest k with
-  <span class="good">p<sub>(k)</sub> ≤ (k/m)·q</span>.<br><br>
-  Tests 1…k are called significant; expected fraction of false discoveries ≈ q.
-</td>
-<td>Control expected proportion of false positives among declared discoveries.</td>
-<td>Step‑up procedure comparing ordered p‑values to increasing thresholds
-(k/m)·q.</td>
-<td>Less conservative than Bonferroni; more discoveries at the cost of some
-false positives.</td>
-<td>Common in genomics / high‑dimensional feature screening.</td>
-<td>Controls FDR only in expectation and under certain dependence structures.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Treating FDR‑controlled discoveries as if they had strict family‑wise error control.</li>
-  <li>Misunderstanding that, even at FDR 5%, some proportion of reported “hits” are expected to be false.</li>
-</ul>
-</td>
+<td>Choose a target FDR level q, sort p-values p<sub>(1)</sub> ≤ … ≤ p<sub>(m)</sub>, and find the largest k with
+p<sub>(k)</sub> ≤ (k/m)q.<br><br>
+Under the standard conditions for the BH procedure, this controls the <strong>expected false discovery proportion (FDR)</strong> at or below the target level; the realised fraction of false discoveries in one analysis can be above or below q.</td>
+<td>Control the expected proportion of false discoveries among rejected hypotheses.</td>
+<td>A step-up multiple-testing procedure that is typically less conservative than family-wise-error control.</td>
+<td>Classical BH guarantees depend on the p-values and their dependence structure; arbitrary dependence may require a more conservative method such as Benjamini–Yekutieli.</td>
+<td>Often used for high-dimensional screening where some false discoveries can be tolerated and quantified at the procedure level.</td>
+<td>FDR is not the probability that any particular reported result is false, and q is not a guarantee about the realised false-discovery fraction in every dataset.</td>
 </tr>
 
 <tr>
 <td><strong>Type I &amp; Type II Error</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">moderate</span>
-      <span class="tick-errhi">high</span>
-    </div>
-  </div>
-
-  <span class="good">α ≈ 0.01–0.05</span> = standard false‑positive risk.<br><br>
-  <span class="moderate">β ≈ 0.10–0.20</span> (power 80–90%) = typical design target.<br><br>
-  <span class="poor">Very high α or β (&gt; 0.10 or &gt; 0.30)</span> = too many wrong decisions.
+α is the Type-I error rate specified by the testing procedure; β depends on the true effect and design, with power = 1−β.<br><br>
+Values such as α = 0.05 or power = 0.80/0.90 are common conventions, <strong>not universal optima</strong>. Choose them from error costs, minimum relevant effect, multiplicity, sample size and regulatory/domain requirements.
 </td>
 <td>Frame trade‑off between false positives (Type I) and false negatives (Type II)
 when designing tests and studies.</td>
@@ -3126,19 +2842,8 @@ Power = 1 − β.</td>
 <tr>
 <td><strong>Statistical Power</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-08">0.8</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  <span class="poor">&lt; 0.5</span> = often misses real effects.<br><br>
-  <span class="moderate">0.5–0.8</span> = moderate.<br><br>
-  <span class="good">&gt; 0.8</span> = usually acceptable; &gt;0.9 even better.
+Power is defined for a specified alternative/effect size and analysis plan.<br><br>
+80% or 90% are common planning conventions, not universal thresholds. Report the effect size the study was powered to detect and avoid “observed/post-hoc power” as an interpretation of a completed test.
 </td>
 <td>Probability a test detects a true effect of given size.</td>
 <td>Depends on α, effect size, variability, and sample size.</td>
@@ -3156,20 +2861,8 @@ Power = 1 − β.</td>
 <tr>
 <td><strong>Z / t Tests</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-tstat"></div>
-    <div class="colorbar-scale">
-      <span class="tick-t0">0</span>
-      <span class="tick-t1">1</span>
-      <span class="tick-t2">2</span>
-      <span class="tick-t3">3+</span>
-    </div>
-  </div>
-
-  Two‑sided tests (large df):<br><br>
-  <span class="poor">|Z| or |t| &lt; 1</span> = little evidence.<br><br>
-  <span class="moderate">|Z| or |t| ≈ 2</span> = borderline (p ≈ 0.05).<br><br>
-  <span class="good">|Z| or |t| ≥ 3</span> = strong evidence against H<sub>0</sub>.
+Interpret the statistic through its <strong>null distribution, degrees of freedom (for t), alternative hypothesis and p-value</strong>.<br><br>
+A larger |statistic| is farther from the null in standard-error units, but absolute cutoffs such as 2 or 3 are not universal and do not measure practical effect size.
 </td>
 <td>Test if a mean / difference / regression coefficient differs from a null
 value.</td>
@@ -3188,18 +2881,8 @@ value.</td>
 <tr>
 <td><strong>Chi-Square Test</strong> (χ²)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-chi2"></div>
-    <div class="colorbar-scale">
-      <span class="tick-chi2-0">0</span>
-      <span class="tick-chi2-crit">χ²<sub>crit</sub></span>
-      <span class="tick-chi2-high">high</span>
-    </div>
-  </div>
-
-  <span class="poor">χ² near 0</span> = data close to H<sub>0</sub> (little evidence of association/effect).<br><br>
-  <span class="moderate">χ² around χ²<sub>crit</sub></span> = borderline significance.<br><br>
-  <span class="good">χ² well above χ²<sub>crit</sub></span> = strong evidence of association / lack of fit to H<sub>0</sub>.
+Interpret χ² relative to its <strong>degrees of freedom and null distribution</strong>, not an absolute “high/low” scale.<br><br>
+A small p-value is evidence against the specified null; report an effect size such as Cramér's V when magnitude matters.
 </td>
 <td>Test independence (contingency tables) or goodness‑of‑fit of categorical
 data to expected counts.</td>
@@ -3214,7 +2897,7 @@ ratios in genetics, etc.</td>
 effect size (e.g. Cramér’s V) for magnitude.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
-  <li>Applying χ² when expected frequencies are too small (e.g. &lt; 5 per cell).</li>
+  <li>Applying the asymptotic χ² approximation to sparse expected counts without checking whether an exact or simulation-based method is more appropriate.</li>
   <li>Interpreting a significant χ² as evidence of large practical effect without reporting effect size.</li>
 </ul>
 </td>
@@ -3223,19 +2906,8 @@ effect size (e.g. Cramér’s V) for magnitude.<br><br>
 <tr>
 <td><strong>ANOVA F-test</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-fstat"></div>
-    <div class="colorbar-scale">
-      <span class="tick-f1">1</span>
-      <span class="tick-f2">2</span>
-      <span class="tick-f3">3</span>
-      <span class="tick-f5">5+</span>
-    </div>
-  </div>
-
-  <span class="poor">F ≈ 1</span> = no detected difference between means.<br><br>
-  <span class="moderate">F ≈ 2–3</span> = might be marginally significant (depends on df).<br><br>
-  <span class="good">F ≫ 1</span> (e.g. &gt;5) = strong evidence at least one group mean differs.
+Interpret F using its <strong>numerator and denominator degrees of freedom</strong> and corresponding p-value; there is no universal F=2/3/5 significance scale.<br><br>
+A significant omnibus result says at least one mean differs under the model assumptions; add effect sizes and multiplicity-aware follow-ups as needed.
 </td>
 <td>Test if means of 3+ groups are all equal vs at least one differs.</td>
 <td>Compares between‑group variance to within‑group variance.</td>
@@ -3254,18 +2926,8 @@ or effect sizes by itself.<br><br>
 <tr>
 <td><strong>Confidence Interval</strong> (e.g. 95% CI)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-ciwidth"></div>
-    <div class="colorbar-scale">
-      <span class="tick-ci-narrow">narrow</span>
-      <span class="tick-ci-mid">medium</span>
-      <span class="tick-ci-wide">wide</span>
-    </div>
-  </div>
-
-  <span class="good">95% CI not containing 0 (difference) or 1 (ratio)</span> → statistically significant at ≈5%.<br><br>
-  <span class="good">Narrow CI</span> → precise estimate.<br><br>
-  <span class="poor">Very wide CI</span> → high uncertainty.
+Interpret both <strong>location and width</strong> relative to meaningful values.<br><br>
+For a two-sided 95% CI constructed from the same model/test, excluding the null (0 for a difference, 1 for a ratio) corresponds to rejection at α≈0.05. “Narrow” is scale- and decision-dependent.
 </td>
 <td>Provide a range of plausible values for a parameter.</td>
 <td>Usually estimate ± critical value × standard error.</td>
@@ -3279,20 +2941,10 @@ with 95% probability (frequentist CIs don’t strictly mean that).</td>
 <tr>
 <td><strong>Permutation Test</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-pvalue-effect"></div>
-    <div class="colorbar-scale">
-      <span class="tick-p0">0</span>
-      <span class="tick-p005">0.05</span>
-      <span class="tick-p1">1.0</span>
-    </div>
-  </div>
-
-  Let p<sub>perm</sub> be the permutation p‑value.<br><br>
-  <span class="good">p<sub>perm</sub> &lt; 0.05</span> → statistic is in extreme tail of null distribution (significant effect).<br><br>
-  <span class="poor">p<sub>perm</sub> ≥ 0.05</span> → compatible with chance re‑labeling.
+Interpret the permutation p-value under the <strong>exchangeability scheme actually used</strong>.<br><br>
+Pre-specify α when a decision is needed. A small p-value is evidence against the permutation null, not an intrinsically “good” result; preserve pairing, clustering, time or other required dependence.
 </td>
-<td>Distribution‑free significance test using label shuffling.</td>
+<td>Randomisation/exchangeability-based significance test using an allowed permutation scheme.</td>
 <td>Permute labels many times; recompute statistic to get null distribution and
 p<sub>perm</sub>.</td>
 <td>Useful for complex statistics where analytic null distributions are hard to
@@ -3322,7 +2974,7 @@ evidence of real signal.</td>
     </div>
   </div>
 
-  <span class="poor">|d| &lt; 0.2</span> = negligible.<br><br>
+  <strong>Common descriptive convention only:</strong><br><br><span class="poor">|d| &lt; 0.2</span> = negligible.<br><br>
   <span class="moderate">0.2–0.5</span> = small.<br><br>
   <span class="moderate">0.5–0.8</span> = medium.<br><br>
   <span class="good">&gt; 0.8</span> = large effect.
@@ -3357,7 +3009,7 @@ d = \frac{\bar{x}_1 - \bar{x}_2}{s_{pooled}}.
     </div>
   </div>
 
-  <span class="poor">|δ| &lt; 0.147</span> = negligible.<br><br>
+  <strong>Common descriptive convention only:</strong><br><br><span class="poor">|δ| &lt; 0.147</span> = negligible.<br><br>
   <span class="moderate">0.147–0.33</span> = small.<br><br>
   <span class="moderate">0.33–0.474</span> = medium.<br><br>
   <span class="good">&gt; 0.474</span> = large effect (strong dominance).
@@ -3366,7 +3018,7 @@ d = \frac{\bar{x}_1 - \bar{x}_2}{s_{pooled}}.
 <td>δ = P(X&gt;Y) − P(Y&gt;X), where X/Y from two groups; ranges −1..1.</td>
 <td>Equivalent to rank‑biserial correlation; sign shows direction, magnitude
 shows strength.</td>
-<td>δ = 0.5 means X exceeds Y in 75% of pairs, a very strong effect.</td>
+<td>With negligible ties, δ = 0.5 corresponds to P(X&gt;Y)=0.75; interpret the practical importance in context.</td>
 <td>Summarises ordering, not magnitude of differences; can be less intuitive
 than differences in means.<br><br>
 <strong>Common pitfalls:</strong>
@@ -3591,7 +3243,7 @@ than differences in means.<br><br>
           </tr>
           <tr>
             <td><strong>Mann–Whitney U</strong></td>
-            <td>“Do two groups differ in their typical values (medians/ranks)?”</td>
+            <td>“Do two independent groups differ in stochastic ordering / rank distribution?”</td>
             <td>Two independent groups, ranked/continuous outcome</td>
             <td>
               Non-parametric alternative to the independent t-test. Tests
@@ -3634,7 +3286,7 @@ than differences in means.<br><br>
             <td>“Are two categorical variables independent?”</td>
             <td>R × C contingency table (for example treatment × outcome)</td>
             <td>
-              Expected counts should not be too small (rules of thumb apply).
+              The χ² approximation needs adequate expected counts; for sparse tables use an exact, Monte Carlo, or otherwise appropriate small-sample method rather than a rigid one-number rule.
               Large samples make tiny deviations “significant”.
             </td>
           </tr>
@@ -3651,8 +3303,7 @@ than differences in means.<br><br>
             <td>“Is there association in a 2×2 table?”</td>
             <td>2 × 2 table with small counts</td>
             <td>
-              Exact test, no large-sample approximation. Useful when any
-              expected count is small (&lt;5).
+              Exact test, no large-sample approximation. Useful when a 2×2 table is sparse and the large-sample χ² approximation is questionable.
             </td>
           </tr>
         </tbody>
@@ -3694,8 +3345,7 @@ than differences in means.<br><br>
               Checking whether residuals from a time-series model look like white noise.
             </td>
             <td>
-              Tests several lags at once. A small p-value suggests remaining
-              structure in residuals (model underfits dynamics).
+              Tests several lags jointly. A small p-value suggests remaining serial structure; choose lags deliberately and, for fitted time-series models, account for estimated model degrees of freedom where appropriate.
             </td>
           </tr>
         </tbody>
@@ -3754,13 +3404,13 @@ than differences in means.<br><br>
 <details open>
 <summary>Robustness &amp; Resampling</summary>
 <div class="table-responsive">
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
     <section id="robustness-playground">
   <style>
     #robustness-playground {
@@ -3936,9 +3586,8 @@ than differences in means.<br><br>
       </div>
 
       <p class="rp-hint">
-        Try: <em>1, 2, 3, 4, 5</em> then add an outlier like <em>+30</em>.  
-        The mean moves a lot; the median barely moves.<p><br>
-        The "Robustness Playground" is a visual tool proving that the median is generally a better measure of the "typical" center for data that might contain errors or extreme values, because it resists the pull of outliers much better than the mean.
+        Try: <em>1, 2, 3, 4, 5</em> then add an outlier like <em>+30</em>.
+        The mean moves a lot; the median barely moves.        The "Robustness Playground" is a visual tool proving that the median is generally a better measure of the "typical" center for data that might contain errors or extreme values, because it resists the pull of outliers much better than the mean.
 
 
 Robustness in statistics means that a measurement (like the median) remains relatively unchanged even if a few data points are very unusual or extreme (outliers).
@@ -4127,13 +3776,13 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
   </script>
 </section>
 
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   <section id="resampling-stability-playground">
   <style>
     #resampling-stability-playground {
@@ -4273,10 +3922,7 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
       width: 10px;
       height: 10px;
       margin-right: 0.25rem;
-      border-radius: 2px;
-      
-      
-          #resampling-stability-playground .rsp-left-col {
+      border-radius: 2px;\n    }\n\n    #resampling-stability-playground .rsp-left-col {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -4309,15 +3955,7 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
     body:not(.dark) #resampling-stability-playground .rsp-info-card p,
     body:not(.dark) #resampling-stability-playground .rsp-info-card ul {
       color: #4b5563;
-    }
-
-      
-      
-      
-      
-    }
-
-    /* Light mode override – looks like your mean/median section */
+    }\n\n    /* Light mode override – looks like your mean/median section */
     body:not(.dark) #resampling-stability-playground {
       background: #f9fafb;
       color: #111827;
@@ -4446,8 +4084,7 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
           <li><strong>CI width</strong> – how wide the interval is (narrow = more precise).</li>
           <li><strong>Sign stable</strong> – fraction of resamples that keep the same sign as the mean.</li>
           <li>
-            Green “high stability” tags mean the method gives a tight CI and almost never flips sign;
-            red “low stability” tags mean the estimate is fragile.
+            The green/red tags use a <strong>custom teaching heuristic</strong> combining interval width and sign consistency; they are not formal statistical thresholds.
           </li>
         </ul>
 
@@ -4463,15 +4100,14 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
       <svg id="rsp-plot"></svg>
       <div class="rsp-legend">
         <span class="box" style="background:#38bdf8;"></span> Bootstrap 95% CI &nbsp;
-        <span class="box" style="background:#a855f7;"></span> Jackknife 95% CI &nbsp;
+        <span class="box" style="background:#a855f7;"></span> Jackknife normal-approximation 95% CI &nbsp;
         <span class="box" style="background:#f97316;"></span> Single-fit estimate
       </div>
 
       <table class="rsp-metrics" id="rsp-metrics-table"></table>
 
       <p class="rsp-note">
-        <span class="rsp-tag rsp-tag-strong">High stability</span> = coefficient keeps sign and tight CI.<br>
-        <span class="rsp-tag rsp-tag-weak">Low stability</span> = sign flips often / very wide CI.
+        <span class="rsp-tag rsp-tag-strong">Demo: more stable</span> / <span class="rsp-tag rsp-tag-weak">Demo: less stable</span> use a custom visual heuristic, not a formal test.
       </p>
     </div>
   </div>
@@ -4733,7 +4369,7 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
 
         // Labels
         addLabel(midYsingle, 'Single fit (full sample)');
-        addLabel(midYboot,   'Bootstrap (B=500)');
+        addLabel(midYboot,   'Bootstrap (B=1000)');
         addLabel(midYjack,   'Jackknife (leave-one-out)');
 
         // Min / max ticks
@@ -4766,7 +4402,7 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
 
         const data      = generateData(n, noise, signal);
         const singleFit = fitOLS(data.x1, data.x2, data.y);
-        const boot      = bootstrapCoefs(data, 500);
+        const boot      = bootstrapCoefs(data, 1000);
         const jack      = jackknifeCoefs(data);
 
         const bootB1 = summariseBootstrap(boot, 'b1');
@@ -4853,16 +4489,16 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
 </section>
 
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
 <table>
 <thead>
 <tr>
@@ -4879,42 +4515,13 @@ Non-robust measurements (like the mean) are highly sensitive to these extreme va
 
 <tr>
 <td><strong>Cross-Validation Mean &amp; Std</strong> (k-fold CV)</td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  <span class="good">Higher mean score</span> = better average performance.<br><br>
-
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-robustness"></div>
-    <div class="colorbar-scale">
-      <span class="tick-robust-low">high var</span>
-      <span class="tick-robust-mid">medium</span>
-      <span class="tick-robust-high">low var</span>
-    </div>
-  </div>
-
-  <span class="good">Low std across folds</span> = stable / robust model.<br><br>
-  <span class="poor">High std across folds</span> = performance sensitive to data split.
-</td>
-<td>Estimate out‑of‑sample performance and stability.</td>
-<td>Repeatedly train/test on different folds of the data.</td>
-<td>Mean = expected performance; std = sensitivity to sample.</td>
-<td>0.88 ± 0.01 across folds is strong &amp; stable; 0.90 ± 0.10 is unstable.</td>
-<td>More expensive than simple train/test; must respect temporal / grouped
-structure.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Randomly shuffling time‑series data or grouped data, breaking dependencies.</li>
-  <li>Choosing k so large that folds are too small (high variance) or so small that variance estimates are unreliable.</li>
-</ul>
-</td>
+<td>Compare the mean score with relevant baselines and competing models.<br><br>
+Fold-to-fold standard deviation describes <strong>split sensitivity</strong>, but has no universal “stable” cutoff and is not automatically a standard error/CI because folds overlap and scores are dependent.</td>
+<td>Estimate generalisation performance under a specified resampling scheme.</td>
+<td>Repeatedly fit on training folds and evaluate on held-out folds.</td>
+<td>The split design must match deployment: stratify when appropriate, keep groups together, use time-aware splits for temporal prediction, and put preprocessing/feature selection inside the CV pipeline.</td>
+<td>Report individual/repeated-CV scores and compare paired results; use nested CV or an untouched test set when model/hyperparameter selection is substantial.</td>
+<td>Ordinary random k-fold assumes exchangeable/i.i.d.-like observations. Fold SD alone is not an inferential confidence interval.</td>
 </tr>
 
 <tr>
@@ -4934,8 +4541,7 @@ structure.<br><br>
   <span class="poor">High variance (overfit)</span> → very low train error, high test error.
 </td>
 <td>Conceptual tool for selecting model complexity.</td>
-<td>Simple models: high bias, low variance; complex models: low bias, high
-variance.</td>
+<td>This is the classical intuition: insufficient flexibility can create bias and excessive effective flexibility can create variance. The relationship is not universally monotone in modern regularised/overparameterised models.</td>
 <td>Analyse learning curves vs model capacity to find sweet spot.</td>
 <td>Deep tree that fits training perfectly but fails on test is high‑variance.</td>
 <td>Not a single numeric statistic; patterns can be subtle for deep models.<br><br>
@@ -4949,35 +4555,13 @@ variance.</td>
 
 <tr>
 <td><strong>Jackknife Variability</strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-robustness"></div>
-    <div class="colorbar-scale">
-      <span class="tick-robust-low">high var</span>
-      <span class="tick-robust-mid">medium</span>
-      <span class="tick-robust-high">low var</span>
-    </div>
-  </div>
-
-  <span class="good">Low jackknife SE</span> → estimator stable to leaving out single observations.<br><br>
-  <span class="moderate">Moderate SE</span> → some sensitivity.<br><br>
-  <span class="poor">High SE</span> → highly sensitive to specific cases.
-</td>
-<td>Assess estimator stability and approximate standard errors by
-leave‑one‑out recomputation.</td>
-<td>Compute estimates on N datasets, each missing one observation; inspect
-spread.</td>
-<td>Big changes when omitting particular points indicate influence.</td>
-<td>If dropping any one observation barely changes a coefficient, model is
-stable.</td>
-<td>Less flexible than bootstrap for complex estimators; can be noisy for small
-N.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Confusing jackknife variability (influence of individual points) with overall sampling variability.</li>
-  <li>Applying jackknife to highly non‑smooth estimators where leave‑one‑out changes structure dramatically.</li>
-</ul>
-</td>
+<td>For a smooth estimator, the delete-1 jackknife can estimate a standard error using the dispersion of leave-one-out estimates.<br><br>
+Interpret the SE on the estimator's scale; there is no universal “low/high” cutoff. Large leave-one-out changes also reveal sensitivity to particular observations.</td>
+<td>Approximate sampling variability and diagnose observation-level sensitivity for suitable estimators.</td>
+<td>Recompute the estimator n times, each time omitting one observation.</td>
+<td>The standard delete-1 jackknife SE rescales the dispersion of the leave-one-out estimates by \(\sqrt{(n-1)/n}\); raw percentiles of those leave-one-out estimates are not a standard jackknife CI.</td>
+<td>If omitting individual observations barely changes a smooth regression coefficient, its jackknife SE will usually be small relative to the coefficient's practical scale.</td>
+<td>Can perform poorly for non-smooth statistics and dependent observations unless the resampling scheme is adapted. A small jackknife SE is not proof that the model is correctly specified.</td>
 </tr>
 
 <tr>
@@ -5014,35 +4598,13 @@ normality.</td>
 
 <tr>
 <td><strong>Feature Stability Across Resamples</strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-standard"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  <span class="poor">&lt; 0.5</span> = feature selected or important in &lt;50% of resamples (unstable).<br><br>
-  <span class="moderate">0.5–0.8</span> = moderate stability.<br><br>
-  <span class="good">&gt; 0.8</span> = highly stable across resamples.
-</td>
-<td>Check whether discovered “important features” are robust to sampling
-variation.</td>
-<td>Repeat feature selection / importance computation over many resamples and
-count how often each feature is selected as important.</td>
-<td>Helps distinguish real signal from noise‑driven feature choices.</td>
-<td>Stable features (e.g. 95/100 bootstrap samples) are more trustworthy than
-features selected rarely.</td>
-<td>Correlated predictors may appear unstable individually; requires careful
-interpretation.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Judging features purely by single‑fit importance scores without looking at stability.</li>
-  <li>Ignoring that correlated feature groups may swap roles across resamples while jointly representing the same signal.</li>
-</ul>
-</td>
+<td>Report selection/importance frequency for the <strong>specified resampling and selection procedure</strong>.<br><br>
+Cutoffs such as 0.5 or 0.8 are project-specific heuristics, not universal statistical guarantees. Formal stability-selection methods have their own assumptions and error-control results.</td>
+<td>Check whether feature conclusions are sensitive to sampling variation.</td>
+<td>Repeat the complete selection/importance procedure over valid resamples and record selection or importance frequency.</td>
+<td>Stability is conditional on the model, hyperparameters, threshold and resampling design.</td>
+<td>A feature selected in 95/100 resamples is more repeatable under that procedure than one selected 20/100 times, but correlated features may swap roles.</td>
+<td>Do not convert a selection frequency into causal importance or a universal false-discovery guarantee.</td>
 </tr>
 
 </tbody>
@@ -5095,20 +4657,8 @@ R^2 = 1 - \frac{SS_{res}}{SS_{tot}}.
 <tr>
 <td><strong>Adjusted R<sup>2</sup></strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-r2"></div>
-    <div class="colorbar-scale">
-      <span class="tick-0">0</span>
-      <span class="tick-025">0.25</span>
-      <span class="tick-05">0.5</span>
-      <span class="tick-10">1.0</span>
-    </div>
-  </div>
-
-  Adjusted R² can also be negative.<br><br>
-  <span class="good">Higher adjusted R²</span> = better fit after penalising extra predictors when comparing models on the same response/data.<br><br>
-  <span class="moderate">Small gains</span> = marginal benefit of added predictors.<br><br>
-  <span class="poor">Decrease when adding predictors</span> = likely overfitting / noise variables.
+Adjusted R² can be negative. Compare it only among models fitted to the same response/data.<br><br>
+Higher adjusted R² means the fit improvement offset the degrees-of-freedom penalty, but it is <strong>not</strong> an out-of-sample performance guarantee.
 </td>
 <td>Compare models with different numbers of predictors while penalising
 complexity.</td>
@@ -5129,20 +4679,10 @@ performance.<br><br>
 <tr>
 <td><strong>RMSE</strong> (Root Mean Square Error)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">moderate</span>
-      <span class="tick-errhi">large</span>
-    </div>
-  </div>
-
-  <span class="good">Lower RMSE</span> = better (small typical errors).<br><br>
-  <span class="moderate">Similar to target SD</span> = modest improvement over baseline.<br><br>
-  <span class="poor">Close to or above target SD/range</span> = weak predictive value.
+Lower is better for the <strong>same target, units and evaluation sample</strong>.<br><br>
+Interpret RMSE against a simple out-of-sample baseline and domain error tolerance; there is no universal fraction of target SD/range that is “good”.
 </td>
-<td>Average magnitude of squared prediction errors, back in original units.</td>
+<td>Square root of the mean squared prediction error, expressed in the target's original units.</td>
 <td>
 \[
 \text{RMSE} = \sqrt{\frac{1}{n}\sum (y_i - \hat{y}_i)^2 }.
@@ -5161,18 +4701,8 @@ performance.<br><br>
 <tr>
 <td><strong>MAE</strong> (Mean Absolute Error)</td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">0</span>
-      <span class="tick-errmid">moderate</span>
-      <span class="tick-errhi">large</span>
-    </div>
-  </div>
-
-  <span class="good">Lower MAE</span> = predictions on average close to truth.<br><br>
-  <span class="moderate">Moderate fraction of target scale</span> = acceptable.<br><br>
-  <span class="poor">Large fraction of target scale</span> = poor accuracy.
+Lower is better for the <strong>same target, units and evaluation sample</strong>.<br><br>
+Compare with a naive baseline and a domain-defined tolerable error; percentages of the target mean are not universal quality thresholds.
 </td>
 <td>Average absolute prediction error; more robust than RMSE.</td>
 <td>
@@ -5209,8 +4739,7 @@ performance.<br><br>
 <td>Alternative regression loss functions: MSE for squared errors, RMSLE for
 relative/log errors.</td>
 <td>RMSLE uses log1p transform, emphasising multiplicative errors.</td>
-<td>Useful when underestimation of large values is particularly problematic or
-targets are highly skewed.</td>
+<td>Useful when the target is non-negative and multiplicative/log-scale discrepancies are more meaningful than additive errors; target skew alone is not sufficient reason to use RMSLE.</td>
 <td>Useful for non-negative targets where multiplicative / relative error is meaningful.</td>
 <td>With the common log1p definition, zero is valid; negative targets or predictions are not. MSE is sensitive to outliers.<br><br>
 <strong>Common pitfalls:</strong>
@@ -5235,7 +4764,7 @@ targets are highly skewed.</td>
     </div>
   </div>
 
-  Interpreting |r|:<br><br>
+  Interpreting |r| using common rough conventions only (field- and task-dependent):<br><br>
   <span class="poor">&lt; 0.3</span> = weak.<br><br>
   <span class="moderate">0.3–0.5</span> = moderate.<br><br>
   <span class="good">&gt; 0.7</span> = strong linear association.
@@ -5271,7 +4800,7 @@ r = \frac{\text{Cov}(X,Y)}{\sigma_X\sigma_Y}.
     </div>
   </div>
 
-  Interpreting |ρ|:<br><br>
+  Interpreting |ρ| using common rough conventions only (field- and task-dependent):<br><br>
   <span class="poor">&lt; 0.3</span> = weak monotonic association.<br><br>
   <span class="moderate">0.3–0.5</span> = moderate.<br><br>
   <span class="good">&gt; 0.7</span> = strong monotonic relationship.
@@ -5305,7 +4834,7 @@ with the other.</td>
     </div>
   </div>
 
-  Interpreting |r<sub>partial</sub>|:<br><br>
+  Interpreting |r<sub>partial</sub>| using rough descriptive conventions only:<br><br>
   <span class="poor">≈ 0</span> = little remaining association beyond controls.<br><br>
   <span class="moderate">≈ 0.3–0.5</span> = moderate residual link.<br><br>
   <span class="good">&gt; 0.5</span> = strong association beyond controlled factors.
@@ -5328,18 +4857,8 @@ controls.<br><br>
 <tr>
 <td><strong>Regression Coefficients + CI</strong></td>
 <td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-ciwidth"></div>
-    <div class="colorbar-scale">
-      <span class="tick-ci-narrow">narrow</span>
-      <span class="tick-ci-mid">medium</span>
-      <span class="tick-ci-wide">wide</span>
-    </div>
-  </div>
-
-  <span class="good">CI not containing 0</span> → coefficient significantly different from 0.<br><br>
-  <span class="good">Narrow CI</span> → precise effect estimate.<br><br>
-  <span class="poor">Wide CI including 0</span> → weak or uncertain effect.
+Interpret the coefficient on its scale and report its confidence interval.<br><br>
+For a two-sided interval/test from the same model, a 95% CI excluding 0 corresponds to rejection at about α=0.05, but statistical significance is not practical importance and a wide interval can include materially important effects.
 </td>
 <td>Interpret predictor effects and uncertainty in regression models.</td>
 <td>Coefficients describe expected change in response for unit change in
@@ -5369,7 +4888,7 @@ interpretable.</td>
   </div>
 
   <span class="poor">&lt; 1.5</span> = likely positive autocorrelation (bad for OLS SEs).<br><br>
-  <span class="good">1.5–2.5</span> = little evidence of serious autocorrelation.<br><br>
+  <span class="moderate">1.5–2.5</span> = a common rough screening band around 2; formal interpretation depends on the design and critical values.<br><br>
   <span class="poor">&gt; 2.5</span> = possible negative autocorrelation.
 </td>
 <td>Detect first‑order serial correlation in regression residuals.</td>
@@ -5400,7 +4919,7 @@ value tables or approximations.<br><br>
   </div>
 
   <span class="poor">p &lt; 0.05</span> → reject homoscedasticity; heteroscedastic errors (bad for standard OLS SEs).<br><br>
-  <span class="good">p ≥ 0.05</span> → no strong evidence of non‑constant variance.
+  <strong>p ≥ 0.05</strong> → no strong evidence of non‑constant variance.
 </td>
 <td>Test for heteroscedasticity (non‑constant variance) in regression.</td>
 <td>Regress squared residuals on predictors; statistic ~χ² under constant
@@ -5432,14 +4951,14 @@ patterns.<br><br>
 
   Null: residuals are normal.<br><br>
   <span class="poor">p &lt; 0.05</span> → reject normality (assumption violation).<br><br>
-  <span class="good">p ≥ 0.05</span> → no strong evidence against normality.
+  <strong>p ≥ 0.05</strong> → no strong evidence against normality.
 </td>
 <td>Check normality assumption for regression residuals.</td>
 <td>Statistic W measures agreement between ordered residuals and expected
 normal order statistics.</td>
 <td>Used with residual plots to assess normality assumption for t‑based
 inference.</td>
-<td>p = 0.4 suggests residual normality is acceptable; p = 0.001 suggests
+<td>p = 0.4 gives no strong evidence against residual normality; p = 0.001 suggests
 heavy tails / skew.</td>
 <td>Very powerful for large n (tiny deviations flagged); doesn’t tell how
 residuals deviate.<br><br>
@@ -5469,7 +4988,7 @@ residuals deviate.<br><br>
       <tr>
         <td>Robustness to outliers</td>
         <td>Yes – if occasional extreme errors are not critical.</td>
-        <td>No – RMSE will be dominated by a few large residuals.</td>
+        <td>Usually less robust – RMSE gives disproportionately more weight to large residuals.</td>
       </tr>
       <tr>
         <td>Penalising large errors heavily</td>
@@ -5484,12 +5003,12 @@ residuals deviate.<br><br>
       <tr>
         <td>Gradient‑based optimisation</td>
         <td>Non‑differentiable at 0 but workable.</td>
-        <td>Smooth and strongly convex; widely used loss.</td>
+        <td>MSE is the smooth quadratic loss and is strongly convex in the predictions. RMSE is a monotone transformation of MSE with the same fixed-sample minimiser, but it is not itself the quadratic loss.</td>
       </tr>
       <tr>
         <td>Highly skewed targets</td>
         <td>Sometimes combined with median‑based models.</td>
-        <td>May require log‑transform or RMSLE for stability.</td>
+        <td>Consider a log transform/RMSLE only when a multiplicative error scale and non-negative target are substantively appropriate.</td>
       </tr>
     </tbody>
   </table>
@@ -5529,7 +5048,7 @@ residuals deviate.<br><br>
     </div>
   </div>
 
-  VIF ≈ 1 → no multicollinearity.<br><br>
+  <strong>Common screening heuristics only:</strong><br><br>VIF ≈ 1 → little linear redundancy with the other predictors.<br><br>
   <span class="moderate">5–10</span> = moderate concern.<br><br>
   <span class="poor">&gt; 10</span> = serious multicollinearity.
 </td>
@@ -5566,7 +5085,7 @@ some redundancy exists.<br><br>
     </div>
   </div>
 
-  <span class="good">&lt; 10</span> = low multicollinearity.<br><br>
+  <strong>Common scale-dependent screening heuristic:</strong><br><br><span class="good">&lt; 10</span> = relatively low condition number on the chosen scaling.<br><br>
   <span class="moderate">10–30</span> = moderate.<br><br>
   <span class="poor">&gt; 30</span> = severe (near singular matrix).
 </td>
@@ -5626,7 +5145,7 @@ pinpoint which variables are problematic.<br><br>
     </div>
   </div>
 
-  <span class="good">Between -1 and +1</span> = modest skew (often acceptable).<br><br>
+  <strong>Descriptive heuristic only:</strong><br><br><span class="moderate">Between -1 and +1</span> = modest skew; whether that matters depends on the analysis/model.<br><br>
   <span class="moderate">Between -2 and -1 or 1 and 2</span> = moderate skew.<br><br>
   <span class="poor">&lt; -2 or &gt; 2</span> = strong skew; consider transform or robust methods.
 </td>
@@ -5656,7 +5175,7 @@ pinpoint which variables are problematic.<br><br>
   </div>
 
   (Using excess kurtosis, normal ≈ 0.)<br><br>
-  <span class="good">≈ 0</span> = tails similar to normal.<br><br>
+  <strong>Descriptive heuristic only:</strong><br><br><span class="moderate">Excess kurtosis near 0</span> = a normal-like fourth moment; it does not by itself establish normal tails.<br><br>
   <span class="moderate">Between -2 and -0.5</span> = somewhat light‑tailed.<br><br>
   <span class="poor">&gt; 2</span> = heavy tails / many extreme values.
 </td>
@@ -5687,13 +5206,13 @@ pinpoint which variables are problematic.<br><br>
 
   Null: data are normal.<br><br>
   <span class="poor">p &lt; 0.05</span> → reject normality.<br><br>
-  <span class="good">p ≥ 0.05</span> → no strong evidence against normality.
+  <strong>p ≥ 0.05</strong> → no strong evidence against normality.
 </td>
 <td>Formal test of normality for small–moderate samples.</td>
 <td>Statistic W measures agreement between ordered data and expected normal
 quantiles.</td>
 <td>p-value derived from W; small p indicates deviation from normality.</td>
-<td>p=0.08 → normality acceptable; p=0.001 → strong deviation.</td>
+<td>p=0.08 → no strong evidence against normality; p=0.001 → strong evidence of deviation.</td>
 <td>Very sensitive with large n; use with plots and domain context.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
@@ -5717,8 +5236,8 @@ quantiles.</td>
     </div>
   </div>
 
-  Under normality:<br><br>
-  <span class="good">|z| &lt; 2</span> = typical.<br><br>
+  Under an approximately normal reference model, these are common screening conventions rather than automatic outlier rules:<br><br>
+  <span class="moderate">|z| &lt; 2</span> = not unusually far from the mean.<br><br>
   <span class="moderate">2 ≤ |z| ≤ 3</span> = borderline outlier.<br><br>
   <span class="poor">|z| &gt; 3</span> = potential outlier.
 </td>
@@ -5753,7 +5272,7 @@ truly abnormal. Mean/SD can be distorted by the outliers.<br><br>
     </div>
   </div>
 
-  <span class="good">Within [Q1−1.5·IQR, Q3+1.5·IQR]</span> = typical range.<br><br>
+  <span class="good">Within [Q1−1.5·IQR, Q3+1.5·IQR]</span> = not flagged by the standard Tukey-fence rule.<br><br>
   <span class="moderate">Outside 1.5·IQR but within 3·IQR</span> = moderate outlier.<br><br>
   <span class="poor">Beyond 3·IQR fences</span> = extreme outlier.
 </td>
@@ -5785,16 +5304,15 @@ and dimension‑wise only.<br><br>
     </div>
   </div>
 
-  For robust z<sub>MAD</sub>:<br><br>
-  <span class="good">|z<sub>MAD</sub>| &lt; 2.5</span> = typical.<br><br>
+  For a roughly symmetric unimodal reference distribution, common screening heuristics include:<br><br>
+  <span class="moderate">|z<sub>MAD</sub>| &lt; 2.5</span> = not strongly flagged.<br><br>
   <span class="moderate">2.5–3.5</span> = borderline.<br><br>
   <span class="poor">&gt; 3.5</span> = strong outlier candidate.
 </td>
 <td>Detect outliers robustly using median and median absolute deviation.</td>
-<td>Robust Z = (x − median) / (1.4826 · MAD), where MAD is median(|x −
-median|).</td>
+<td>Let MAD<sub>raw</sub> = median(|x − median|). Under approximate normality, 1.4826·MAD<sub>raw</sub> estimates σ, so a normal-consistent robust score is (x − median)/(1.4826·MAD<sub>raw</sub>).</td>
 <td>More stable than classical z‑score in presence of outliers.</td>
-<td>Good for heavy‑tailed or skewed distributions where mean/SD are distorted.</td>
+<td>More resistant to isolated extremes than mean/SD-based z-scores, but a symmetric MAD rule can still misclassify observations in strongly skewed or multimodal data.</td>
 <td>Still assumes a roughly unimodal distribution; threshold choices are
 heuristic.<br><br>
 <strong>Common pitfalls:</strong>
@@ -5818,9 +5336,8 @@ heuristic.<br><br>
     </div>
   </div>
 
-  <span class="good">&lt; 0.5</span> = typically low influence.<br><br>
-  <span class="moderate">0.5–1</span> = potentially influential, inspect.<br><br>
-  <span class="poor">&gt; 1</span> (especially much &gt;1) = highly influential point.
+  Cook's D uses <strong>screening heuristics, not a universal deletion threshold</strong>.<br><br>
+  Values near/above 1 are often inspected; rules such as 4/n are also used. Investigate influential observations instead of deleting them mechanically.
 </td>
 <td>Measure influence of each observation on regression fit.</td>
 <td>Combines leverage and residual size to approximate change in all fitted
@@ -5867,7 +5384,7 @@ Squaring MD gives a χ² statistic under multivariate normality.</td>
 space.</td>
 <td>Useful for anomaly detection in multi‑feature settings.</td>
 <td>Requires good estimates of μ and Σ; classical covariance is itself
-distorted by outliers; robust covariance estimators may be needed.<br><br>
+distorted by outliers; robust covariance estimators may be needed. The simple χ² reference is most direct under multivariate normality with fixed population parameters; estimating μ and Σ from the same finite sample changes the exact reference distribution.<br><br>
 <strong>Common pitfalls:</strong>
 <ul>
   <li>Computing Mahalanobis distance with non‑invertible or poorly conditioned covariance matrices.</li>
@@ -5890,7 +5407,7 @@ distorted by outliers; robust covariance estimators may be needed.<br><br>
 
   Two‑sample KS for distribution shift:<br><br>
   <span class="poor">p &lt; 0.05</span> → distributions differ significantly (potential shift / mismatch).<br><br>
-  <span class="good">p ≥ 0.05</span> → no strong evidence of difference.<br><br>
+  <strong>p ≥ 0.05</strong> → no strong evidence of difference.<br><br>
   Larger D (0–1) = stronger discrepancy.
 </td>
 <td>Compare empirical distributions (e.g. train vs production) or sample
@@ -6278,7 +5795,7 @@ independent samples.<br><br>
                   <li>Blue dots: base data. Red dot: outlier. Blue line: fit without outlier.</li>
                   <li>Orange line: fit including outlier.</li>
                   <li>
-                    In the table, <strong>Δ slope</strong> and the tag
+                    In the table, <strong>Δ slope</strong> and the custom visual tag
                     <span class="ir-tag bad">fragile</span>/<span class="ir-tag good">stable</span> tell you
                     how influential the point is.
                   </li>
@@ -6368,14 +5885,14 @@ independent samples.<br><br>
                   <li>Blue dots: regular data used to fit the baseline regression line.</li>
                   <li>Purple dot: candidate point at the chosen x-position and residual.</li>
                   <li>
-                    The table shows its Cook’s Distance and a qualitative flag
+                    The table shows leverage, an internally studentized residual, Cook’s Distance, and qualitative screening flags
                     (<span class="ir-tag good">OK</span> vs
                     <span class="ir-tag bad">influential</span>).
                   </li>
                 </ul>
                 <p><strong>Heuristics</strong></p>
                 <ul>
-                  <li>Rough rule: Cook’s D &gt; 1 is clearly influential; D &gt; 0.5 is worth attention.</li>
+                  <li>Common screens include Cook’s D &gt; 4/n (worth inspection) and D around/above 1 (often large); neither is an automatic deletion rule.</li>
                   <li>
                     High leverage with tiny residual can still be dangerous if a future small mistake there
                     would flip the slope.
@@ -6461,8 +5978,7 @@ independent samples.<br><br>
               </div>
 
               <p class="ir-note">
-                This is a pedagogical model: we don’t fit an actual classifier, but apply a simple response
-                surface that mimics how noise hurts cross-validated performance.
+                This panel is an <strong>illustrative response-surface toy</strong>: it does not fit a classifier or run cross-validation. Its numbers are synthetic intuition scores, not estimated accuracy, CV variance or a validated stability metric.
               </p>
             </div>
 
@@ -6471,25 +5987,25 @@ independent samples.<br><br>
               <div class="ir-grid-2">
                 <div>
                   <div class="ir-kpi">
-                    Baseline accuracy (clean data)
+                    Illustrative clean-data score
                     <span class="val" id="ni-acc-base">0.90</span>
                   </div>
                   <div class="ir-kpi">
-                    Expected train accuracy
+                    Illustrative train score
                     <span class="val" id="ni-acc-train">0.90</span>
                   </div>
                   <div class="ir-kpi">
-                    Expected CV accuracy
+                    Illustrative held-out score
                     <span class="val" id="ni-acc-cv">0.86</span>
                   </div>
                 </div>
                 <div>
                   <div class="ir-kpi">
-                    Variance of CV scores
+                    Illustrative variability score
                     <span class="val" id="ni-var">0.01</span>
                   </div>
                   <div class="ir-kpi">
-                    Stability index (0–1)
+                    Custom toy stability heuristic (0–1)
                     <span class="val" id="ni-stab">0.80</span>
                   </div>
                   <div class="ir-kpi">
@@ -6511,8 +6027,7 @@ independent samples.<br><br>
                     unchanged.
                   </li>
                   <li>
-                    The stability index is a compact score combining CV accuracy and variability: low values
-                    mean your model is too dependent on random quirks.
+                    The displayed stability number is a custom visual heuristic combining the toy held-out score and variability term; it is not a published stability estimator.
                   </li>
                 </ul>
                 <p class="ir-note">
@@ -6624,9 +6139,9 @@ independent samples.<br><br>
       </p>
 
       <ul>
-        <li><strong>VIF ≈ 1</strong> – almost no collinearity.</li>
-        <li><strong>VIF 5–10</strong> – coefficients are unstable and hard to interpret.</li>
-        <li><strong>VIF &gt; 10</strong> – strong collinearity; rethink features or model design.</li>
+        <li><strong>VIF ≈ 1</strong> – little linear redundancy with the other predictors.</li>
+        <li><strong>VIF 5–10</strong> – a common screening range that often motivates closer inspection; context and model purpose matter.</li>
+        <li><strong>VIF &gt; 10</strong> – a common severe-screening heuristic, not an automatic variable-deletion rule.</li>
       </ul>
 
       <p class="lab-note">
@@ -6648,7 +6163,7 @@ independent samples.<br><br>
     <li><strong>Collinearity</strong> – too many overlapping features → unstable estimates.</li>
   </ul>
   <p class="lab-summary">
-    In short: <strong>noise + many decisions = unreliable statistics</strong>.  
+    In short: <strong>noise + many decisions = unreliable statistics</strong>.
     The corrections and diagnostics you see here (Bonferroni, FWER, VIF) are tools to keep
     that under control.
   </p>
@@ -6798,7 +6313,7 @@ independent samples.<br><br>
               </div>
               <div class="ir-kpi">
                 Verdict
-                <span id="bf-verdict" class="ir-tag neutral">reasonable</span>
+                <span id="bf-verdict" class="ir-tag neutral">illustrative screen</span>
               </div>
 
               <div class="ir-explain" style="margin-top:0.5rem;">
@@ -6835,15 +6350,15 @@ independent samples.<br><br>
 
               <div class="ir-kpi">
                 R² for the equicorrelated predictor setup
-                <span class="val" id="vif-r2">0.66</span>
+                <span class="val" id="vif-r2">0.61</span>
               </div>
               <div class="ir-kpi">
                 VIF = 1 / (1 − R²)
-                <span class="val" id="vif-val">2.94</span>
+                <span class="val" id="vif-val">2.58</span>
               </div>
               <div class="ir-kpi">
                 Interpretation
-                <span id="vif-verdict" class="ir-tag good">acceptable</span>
+                <span id="vif-verdict" class="ir-tag neutral">demo screen</span>
               </div>
 
               <div class="ir-explain" style="margin-top:0.5rem;">
@@ -7060,7 +6575,7 @@ independent samples.<br><br>
           } else {
             const tag = document.createElement("span");
             tag.className = "ir-tag " + (Math.abs(deltaSlope) < 0.15 ? "good" : "bad");
-            tag.textContent = Math.abs(deltaSlope) < 0.15 ? "stable" : "fragile";
+            tag.textContent = Math.abs(deltaSlope) < 0.15 ? "demo: smaller Δ" : "demo: larger Δ";
             sTd.appendChild(tag);
           }
           tr.appendChild(sTd);
@@ -7207,7 +6722,8 @@ independent samples.<br><br>
         const h = 1 / n + ((x - xbar) ** 2) / (centeredSS || 1e-12);
         const oneMinusH = Math.max(1e-12, 1 - h);
         const D = (e * e / (p * sigma2)) * (h / (oneMinusH ** 2));
-        return { D, e, h, fitFull };
+        const studentized = e / Math.sqrt(Math.max(1e-12, sigma2 * oneMinusH));
+        return { D, e, h, studentized, p, fitFull };
       }
 
       function computeDomain(cand) {
@@ -7307,17 +6823,19 @@ independent samples.<br><br>
         const info = cookDistanceForPoint(xsWith, ysWith, xsWith.length - 1);
         const fmt = (v) => v.toFixed(3);
         tableBody.innerHTML = "";
+        const leverageScreen = (2 * info.p) / info.fitFull.n; // common 2p/n screening rule
+        const cookScreen = 4 / info.fitFull.n;              // common 4/n screening rule
         const rows = [
-          ["Leverage h", fmt(info.h), info.h > 0.3 ? "high leverage" : "ordinary"],
-          ["Residual e", fmt(info.e), Math.abs(info.e) > 2 ? "large residual" : "moderate"],
+          ["Leverage h", fmt(info.h), info.h > leverageScreen ? "above 2p/n screen" : "below 2p/n screen"],
+          ["Internally studentized residual", fmt(info.studentized), Math.abs(info.studentized) > 2 ? "|r| > 2 screen" : "|r| ≤ 2"],
           [
             "Cook's Distance D",
             fmt(info.D),
             info.D > 1
-              ? "strongly influential"
-              : info.D > 0.5
-              ? "influential"
-              : "not strongly influential"
+              ? "large by common D > 1 screen"
+              : info.D > cookScreen
+              ? "above 4/n screen; inspect"
+              : "below common 4/n screen"
           ]
         ];
 
@@ -7460,13 +6978,13 @@ independent samples.<br><br>
         verdict.classList.remove("good", "bad", "neutral");
         if (fwerRaw > 0.5 && m > 20) {
           verdict.classList.add("bad");
-          verdict.textContent = "FWER out of control";
+          verdict.textContent = "large uncorrected FWER";
         } else if (aCorr < 0.0005 && m > 100) {
           verdict.classList.add("neutral");
-          verdict.textContent = "very conservative";
+          verdict.textContent = "very strict per-test threshold";
         } else {
-          verdict.classList.add("good");
-          verdict.textContent = "reasonable";
+          verdict.classList.add("neutral");
+          verdict.textContent = "inspect FWER and α/m";
         }
       }
 
@@ -7500,14 +7018,14 @@ independent samples.<br><br>
 
         vifVerdict.classList.remove("good", "bad", "neutral");
         if (vif < 3) {
-          vifVerdict.classList.add("good");
-          vifVerdict.textContent = "acceptable";
+          vifVerdict.classList.add("neutral");
+          vifVerdict.textContent = "lower by demo screen";
         } else if (vif < 10) {
           vifVerdict.classList.add("neutral");
-          vifVerdict.textContent = "concerning";
+          vifVerdict.textContent = "moderate by demo screen";
         } else {
           vifVerdict.classList.add("bad");
-          vifVerdict.textContent = "severe collinearity";
+          vifVerdict.textContent = "high by demo screen";
         }
       }
 
@@ -7625,64 +7143,24 @@ true model recovery, is goal.<br><br>
 
 <tr>
 <td><strong>Mallows’ C<sub>p</sub></strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-cp"></div>
-    <div class="colorbar-scale">
-      <span class="tick-cp-neg10">-10</span>
-      <span class="tick-cp-0">0</span>
-      <span class="tick-cp-pos10">+10</span>
-    </div>
-  </div>
-
-  For subset size p (predictors), good models have C<sub>p</sub> ≈ p+1.<br><br>
-  <span class="good">C<sub>p</sub> − (p+1) ≈ 0</span> = balanced bias–variance.<br><br>
-  <span class="poor">Far above p+1</span> = underfitting (missing predictors).<br><br>
-  <span class="poor">Far below p+1</span> = possible overfitting.
-</td>
-<td>Guide subset selection in linear regression.</td>
-<td>Compares residual SS of subset model to full model’s error variance.</td>
-<td>Plot C<sub>p</sub> vs p; models near diagonal line C<sub>p</sub> = p+1 are desirable.</td>
-<td>Helps choose among many subset models with similar R².</td>
-<td>Relies on full model as reference; computationally expensive for large
-predictor sets without heuristics.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Ignoring the uncertainty in selecting the “best” C<sub>p</sub> model when many subsets have similar values.</li>
-  <li>Using C<sub>p</sub> when the full model is itself misspecified.</li>
-</ul>
-</td>
+<td>Let p denote the number of fitted parameters (including the intercept under the usual convention).<br><br>
+Look for <strong>small C<sub>p</sub> values near p</strong>. C<sub>p</sub> much larger than p suggests appreciable bias/lack of fit. Values below p can occur from sampling variation and are <strong>not, by themselves, evidence of overfitting</strong>.</td>
+<td>Screen candidate subset linear-regression models for a bias–variance trade-off relative to a full-model error-variance estimate.</td>
+<td>Compares a subset model's residual sum of squares with an error-variance estimate from the full candidate model.</td>
+<td>Under the usual derivation, an approximately unbiased candidate has expected C<sub>p</sub> near p; the full model itself has C<sub>p</sub> near/equal to p by construction and should not be selected for that reason alone.</td>
+<td>If several subsets have small C<sub>p</sub> near p, inspect predictive validation, diagnostics, simplicity and subject-matter plausibility rather than choosing mechanically.</td>
+<td>Depends on the full candidate model and its variance estimate; definitions/counting conventions for p vary across software; it is a screening criterion, not an automatic proof of the best model.</td>
 </tr>
 
 <tr>
-<td><strong>Cross‑validated Deviance / Log‑Loss</strong></td>
-<td>
-  <div class="colorbar-wrapper">
-    <div class="colorbar colorbar-error"></div>
-    <div class="colorbar-scale">
-      <span class="tick-err0">low</span>
-      <span class="tick-errmid">medium</span>
-      <span class="tick-errhi">high</span>
-    </div>
-  </div>
-
-  Lower is better.<br><br>
-  <span class="good">Lowest CV deviance among candidates</span> = preferred model.<br><br>
-  <span class="moderate">Differences &lt; 1–2%</span> = often negligible in practice.<br><br>
-  <span class="poor">Much larger deviance</span> = clearly worse predictive model.
-</td>
-<td>Directly compare predictive models using out‑of‑sample negative log‑likelihood.</td>
-<td>Compute mean deviance / log‑loss across CV folds.</td>
-<td>Penalises wrong confident predictions more strongly than Brier score.</td>
-<td>Standard for logistic / probabilistic models in ML competitions.</td>
-<td>Can be dominated by rare but very miscalibrated regions; needs context
-for what constitutes a big improvement.<br><br>
-<strong>Common pitfalls:</strong>
-<ul>
-  <li>Over‑tuning hyperparameters to tiny differences in log‑loss on noisy validation data.</li>
-  <li>Ignoring class weights or imbalance when interpreting deviance alone.</li>
-</ul>
-</td>
+<td><strong>Cross-validated Log-Loss / Deviance</strong></td>
+<td>Lower is better for the <strong>same outcome definition, weighting and evaluation scheme</strong>.<br><br>
+Compare against a simple probabilistic baseline and resampling uncertainty. There is no universal percentage difference that is automatically meaningful.</td>
+<td>Compare probabilistic predictive models out of sample using likelihood-based scoring.</td>
+<td>Log-loss is average negative log predictive probability. Model deviance is closely related to negative log-likelihood but may differ by constants or scale depending on the model/software, so name the reported quantity precisely.</td>
+<td>Evaluate the score on held-out folds generated by a leakage-safe split/pipeline; confident wrong probabilities receive a large penalty.</td>
+<td>For binary classification, compare CV log-loss with a prevalence-only or other domain-relevant probabilistic baseline.</td>
+<td>Can be dominated by a few extremely confident errors; values are not directly comparable when observation weights, outcome definitions or likelihood conventions differ.</td>
 </tr>
 
 <tr>
@@ -7698,7 +7176,7 @@ for what constitutes a big improvement.<br><br>
   </div>
 
   <span class="poor">Very small λ</span> → unregularised, risk of overfitting.<br><br>
-  <span class="good">λ chosen by CV</span> → good bias–variance compromise.<br><br>
+  <span class="moderate">λ chosen inside a properly nested/tuned CV workflow</span> → a data-driven candidate; final performance still requires honest out-of-sample evaluation.<br><br>
   <span class="poor">Very large λ</span> → coefficients shrunk too much (underfitting).
 </td>
 <td>Control complexity of models like ridge, lasso, elastic‑net.</td>
@@ -7827,7 +7305,7 @@ implementations.<br><br>
           values of a feature are randomly permuted.</td>
           <td>Break the relationship between a feature and target by shuffling that
           feature; recompute performance and compare to baseline.</td>
-          <td>Rank features by drop in ROC AUC or RMSE in a tree ensemble to understand which inputs matter most.</td>
+          <td>On held-out data, repeat each permutation several times and report the distribution of score drops; correlated features may share or mask importance.</td>
           <td>Correlated features can share importance (each appears less
           important alone). Requires many evaluations of the model; may be expensive.<br><br>
           <strong>Common pitfalls:</strong>
@@ -7850,8 +7328,8 @@ implementations.<br><br>
               </div>
             </div>
 
-            <span class="good">Stable patterns that match domain knowledge</span> are desirable.<br><br>
-            Very large |SHAP| values indicate strongly influential features for a given prediction.
+            <strong>Check attribution fidelity, stability and sensitivity to the background/masking assumptions.</strong><br><br>
+            Large |SHAP| means large model-attribution magnitude for that prediction; agreement with prior beliefs is not itself validation.
           </td>
           <td>Provide theoretically grounded, additive feature attributions for
           individual predictions and global patterns.</td>
@@ -7914,11 +7392,11 @@ implementations.<br><br>
   <!-- 9. PYTHON CODE SNIPPETS               -->
   <!-- ===================================== -->
   <details open>
-    <summary>Python Code Snippets (scikit‑learn / statsmodels / SHAP / LIME)</summary>
+    <summary>Python Code Snippets (scikit‑learn / SciPy / SHAP / LIME)</summary>
 
     <h2>Classification Metrics & Confusion Matrix</h2>
-<a href="https://mybinder.org/v2/gh/slashennui/Classification-Metrics-Confusion-Matrix/4c3d2c41f4a9ae2038ba76865e07590712401d58?urlpath=lab%2Ftree%2FClassification%20Metrics%20%26%20Confusion%20Matrix.ipynb"
-   target="_blank"
+<a href="https://mybinder.org/v2/gh/slashennui/Classification-Metrics-Confusion-Matrix/main?urlpath=lab%2Ftree%2FClassification%20Metrics%20%26%20Confusion%20Matrix.ipynb"
+   target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
 </a>
@@ -7953,54 +7431,56 @@ implementations.<br><br>
   </style>
 
   <pre><code class="language-python">
+
 import numpy as np
+from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-
-# Generate dummy data for demonstration
-X, y = np.random.rand(100, 5), np.random.randint(0, 2, 100)
-
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
-)
-
-# Train a simple classification model (e.g., Logistic Regression)
-model = LogisticRegression(random_state=42)
-model.fit(X_train, y_train)
-
-# Define y_true and X for the existing metrics calculation cell
-y_true = y_test
-X = X_test
-
 from sklearn.metrics import (
-    confusion_matrix, accuracy_score, precision_score, recall_score,
-    f1_score, roc_auc_score, average_precision_score,
+    confusion_matrix, accuracy_score, balanced_accuracy_score,
+    precision_score, recall_score, f1_score, roc_auc_score,
+    average_precision_score, auc, precision_recall_curve,
     matthews_corrcoef, cohen_kappa_score
 )
 
-y_proba = model.predict_proba(X)[:, 1]
+X, y = make_classification(
+    n_samples=800, n_features=10, n_informative=6, n_redundant=2,
+    weights=[0.75, 0.25], class_sep=1.2, random_state=42
+)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.30, stratify=y, random_state=42
+)
+
+model = LogisticRegression(max_iter=1000, random_state=42)
+model.fit(X_train, y_train)
+y_proba = model.predict_proba(X_test)[:, 1]
 y_pred = (y_proba >= 0.5).astype(int)
 
-cm = confusion_matrix(y_true, y_pred)
-acc = accuracy_score(y_true, y_pred)
-prec = precision_score(y_true, y_pred)
-rec = recall_score(y_true, y_pred)
-f1 = f1_score(y_true, y_pred)
-roc_auc = roc_auc_score(y_true, y_proba)
-average_precision = average_precision_score(y_true, y_proba)
-mcc = matthews_corrcoef(y_true, y_pred)
-kappa = cohen_kappa_score(y_true, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+acc = accuracy_score(y_test, y_pred)
+bal_acc = balanced_accuracy_score(y_test, y_pred)
+prec = precision_score(y_test, y_pred, zero_division=np.nan)
+rec = recall_score(y_test, y_pred, zero_division=np.nan)
+f1 = f1_score(y_test, y_pred, zero_division=np.nan)
+roc_auc = roc_auc_score(y_test, y_proba)
+average_precision = average_precision_score(y_test, y_proba)  # AP
+pr_precision, pr_recall, _ = precision_recall_curve(y_test, y_proba)
+trapezoidal_pr_auc = auc(pr_recall, pr_precision)
+mcc = matthews_corrcoef(y_test, y_pred)
+kappa = cohen_kappa_score(y_test, y_pred)
 
-print("Confusion Matrix:\\n", cm)
+print("Confusion Matrix:\n", cm)
 print("Accuracy:", acc)
+print("Balanced accuracy:", bal_acc)
 print("Precision:", prec)
 print("Recall:", rec)
 print("F1-score:", f1)
 print("ROC AUC:", roc_auc)
 print("Average Precision (AP):", average_precision)
+print("Trapezoidal PR AUC:", trapezoidal_pr_auc)
 print("Matthews Corr. Coeff.:", mcc)
 print("Cohen's Kappa:", kappa)
+
   </code></pre>
 
   <!-- Highlight.js scripts (only affect this block) -->
@@ -8018,16 +7498,10 @@ print("Cohen's Kappa:", kappa)
 
 
 
-<p><br>
 
-
-
-
-    </code></pre>
-
-    <h2>Statistical Tests (t-test, ANOVA, chi-square)</h2>
+<h2>Statistical Tests (t-test, ANOVA, chi-square)</h2>
 <a href="https://mybinder.org/v2/gh/slashennui/Statistical-Tests-t-test-ANOVA-chi-square-/main?urlpath=%2Fdoc%2Ftree%2FStatistical+Tests+%28t-test%2C+ANOVA%2C+chi-square%29.ipynb"
-   target="_blank"
+   target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
 </a>
@@ -8062,48 +7536,67 @@ print("Cohen's Kappa:", kappa)
   </style>
 
   <pre><code class="language-python">
+
 import numpy as np
-import pandas as pd
 from scipy import stats
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 
-# Sample data for two-sample t-test
-group1 = np.random.rand(20) * 10
-group2 = np.random.rand(25) * 10 + 2  # Slightly different mean
+rng = np.random.default_rng(42)
 
-# two-sample t-test
-t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=False)
-print(f"Two-sample t-test: t-statistic = {t_stat:.3f}, p-value = {p_value:.3f}")
+# Two independent groups: Welch t-test is a robust default when equal variances
+# are not established.
+group1 = rng.normal(loc=0.0, scale=1.0, size=40)
+group2 = rng.normal(loc=0.5, scale=1.4, size=45)
+t_result = stats.ttest_ind(group1, group2, equal_var=False)
+print("Welch t-test:", t_result)
 
-# Sample data for chi-square test of independence
-contingency_table = np.array([[10, 20], [15, 5]])
+# One-way ANOVA. SciPy >= 1.16 supports Welch ANOVA via equal_var=False.
+group_a = rng.normal(loc=0.0, scale=1.0, size=30)
+group_b = rng.normal(loc=0.5, scale=1.5, size=35)
+group_c = rng.normal(loc=1.0, scale=0.8, size=28)
+anova_classical = stats.f_oneway(group_a, group_b, group_c, equal_var=True)
+anova_welch = stats.f_oneway(group_a, group_b, group_c, equal_var=False)
+print("Classical one-way ANOVA:", anova_classical)
+print("Welch ANOVA:", anova_welch)
 
-# chi-square test of independence
-chi2, p, dof, expected = stats.chi2_contingency(contingency_table)
-print(f"\nChi-square test: chi2 = {chi2:.3f}, p-value = {p:.3f}, dof = {dof}")
-print(f"Expected frequencies:\n{expected}")
+# Chi-square test of independence. Inspect expected counts before trusting the
+# large-sample approximation.
+contingency_table = np.array([[30, 20], [15, 35]])
+chi2, p_chi, dof, expected = stats.chi2_contingency(contingency_table)
+print("Chi-square:", chi2, p_chi, "dof =", dof)
+print("Expected counts:\n", expected)
 
-# Sample data for one-way ANOVA
-data = {
-    'y': np.concatenate([
-        np.random.rand(10) * 5,
-        np.random.rand(10) * 5 + 2,
-        np.random.rand(10) * 5 + 1
-    ]),
-    'group': ['A'] * 10 + ['B'] * 10 + ['C'] * 10
-}
-df = pd.DataFrame(data)
+# Fisher's exact test is available for a 2x2 table and is useful for sparse counts.
+odds_ratio, p_fisher = stats.fisher_exact(np.array([[1, 9], [8, 2]]))
+print("Fisher exact:", odds_ratio, p_fisher)
 
-# one-way ANOVA with statsmodels
-model = smf.ols('y ~ C(group)', data=df).fit()
-anova_table = sm.stats.anova_lm(model, typ=2)
-print(f"\nOne-way ANOVA:\n{anova_table}")
+# Normality: Shapiro-Wilk is a test, not proof of normality; combine it with
+# a Q-Q plot and practical/model-specific robustness considerations.
+sample = rng.normal(size=100)
+w_stat, p_shapiro = stats.shapiro(sample)
+print("Shapiro-Wilk:", w_stat, p_shapiro)
+
+# 1-sample KS: compare to a FULLY SPECIFIED continuous reference distribution.
+# Do not estimate mu0/sigma0 from the same sample and then use the ordinary
+# known-parameter KS p-value as if they had been fixed in advance.
+mu0, sigma0 = 0.0, 1.0
+reference_cdf = stats.norm(loc=mu0, scale=sigma0).cdf
+ks_stat, p_ks = stats.kstest(sample, reference_cdf)
+print("One-sample KS:", ks_stat, p_ks)
+
+# Two-sample KS compares two independent continuous distributions.
+sample2 = rng.normal(loc=0.3, size=120)
+ks2_stat, p_ks2 = stats.ks_2samp(sample, sample2)
+print("Two-sample KS:", ks2_stat, p_ks2)
+
+# Brown-Forsythe form of Levene's test uses group medians.
+lev_stat, p_lev = stats.levene(group_a, group_b, group_c, center="median")
+print("Brown-Forsythe / median Levene:", lev_stat, p_lev)
+
   </code></pre>
 
   <!-- Highlight.js scripts (only affect this block) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+
   <script>
     (function () {
       var block = document.querySelector('#stats-tests-code-block code');
@@ -8116,7 +7609,6 @@ print(f"\nOne-way ANOVA:\n{anova_table}")
 
 
 
-<p><br>
 
 
 
@@ -8125,7 +7617,7 @@ print(f"\nOne-way ANOVA:\n{anova_table}")
 
     <h2>Regression Metrics (MAE vs RMSE)</h2>
   <a href="https://mybinder.org/v2/gh/slashennui/Regression-Metrics-MAE-vs-RMSE-/main?urlpath=%2Fdoc%2Ftree%2FRegression+Metrics+%28MAE+vs+RMSE%29.ipynb"
-   target="_blank"
+   target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
 </a>
@@ -8191,8 +7683,8 @@ print(f"R²: {r2:.4f}")
   </code></pre>
 
   <!-- Highlight.js scripts (only affect this block) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+
   <script>
     (function () {
       var block = document.querySelector('#mae-rmse-code-block code');
@@ -8204,13 +7696,12 @@ print(f"R²: {r2:.4f}")
 </div>
 
 
-<p><br>
 
 
 
     <h2>SHAP / LIME Basics</h2>
     <a href="https://mybinder.org/v2/gh/slashennui/SHAP-LIME-Basics/main?urlpath=%2Fdoc%2Ftree%2FSHAP-LIME+Basics.ipynb"
-   target="_blank"
+   target="_blank" rel="noopener noreferrer"
    style="text-decoration: none;">
     <img src="https://static.mybinder.org/badge_logo.svg" alt="Launch on Binder" />
 </a>
@@ -8245,6 +7736,7 @@ print(f"R²: {r2:.4f}")
   </style>
 
   <pre><code class="language-python">
+
 import numpy as np
 import pandas as pd
 import shap
@@ -8254,11 +7746,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 X, y = make_classification(
-    n_samples=600,
-    n_features=8,
-    n_informative=5,
-    n_redundant=1,
-    random_state=42,
+    n_samples=600, n_features=8, n_informative=5, n_redundant=1, random_state=42
 )
 feature_names = [f"feature_{i}" for i in range(X.shape[1])]
 X_df = pd.DataFrame(X, columns=feature_names)
@@ -8269,12 +7757,12 @@ X_train_df, X_test_df, y_train, y_test = train_test_split(
 model = LogisticRegression(max_iter=1000, random_state=42)
 model.fit(X_train_df, y_train)
 
-# SHAP: construct the explainer with training/background data, explain held-out rows.
-shap_explainer = shap.LinearExplainer(model, X_train_df)
+# SHAP: use training/background data; explain held-out rows.
+shap_explainer = shap.Explainer(model, X_train_df, algorithm="linear")
 shap_values = shap_explainer(X_test_df)
-shap.plots.beeswarm(shap_values)
+shap.plots.beeswarm(shap_values, show=False)
 
-# LIME: training data define perturbations; explain a held-out observation.
+# LIME: training data define its perturbation distribution.
 lime_explainer = LimeTabularExplainer(
     training_data=X_train_df.to_numpy(),
     feature_names=feature_names,
@@ -8283,18 +7771,22 @@ lime_explainer = LimeTabularExplainer(
     random_state=42,
 )
 
+# LIME supplies NumPy perturbations; restore feature names for sklearn.
+def predict_proba_array(a):
+    return model.predict_proba(pd.DataFrame(a, columns=feature_names))
+
 i = 0
 exp = lime_explainer.explain_instance(
-    X_test_df.iloc[i].to_numpy(),
-    model.predict_proba,
-    num_features=5,
+    X_test_df.iloc[i].to_numpy(), predict_proba_array, num_features=5
 )
+print("LIME local fidelity R²:", exp.score)
 print(exp.as_list())
+
   </code></pre>
 
   <!-- Highlight.js scripts (only affect this block) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+
   <script>
     (function () {
       var block = document.querySelector('#lime-shap-code-block code');
@@ -8306,26 +7798,26 @@ print(exp.as_list())
 </div>
 
   </details>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- Limits of Models, Metrics & Science -->
 <div id="limits-reference" class="ref-section soft-yellow" style="background-color: #f8f9fa; padding: 20px;">
   <div class="ref-header">
     <h2>Limits of Models, Metrics & Science</h2>
     <p class="ref-subtitle">
-      
+
     </p>
   </div>
 
@@ -8373,7 +7865,7 @@ print(exp.as_list())
     <p style="margin-top:1rem; font-weight:500;">
       Thanks for your attention.<br>
       — manu
-      
+
 
     </p>
     <p style="margin-top:1rem; font-weight:500;">
@@ -8384,25 +7876,25 @@ print(exp.as_list())
 
 
 
-  
-  
-  
-  
-  
-  
-  
-  
- </main> 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+ </main>
+
+
+
+
+
+
+
+
+
+
 <!-- ===========================
      FLOATING GLOSSARY PANEL
      =========================== -->
@@ -8673,17 +8165,17 @@ print(exp.as_list())
     #glossary-search-input {
       min-width: 110px;
     }
-    
-    
+
+
         .glossary-all summary {
       list-style: none;
       cursor: pointer;
     }
-    
+
     .glossary-all summary::-webkit-details-marker {
       display: none;
     }
-    
+
     .glossary-section-title {
       display: flex;
       justify-content: space-between;
@@ -8691,13 +8183,13 @@ print(exp.as_list())
       font-weight: 600;
       gap: 0.5rem;
     }
-    
+
     .glossary-categories {
       font-size: 0.78rem;
       opacity: 0.75;
       white-space: nowrap;
     }
-    
+
     /* Stack nicely on small screens */
     @media (max-width: 700px) {
       .glossary-section-title {
@@ -8706,7 +8198,7 @@ print(exp.as_list())
       }
     }
 
-    
+
   }
 </style>
 
@@ -8727,7 +8219,7 @@ print(exp.as_list())
       "Area under the Curve (AUC)": "Generic term for the area under a performance curve (ROC, Precision–Recall). Summarises performance across thresholds.",
       "Autocorrelation": "Correlation of a series with itself at different time lags. In time series, residual autocorrelation violates independence assumptions.",
       "Autoregression": "A time-series model where the current value is predicted from its own past values (lags) using a regression equation.",
-    
+
       // ---------- B ----------
       "Backpropagation": "The algorithm used in neural networks to propagate the loss gradient backwards through layers and update weights.",
       "Bagging": "Short for bootstrap aggregating: train many models on different bootstrap samples and average or vote their predictions to reduce variance.",
@@ -8750,7 +8242,7 @@ print(exp.as_list())
       "Brown–Forsythe test": "A robust variant of Levene’s test that uses medians instead of means to check equality of variances; more robust when distributions are skewed or heavy-tailed.",
       "Business analytics": "Using data, statistics and modelling to understand performance and support business decisions.",
       "Business intelligence": "Tools and processes that collect, integrate and visualise data to support reporting and high-level decision making.",
-    
+
       // ---------- C ----------
       "C-index (Concordance Index)": "A rank-based performance measure (often in survival analysis) similar to ROC AUC; probability that a randomly chosen case with the event gets a higher predicted risk.",
       "Calibration": "How well predicted probabilities match observed frequencies (for example, among predictions of 0.7, about 70% are actually positive).",
@@ -8786,7 +8278,7 @@ print(exp.as_list())
       "Cross entropy": "A loss function for probabilistic classification that compares predicted probability distributions to the true labels.",
       "Cross-validation (CV)": "Splitting data into folds to repeatedly train and test a model on different subsets to estimate performance on new data.",
       "Cumulative distribution function (CDF)": "Function that gives the probability that a random variable is less than or equal to a given value.",
-    
+
       // ---------- D ----------
       "Dashboard": "A visual display (charts, tables, indicators) that summarises key metrics for monitoring.",
       "Data leakage": "When information from the future or from the target leaks into the features, making performance look better than it really is.",
@@ -8812,7 +8304,7 @@ print(exp.as_list())
       "Durbin–Watson test": "A test of first-order autocorrelation in regression residuals. Values near 2 ≈ no autocorrelation; near 0 ≈ strong positive; near 4 ≈ strong negative.",
       "Dropout": "A neural-network regularisation technique that randomly drops units during training to reduce overfitting.",
       "Dummy variable": "A 0/1 variable created from a category to indicate presence (1) or absence (0) of that category.",
-    
+
       // ---------- E ----------
       "Early stopping": "Stopping training when performance on a validation set stops improving, to avoid overfitting.",
       "EDA": "Exploratory Data Analysis – visually and statistically exploring data to understand structure, distributions, and potential problems.",
@@ -8825,7 +8317,7 @@ print(exp.as_list())
       "Evaluation metrics": "Numbers used to judge model quality, such as accuracy, F1, AUC, RMSE or log-loss.",
       "Event (in survival analysis)": "The outcome of interest occurring in time-to-event data — for example death, relapse, churn, equipment failure.",
       "Expected counts": "Theoretical cell counts a chi-square test uses to see how far observed counts deviate from what chance alone would produce.",
-    
+
       // ---------- F ----------
       "F1-score": "The harmonic mean of precision and recall. High only if both precision and recall are reasonably high.",
       "F-Score": "A generic name for F-measures that combine precision and recall, such as F1.",
@@ -8844,7 +8336,7 @@ print(exp.as_list())
       "Fisher’s exact test": "An exact test for 2×2 contingency tables, especially when expected counts are small. It avoids large-sample approximations.",
       "Flume": "A tool for collecting, aggregating and moving large volumes of log data into systems like Hadoop.",
       "Frequentist statistics": "Classical statistics that interprets probability as long-run relative frequency and uses sampling distributions and p-values.",
-    
+
       // ---------- G ----------
       "Gated Recurrent Unit (GRU)": "A type of recurrent neural network cell with update and reset gates, simpler than LSTM but with similar goals.",
       "ggplot2": "A popular R package for creating layered, grammar-of-graphics plots.",
@@ -8853,7 +8345,7 @@ print(exp.as_list())
       "Gradient boosting": "An ensemble method that sequentially fits models to the residuals of previous models (XGBoost, LightGBM).",
       "Gradient descent": "An optimisation method that iteratively moves parameters in the direction that reduces the cost function the fastest.",
       "Grid search": "A systematic search over combinations of hyperparameters to find a good configuration.",
-    
+
       // ---------- H ----------
       "Hadoop": "An open-source ecosystem for distributed storage (HDFS) and processing (MapReduce, Spark) of large datasets.",
       "Hazard": "The instantaneous risk of an event occurring at time t, given survival until t. Not a probability but a rate.",
@@ -8869,7 +8361,7 @@ print(exp.as_list())
       "Hyperparameter": "A setting chosen before training (for example learning rate, number of trees) that controls how a model is fit.",
       "Hyperplane": "A flat subspace of one dimension less than the surrounding space; used as a decision surface in methods like SVM.",
       "Hypothesis": "A tentative claim about a population or process that can be tested with data.",
-    
+
       // ---------- I ----------
       "IDI (Integrated Discrimination Improvement)": "A metric that compares how much two risk models improve separation between cases and controls.",
       "IID (Independent and Identically Distributed)": "Assumption that observations are independent of each other and drawn from the same distribution.",
@@ -8880,11 +8372,11 @@ print(exp.as_list())
       "Influence function": "A tool from robust statistics / ML that measures how small changes in a training point would change a model’s estimate.",
       "Iteration": "One pass or update step in an iterative algorithm during training or optimisation.",
       "IQR": "Interquartile range – the distance between the 25th and 75th percentiles; a robust measure of spread.",
-    
+
       // ---------- J ----------
       "Jackknife": "A resampling method that leaves out one observation (or group) at a time to estimate variance and influence.",
       "Julia": "A high-performance dynamic language designed for numerical and scientific computing.",
-    
+
       // ---------- K ----------
       "Kaplan–Meier estimator": "A non-parametric method for estimating the survival function — the probability of an event (such as death) not occurring up to each time point. Handles right-censored data where some individuals' outcomes are not yet observed. Often visualised as a stepwise survival curve and used to compare groups.",
       "Kaplan–Meier curve": "A non-parametric estimate of the survival function. Produces a step-shaped curve showing the fraction still event-free over time.",
@@ -8895,7 +8387,7 @@ print(exp.as_list())
       "Kolmogorov–Smirnov test": "A non-parametric test that compares a sample to a reference distribution or compares two samples to check for distributional differences.",
       "Kruskal–Wallis test": "A non-parametric analogue of one-way ANOVA for 3+ groups based on ranks, useful when normality or equal-variance assumptions fail.",
       "Kurtosis": "A measure of tail heaviness relative to a normal distribution: high kurtosis = more extreme outliers.",
-    
+
       // ---------- L ----------
       "L1 regularisation": "Regularisation using absolute values of coefficients (Lasso); encourages sparse models with some coefficients exactly zero.",
       "L2 regularisation": "Regularisation using squared coefficients (Ridge); discourages large weights but rarely sets them exactly to zero.",
@@ -8913,7 +8405,7 @@ print(exp.as_list())
       "Log-transformation": "Applying the logarithm to a variable to reduce skewness, stabilise variance, or make multiplicative patterns more linear.",
       "Logistic regression": "A model for binary outcomes; it predicts log-odds that are converted to probabilities between 0 and 1.",
       "Long Short-Term Memory (LSTM)": "A recurrent neural network architecture with gates that help remember or forget information over long sequences.",
-    
+
       // ---------- M ----------
       "MAE": "Mean Absolute Error – the average absolute difference between predicted and actual values; easy to read as a ‘typical error’.",
       "Machine learning": "Using algorithms that learn patterns from data to make predictions or decisions without explicit rules.",
@@ -8940,7 +8432,7 @@ print(exp.as_list())
       "Multivariate analysis": "Analysing relationships among several variables at the same time.",
       "Multivariate regression": "Regression with multiple dependent variables predicted jointly from a set of predictors.",
       "Multiple testing": "Running many hypothesis tests on the same data. Greatly increases false positives unless controlled with FWER/FDR methods.",
-    
+
       // ---------- N ----------
       "Naive Bayes": "A simple probabilistic classifier that applies Bayes’ theorem assuming features are conditionally independent given the class.",
       "NaN": "Stands for ‘Not a Number’: a special value representing missing or undefined numeric results.",
@@ -8959,7 +8451,7 @@ print(exp.as_list())
       "Numpy": "A core Python library for fast numerical computing and n-dimensional arrays.",
       "Noise": "Random variation in the data that is not explained by the model or features.",
       "Noise feature": "A feature with no real relationship to the target; often added to test robustness or overfitting.",
-    
+
       // ---------- O ----------
       "One hot encoding": "Representing a categorical variable as multiple 0/1 columns, one per category.",
       "One shot learning": "Training a classifier that can recognise a class from a single labelled example.",
@@ -8968,7 +8460,7 @@ print(exp.as_list())
       "Ordinal variable": "A categorical variable with an inherent order (for example low, medium, high).",
       "Outlier": "An observation that is unusual compared to the rest of the data. It can strongly affect many statistics.",
       "Overfitting": "The model fits the noise and quirks of the training data but performs poorly on new data.",
-    
+
       // ---------- P ----------
       "Paired t-test": "A t-test that compares the mean difference between paired or matched observations (for example before–after measurements).",
       "Pandas": "A Python library providing DataFrame objects and tools for data wrangling and analysis.",
@@ -8994,11 +8486,11 @@ print(exp.as_list())
       "P-value": "If there really were no effect, how surprising would this result (or more extreme) be? Small p-values suggest the data are hard to explain under ‘no effect’.",
       "Python": "A widely used high-level programming language, very popular for data science and machine learning.",
       "PyTorch": "A deep-learning framework in Python that uses dynamic computation graphs and is widely used in research.",
-    
+
       // ---------- Q ----------
       "Q–Q plot": "A plot that compares quantiles of the data to quantiles of a reference distribution to visually assess distributional assumptions (for example normality).",
       "Quartile": "Values that split ordered data into four equal parts (Q1, Q2/median, Q3).",
-    
+
       // ---------- R ----------
       "R": "An open-source language and environment for statistical computing, graphics and data analysis.",
       "Range": "The difference between the largest and smallest value in a dataset.",
@@ -9020,7 +8512,7 @@ print(exp.as_list())
       "ROC AUC": "Area under the ROC curve; measures how well the model separates positives from negatives across thresholds (0.5 = random, 1.0 = perfect).",
       "Root Mean Squared Error (RMSE)": "Same as RMSE; included for people searching by the long name.",
       "Rotational invariance": "A property where results do not change when the coordinate system is rotated.",
-    
+
       // ---------- S ----------
       "Sample size": "How many observations are in the dataset or in the part of the data being analysed.",
       "Sample size effect (tests)": "The phenomenon that large samples make tiny effects statistically significant, while small samples may miss real effects.",
@@ -9050,8 +8542,8 @@ print(exp.as_list())
       "Survival analysis": "Statistical methods for modelling time until an event occurs (death, failure, recovery). Often involves censoring, Kaplan–Meier curves, and hazard models like Cox regression. It handles censoring, where for some subjects we only know that the event has not yet happened by the end of follow-up.",
       "Survival analysis / time-to-event methods": "Kaplan–Meier curve, Log-rank test, Cox proportional hazards model, Hazard ratio, Censoring, C-index, Time-dependent AUC, Brier score (time-dependent), RMST, Competing risks",
       "Survival function": "The probability of being event-free beyond time t. Estimated using Kaplan–Meier or parametric survival models.",
-      "Survival / Time-to-Event Performance": "Kaplan–Meier, C-index, Brier over time, Cox model",  
-    
+      "Survival / Time-to-Event Performance": "Kaplan–Meier, C-index, Brier over time, Cox model",
+
       // ---------- T ----------
       "Tail behaviour": "How the extreme values (tails) of a distribution behave. Heavy tails mean more extreme outliers than a normal distribution would predict.",
       "Target": "The outcome the model is trying to predict. Also called label, response or dependent variable.",
@@ -9071,28 +8563,28 @@ print(exp.as_list())
       "True positive (TP)": "A case that is actually positive and was predicted positive.",
       "Type I error": "Rejecting a true null hypothesis. In practice: a false alarm or false positive.",
       "Type II error": "Failing to reject a false null hypothesis. In practice: a missed effect or false negative.",
-    
+
       // ---------- U ----------
       "UMAP": "A non-linear dimensionality-reduction method often used for 2D/3D visualisation of high-dimensional data.",
       "Underfitting": "The model is too simple to capture the structure in the data and performs poorly even on training data.",
       "Univariate analysis": "Analysing the distribution or relationship of a single variable (for example histogram of one feature).",
       "Unsupervised learning": "Learning patterns or structure from data without labelled outcomes (for example clustering).",
-    
+
       // ---------- V ----------
       "Validation set": "A set of data held out from training and used to tune hyperparameters or choose between models.",
       "Variance": "How much values or estimates spread around their mean; high variance means a lot of variability or instability.",
       "Variance Inflation Factor (VIF)": "Quantifies how much the variance of a regression coefficient is inflated by multicollinearity; large values flag problems.",
       "Variance / spread": "Levene's test, Brown–Forsythe test",
-    
+
       // ---------- W ----------
       "WAIC": "Widely Applicable Information Criterion – a Bayesian model comparison score; lower WAIC usually means better out-of-sample prediction.",
       "Wasserstein distance": "A distance between probability distributions that measures how much ‘mass’ must be moved to transform one into the other; used in optimal transport and robust ML.",
       "Welch’s t-test": "A version of the independent t-test that does not assume equal variances across groups.",
       "White-noise residuals": "Residuals that show no autocorrelation and roughly constant variance over time; a goal for well-specified time-series models.",
-    
+
       // ---------- X ----------
       "XGBoost": "A highly optimised implementation of gradient-boosted decision trees, widely used for tabular machine-learning problems.",
-    
+
       // ---------- Z ----------
       "Z-score": "A standardised value equal to (value − mean) / standard deviation; measures how many SDs a point is from the mean.",
       "Z-test": "A hypothesis test that uses the normal distribution to assess how far a statistic is from the null value in standard-deviation units.",
@@ -9109,10 +8601,10 @@ print(exp.as_list())
     function isInsideGlossary(el) {
       return !!el.closest('#glossary-panel');
     }
-    
-    
-    
-    
+
+
+
+
 
 
 
@@ -9268,11 +8760,11 @@ window.addEventListener("scroll", () => {
 })();
 </script>
 
-  
-  
-  
-  
-  
+
+
+
+
+
 
 
 
@@ -9421,11 +8913,460 @@ window.addEventListener("scroll", () => {
 
 
 
-  
-  
-  
-  
-  
+
+
+
+
+
+
+<!-- FULL_REPO_AUDIT_V2_2026_08_15 -->
+
+<!-- UI_FIXES_V2_5 -->
+<style id="ui-fixes-v2-5">
+body:not(.dark) #resampling-stability-playground {
+  background: #f8fafc !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.10) !important;
+}
+
+body:not(.dark) #resampling-stability-playground .rsp-card {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+
+body:not(.dark) #resampling-stability-playground h2,
+body:not(.dark) #resampling-stability-playground h3,
+body:not(.dark) #resampling-stability-playground h4 {
+  color: #111827 !important;
+}
+
+body:not(.dark) #resampling-stability-playground .rsp-desc,
+body:not(.dark) #resampling-stability-playground .rsp-note,
+body:not(.dark) #resampling-stability-playground .rsp-slider-label,
+body:not(.dark) #resampling-stability-playground .rsp-info-card p,
+body:not(.dark) #resampling-stability-playground .rsp-info-card ul,
+body:not(.dark) #resampling-stability-playground .rsp-info-card li,
+body:not(.dark) #resampling-stability-playground .rsp-legend {
+  color: #374151 !important;
+}
+
+body:not(.dark) #resampling-stability-playground .rsp-slider-value {
+  color: #92400e !important;
+}
+
+body:not(.dark) #resampling-stability-playground .rsp-metrics th {
+  color: #4b5563 !important;
+  border-bottom-color: #d1d5db !important;
+}
+
+body:not(.dark) #resampling-stability-playground .rsp-metrics td {
+  color: #111827 !important;
+  border-bottom-color: #e5e7eb !important;
+}
+
+body:not(.dark) #resampling-stability-playground svg {
+  background: #ffffff !important;
+  border-color: #d1d5db !important;
+}
+
+body:not(.dark) #resampling-stability-playground svg text {
+  fill: #4b5563 !important;
+}
+
+#condensed-ref-toggle[aria-expanded="true"],
+#stat-tests-toggle[aria-expanded="true"] {
+  font-weight: 600;
+}
+</style>
+
+
+<!-- UI_FIXES_V2_6 -->
+<style id="ui-fixes-v2-6">
+body.dark .ref-section,
+body.dark #condensed-reference,
+body.dark #stat-tests-section,
+body.dark #limits-reference {
+  background: #0b1120 !important;
+  color: #e5e7eb !important;
+  border-color: #334155 !important;
+}
+
+body.dark .ref-section .ref-card,
+body.dark #condensed-reference .ref-card,
+body.dark #stat-tests-section .ref-card {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+  border-color: #334155 !important;
+}
+
+body.dark .ref-section .ref-header h2,
+body.dark .ref-section .ref-card h3,
+body.dark .ref-section .ref-card h4,
+body.dark #limits-reference h2,
+body.dark #limits-reference h3,
+body.dark #limits-reference h4 {
+  color: #f8fafc !important;
+}
+
+body.dark .ref-section .ref-subtitle,
+body.dark .ref-section p,
+body.dark .ref-section li,
+body.dark #limits-reference p,
+body.dark #limits-reference li {
+  color: #cbd5e1 !important;
+}
+
+body.dark #limits-reference .metric-section__body {
+  background: transparent !important;
+  color: #e5e7eb !important;
+}
+
+body.dark details.ui-dark-section-fix {
+  background: #0b1120 !important;
+  color: #e5e7eb !important;
+}
+
+body.dark details.ui-dark-section-fix > :not(summary) {
+  background-color: #0b1120 !important;
+  color: #e5e7eb !important;
+}
+
+body.dark details.ui-dark-section-fix p,
+body.dark details.ui-dark-section-fix li,
+body.dark details.ui-dark-section-fix h2,
+body.dark details.ui-dark-section-fix h3,
+body.dark details.ui-dark-section-fix h4,
+body.dark details.ui-dark-section-fix td,
+body.dark details.ui-dark-section-fix th {
+  color: #e5e7eb !important;
+}
+
+body.dark details.ui-dark-section-fix tbody tr:nth-child(even) {
+  background-color: #0f172a !important;
+}
+
+body.dark details.ui-dark-section-fix table {
+  background: #0b1120 !important;
+}
+
+body.dark details.ui-dark-section-fix td,
+body.dark details.ui-dark-section-fix th {
+  border-bottom-color: #334155 !important;
+}
+
+body.dark details.ui-dark-section-fix .cutting-badge--prod {
+  color: #bbf7d0 !important;
+}
+body.dark details.ui-dark-section-fix .cutting-badge--practice {
+  color: #fde047 !important;
+}
+body.dark details.ui-dark-section-fix .cutting-badge--research {
+  color: #bfdbfe !important;
+}
+
+details.ui-model-selection-fix .table-responsive {
+  overflow-x: visible !important;
+  max-width: 100% !important;
+}
+
+details.ui-model-selection-fix table {
+  width: 100% !important;
+  table-layout: auto !important;
+}
+
+details.ui-model-selection-fix th,
+details.ui-model-selection-fix td {
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+details.ui-model-selection-fix th:nth-child(1),
+details.ui-model-selection-fix td:nth-child(1) {
+  width: 10rem;
+}
+
+details.ui-model-selection-fix th:nth-child(2),
+details.ui-model-selection-fix td:nth-child(2) {
+  width: 8rem;
+}
+
+body.dark,
+body.dark * {
+  scrollbar-color: #475569 #0f172a;
+}
+
+body.dark ::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+body.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border: 2px solid #0f172a;
+  border-radius: 999px;
+}
+
+body.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+body.dark #condensed-reference-wrapper,
+body.dark #stat-tests-wrapper {
+  background: transparent !important;
+  color: #e5e7eb !important;
+}
+
+body.dark #condensed-ref-toggle,
+body.dark #stat-tests-toggle {
+  background: #111827 !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+</style>
+
+<script id="ui-fixes-v2-6-script">
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('details').forEach(function (detail) {
+    const summary = detail.querySelector(':scope > summary');
+    if (!summary) return;
+
+    const label = summary.textContent.replace(/\s+/g, ' ').trim();
+
+    if (
+      label.startsWith('Survival / Time-to-Event Performance') ||
+      label.startsWith('Advanced & Research Diagnostics')
+    ) {
+      detail.classList.add('ui-dark-section-fix');
+    }
+
+    if (label.startsWith('Model Selection Criteria')) {
+      detail.classList.add('ui-model-selection-fix');
+    }
+  });
+});
+</script>
+
+
+<!-- UI_FIX_V2_7_MODEL_SELECTION_SCROLLBAR -->
+<script id="ui-fix-v2-7-model-selection-scrollbar">
+(function () {
+  function fixModelSelectionScrollbar() {
+    const section = Array.from(document.querySelectorAll('details')).find(function (detail) {
+      const summary = detail.querySelector(':scope > summary');
+      return summary &&
+        summary.textContent.replace(/\s+/g, ' ').trim().startsWith('Model Selection Criteria');
+    });
+
+    if (!section) return;
+
+    const wrapper =
+      section.querySelector(':scope > .table-responsive') ||
+      section.querySelector('.table-responsive');
+
+    if (!wrapper) return;
+
+    /* Force this particular table to fit the available width instead of
+       becoming a horizontal scrolling region. */
+    wrapper.style.setProperty('overflow-x', 'visible', 'important');
+    wrapper.style.setProperty('overflow-y', 'visible', 'important');
+    wrapper.style.setProperty('width', '100%', 'important');
+    wrapper.style.setProperty('max-width', '100%', 'important');
+
+    const table = wrapper.querySelector('table');
+    if (!table) return;
+
+    table.style.setProperty('width', '100%', 'important');
+    table.style.setProperty('max-width', '100%', 'important');
+    table.style.setProperty('min-width', '0', 'important');
+    table.style.setProperty('table-layout', 'auto', 'important');
+
+    table.querySelectorAll('th, td').forEach(function (cell) {
+      cell.style.setProperty('white-space', 'normal', 'important');
+      cell.style.setProperty('overflow-wrap', 'anywhere', 'important');
+      cell.style.setProperty('word-break', 'normal', 'important');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixModelSelectionScrollbar);
+  } else {
+    fixModelSelectionScrollbar();
+  }
+})();
+</script>
+
+
+<!-- UI_FIX_V2_8_MODEL_SELECTION_NO_SCROLL -->
+<style id="ui-fix-v2-8-model-selection-no-scroll">
+details.model-selection-no-scroll .model-selection-table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+details.model-selection-no-scroll .model-selection-table-wrap table {
+  display: table !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+}
+
+details.model-selection-no-scroll .model-selection-table-wrap th,
+details.model-selection-no-scroll .model-selection-table-wrap td {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+</style>
+
+<script id="ui-fix-v2-8-model-selection-no-scroll-script">
+(function () {
+  function removeModelSelectionScroller() {
+    const section = Array.from(document.querySelectorAll('details')).find(function (detail) {
+      const summary = detail.querySelector(':scope > summary');
+      return summary &&
+        summary.textContent.replace(/\s+/g, ' ').trim().startsWith('Model Selection Criteria');
+    });
+
+    if (!section) return;
+
+    section.classList.add('model-selection-no-scroll');
+
+    const table = section.querySelector('table');
+    if (!table) return;
+
+    const wrapper = table.closest('.table-responsive') || table.parentElement;
+    if (!wrapper) return;
+
+    /*
+      The scrollbar is created by the legacy .table-responsive container.
+      Remove that behaviour for this one small table; wrapping already makes
+      the table responsive without horizontal scrolling.
+    */
+    wrapper.classList.remove('table-responsive');
+    wrapper.classList.add('model-selection-table-wrap');
+
+    wrapper.style.setProperty('overflow', 'visible', 'important');
+    wrapper.style.setProperty('overflow-x', 'visible', 'important');
+    wrapper.style.setProperty('overflow-y', 'visible', 'important');
+    wrapper.style.setProperty('width', '100%', 'important');
+    wrapper.style.setProperty('max-width', '100%', 'important');
+
+    table.style.setProperty('display', 'table', 'important');
+    table.style.setProperty('width', 'auto', 'important');
+    table.style.setProperty('max-width', '100%', 'important');
+    table.style.setProperty('min-width', '0', 'important');
+
+    table.querySelectorAll('th, td').forEach(function (cell) {
+      cell.style.setProperty('white-space', 'normal', 'important');
+      cell.style.setProperty('overflow-wrap', 'anywhere', 'important');
+    });
+
+    /*
+      Defensive cleanup: if any ancestor inside this section still has a
+      legacy horizontal scrolling rule, neutralise it.
+    */
+    let node = wrapper.parentElement;
+    while (node && node !== section.parentElement) {
+      const computed = getComputedStyle(node);
+      if (computed.overflowX === 'auto' || computed.overflowX === 'scroll') {
+        node.style.setProperty('overflow-x', 'visible', 'important');
+      }
+      if (node === section) break;
+      node = node.parentElement;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeModelSelectionScroller);
+  } else {
+    removeModelSelectionScroller();
+  }
+})();
+</script>
+
+
+<!-- UI_FIX_V2_9_MODEL_SELECTION_WIDER -->
+<style id="ui-fix-v2-9-model-selection-wider">
+.model-selection-wide-wrap {
+  width: min(1200px, 100%) !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+.model-selection-wide-wrap > table {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  table-layout: auto !important;
+}
+
+.model-selection-wide-wrap > table th,
+.model-selection-wide-wrap > table td {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+</style>
+
+<script id="ui-fix-v2-9-model-selection-wider-script">
+(function () {
+  function fixModelSelectionTable() {
+    const tables = Array.from(document.querySelectorAll('table'));
+
+    const table = tables.find(function (t) {
+      const txt = t.textContent.replace(/\s+/g, ' ').trim();
+      return txt.includes('Criterion') &&
+             txt.includes('Preference') &&
+             txt.includes('Best For') &&
+             txt.includes('AIC') &&
+             txt.includes('BIC') &&
+             txt.includes('Cross-validated Error') &&
+             txt.includes('Adjusted R²');
+    });
+
+    if (!table) return;
+
+    const wrap = table.parentElement;
+    if (!wrap) return;
+
+    wrap.classList.add('model-selection-wide-wrap');
+
+    /* This is intentionally simple: the old scroller is unnecessary here. */
+    wrap.style.setProperty('width', 'min(1200px, 100%)', 'important');
+    wrap.style.setProperty('max-width', '100%', 'important');
+    wrap.style.setProperty('overflow-x', 'hidden', 'important');
+    wrap.style.setProperty('overflow-y', 'visible', 'important');
+
+    table.style.setProperty('width', '100%', 'important');
+    table.style.setProperty('max-width', '100%', 'important');
+    table.style.setProperty('min-width', '0', 'important');
+
+    table.querySelectorAll('th, td').forEach(function (cell) {
+      cell.style.setProperty('white-space', 'normal', 'important');
+      cell.style.setProperty('overflow-wrap', 'anywhere', 'important');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixModelSelectionTable);
+  } else {
+    fixModelSelectionTable();
+  }
+})();
+</script>
+
 </body>
 </html>
 
