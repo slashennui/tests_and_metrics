@@ -1651,7 +1651,7 @@ document.addEventListener('DOMContentLoaded', function () {
      ============================ -->
 
 <section id="condensed-reference-wrapper">
-  <button id="condensed-ref-toggle" class="ref-toggle-btn" type="button">
+  <button id="condensed-ref-toggle" class="ref-toggle-btn" type="button" aria-expanded="false" aria-controls="condensed-reference">
     ▸ Data Science Model Evaluation – Condensed Reference Sheet
   </button>
 
@@ -1768,11 +1768,11 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
 
       <h4>Hypothesis Testing Flow</h4>
       <p>
-        State H₀ &amp; H₁ → Choose α (0.05) → Compute p-value → Compare:
+        State H₀ &amp; H₁ → Pre-specify α (for example 0.05 when justified) → Compute p-value → Compare:
       </p>
       <ul class="ref-list">
         <li><strong>p &lt; α</strong> → Reject H₀ (statistically significant)</li>
-        <li><strong>p ≥ α</strong> → Fail to reject H₀</li>
+        <li><strong>p ≥ α</strong> → Fail to reject H₀; this does not prove H₀ is true</li>
       </ul>
 
       <h4>Common Tests</h4>
@@ -1789,12 +1789,12 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             <tr>
               <td>t-test</td>
               <td>Compare 2 group means</td>
-              <td>Normality, equal variance (or use Welch’s)</td>
+              <td>For independent-samples tests: independent observations/groups and an appropriate sampling model. Student’s t-test assumes equal variances; Welch’s t-test does not.</td>
             </tr>
             <tr>
               <td>ANOVA</td>
               <td>Compare ≥ 3 group means</td>
-              <td>Normality, equal variance, independence</td>
+              <td>Independent observations and an appropriate residual/sampling model. Classical one-way ANOVA assumes equal variances; Welch ANOVA relaxes that assumption.</td>
             </tr>
             <tr>
               <td>Chi-square</td>
@@ -1803,8 +1803,8 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
             </tr>
             <tr>
               <td>Permutation Test</td>
-              <td>Non-parametric alternative</td>
-              <td>Exchangeability of labels</td>
+              <td>Randomisation / exchangeability-based test</td>
+              <td>The permutation scheme must be valid under the null and preserve pairing, clustering, time or other dependence structure as required.</td>
             </tr>
             <tr>
               <td>Kolmogorov–Smirnov (KS)</td>
@@ -1813,8 +1813,7 @@ MCC       = (TP×TN − FP×FN) / √[(TP+FP)(TP+FN)(TN+FP)(TN+FN)]      </pre>
                 or compare two samples (2-sample)
               </td>
               <td>
-                Continuous data, specifies distribution under H₀.
-                Sensitive to differences in shape and location.
+                For a one-sample KS test, the continuous reference CDF should be fully specified independently of the tested sample, unless an adjusted procedure is used when parameters are estimated. For the two-sample form, samples should be independent under the standard setup.
               </td>
             </tr>
             <tr>
@@ -2195,11 +2194,14 @@ lev_stat, p_lev = stats.levene(group1, group2, group3)      </pre>
       // start collapsed
       content.style.display = 'none';
       btn.textContent = '▸ ' + labelText;
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-controls', contentId);
 
       btn.addEventListener('click', () => {
         const isHidden = content.style.display === 'none';
         content.style.display = isHidden ? 'block' : 'none';
         btn.textContent = (isHidden ? '▼ ' : '▸ ') + labelText;
+        btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
       });
     }
 
@@ -3137,7 +3139,7 @@ than differences in means.<br><br>
      ============================ -->
 
 <section id="stat-tests-wrapper">
-  <button id="stat-tests-toggle" class="ref-toggle-btn" type="button">
+  <button id="stat-tests-toggle" class="ref-toggle-btn" type="button" aria-expanded="false" aria-controls="stat-tests-section">
     ▸ Statistical Tests & Assumptions – Quick Reference
   </button>
 
@@ -8020,7 +8022,7 @@ print(exp.as_list())
 <!-- ===========================
      FLOATING GLOSSARY PANEL
      =========================== -->
-<div id="glossary-panel" class="glossary-panel" aria-label="Data science glossary">
+<div id="glossary-panel" class="glossary-panel" role="complementary" aria-label="Data science glossary">
   <div class="glossary-header">
     <span class="glossary-title">Plain-language Glossary</span>
     <div class="glossary-controls">
@@ -8045,12 +8047,12 @@ print(exp.as_list())
 
 <details class="glossary-all" open>
   <summary>
-    <div class="glossary-section-title">
+    <span class="glossary-section-title">
       <span>All terms</span>
       <span class="glossary-categories">
         (Statistics · Machine Learning · Data Science)
       </span>
-    </div>
+    </span>
   </summary>
 
   <div id="glossary-terms" class="glossary-terms"></div>
@@ -8395,7 +8397,7 @@ print(exp.as_list())
       "Continuous variable": "A numeric variable that, in principle, can take infinitely many values in a range (for example height).",
       "Convergence": "When an iterative algorithm’s updates get smaller and its output stabilises near a limiting value.",
       "Convex function": "A function where the line segment between any two points on the graph lies above or on the graph. Convex functions make optimisation easier.",
-      "Correlation": "A scaled measure of linear association between two variables, between −1 and +1.",
+      "Correlation": "A measure of association between variables. The commonly reported Pearson correlation is a scaled measure of linear association from −1 to +1; other correlation coefficients, such as Spearman’s, target different forms of association. Correlation does not by itself establish causation.",
       "Cosine similarity": "Similarity between two vectors measured as the cosine of the angle between them; 1 = identical direction, 0 = orthogonal.",
       "Cost function": "A formula that measures how wrong a model’s predictions are; training minimises this quantity.",
       "Cook’s distance": "An influence measure in regression. Large values indicate points that strongly affect the fitted model and may need closer inspection.",
@@ -8512,7 +8514,7 @@ print(exp.as_list())
       "kNN": "k-nearest neighbours: a simple method that classifies or predicts based on the labels of the k closest training points.",
       "Kolmogorov–Smirnov test": "A non-parametric test that compares a sample to a reference distribution or compares two samples to check for distributional differences.",
       "Kruskal–Wallis test": "A rank-based test for distributional differences among 3+ independent groups. It is not automatically a drop-in test of mean differences when ANOVA assumptions fail.",
-      "Kurtosis": "A measure of tail heaviness relative to a normal distribution: high kurtosis = more extreme outliers.",
+      "Kurtosis": "The standardized fourth central moment of a distribution. Higher kurtosis generally reflects greater weight in the tails/extremes relative to a reference; it is not simply a count of outliers.",
 
       // ---------- L ----------
       "L1 regularisation": "Regularisation using absolute values of coefficients (Lasso); encourages sparse models with some coefficients exactly zero.",
@@ -8543,7 +8545,7 @@ print(exp.as_list())
       "Matthews correlation coefficient (MCC)": "A balanced measure for binary classification using all four confusion-matrix cells; works well with imbalanced data.",
       "Maximum likelihood estimation": "Choosing parameter values that make the observed data most probable under the model.",
       "Mean": "The simple average: add up all values and divide by how many you have.",
-      "Means tests": "t-test, One-way ANOVA, Mann–Whitney U test, Kruskal–Wallis test",
+      "Means tests": "Procedures aimed at mean comparisons include t-tests and ANOVA (with Welch variants when unequal variances matter). Mann–Whitney U and Kruskal–Wallis are rank/distribution tests rather than general tests of means.",
       "Median": "The middle value when the data is sorted. Half the values are above and half below; less sensitive to outliers than the mean.",
       "MIS": "Management Information System – systems that gather and report data to support organisational decision making.",
       "ML-as-a-Service (MLaaS)": "Cloud services that provide ready-made machine-learning tools and APIs.",
@@ -8569,7 +8571,7 @@ print(exp.as_list())
       "Non-parametric": "Methods that make few assumptions about distribution shape or functional form, often using ranks or resampling.",
       "Normal distribution": "The classic bell-shaped continuous distribution; many methods assume data or residuals are approximately normal.",
       "Normality assumption": "The assumption that data or residuals follow a normal distribution. Many classical tests rely on this.",
-      "Normality test": "A statistical test (for example Shapiro–Wilk, Kolmogorov–Smirnov on residuals) that checks whether data follow a normal distribution.",
+      "Normality test": "A test whose null specifies normality or a particular normal reference distribution. Shapiro–Wilk is a common choice; a one-sample Kolmogorov–Smirnov test requires a fully specified reference CDF, or an adjusted procedure when its parameters are estimated from the same data.",
       "Normalization": "Rescaling features to a common scale (for example 0–1) to make them comparable.",
       "Normality / tests distribution shape": "Shapiro–Wilk test, Kolmogorov–Smirnov test, Anderson–Darling test, Q–Q plot",
       "Norms": "Functions that measure vector size, such as L1 (sum of absolute values) or L2 (Euclidean length).",
@@ -8890,154 +8892,8 @@ window.addEventListener("scroll", () => {
 })();
 </script>
 
+<!-- V5: removed unreachable duplicate inline-glossary enhancement -->
 
-
-
-
-
-
-
-
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // 1) Make sure we have the glossary + content container
-    if (typeof GLOSSARY === "undefined") return;
-
-    const contentRoot = document.getElementById("page-content");
-    if (!contentRoot) return;
-
-    // 2) Prepare term lookup (case-insensitive → canonical key)
-    const canonicalByLower = {};
-    Object.keys(GLOSSARY).forEach((key) => {
-      canonicalByLower[key.toLowerCase()] = key;
-    });
-
-    // Sort terms by length (longest first) to avoid partial matches
-    const sortedTerms = Object.keys(GLOSSARY).sort(
-      (a, b) => b.length - a.length
-    );
-
-    // Escape for regex
-    function escapeRegex(str) {
-      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
-
-    const pattern = sortedTerms.map(escapeRegex).join("|");
-    // Word-ish boundaries; good enough for UI text
-    const termRegex = new RegExp("\\b(" + pattern + ")\\b", "gi");
-
-    // 3) Decide where NOT to touch text
-    const SKIP_SELECTOR =
-      "script, style, code, pre, a, button, input, textarea, svg, " +
-      "aside#glossary-panel, .glossary-inline-term";
-
-    function shouldSkipNode(textNode) {
-      const parent = textNode.parentElement;
-      if (!parent) return false;
-      return Boolean(parent.closest(SKIP_SELECTOR));
-    }
-
-    // 4) Walk the DOM and wrap text matches
-    function walk(node) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.nodeValue;
-        if (!text || !text.trim()) return;
-        if (shouldSkipNode(node)) return;
-
-        termRegex.lastIndex = 0;
-        if (!termRegex.test(text)) return; // no match in this node
-
-        // Build a fragment with wrapped terms
-        const frag = document.createDocumentFragment();
-        let lastIndex = 0;
-        termRegex.lastIndex = 0;
-        let match;
-
-        while ((match = termRegex.exec(text)) !== null) {
-          const start = match.index;
-          const end = termRegex.lastIndex;
-          const matchedText = match[0];
-
-          // Add text before the term
-          if (start > lastIndex) {
-            frag.appendChild(
-              document.createTextNode(text.slice(lastIndex, start))
-            );
-          }
-
-          // Find canonical key for the matched text (case-insensitive)
-          const canonicalKey =
-            canonicalByLower[matchedText.toLowerCase()] || matchedText;
-
-          // Create inline span
-          const span = document.createElement("span");
-          span.className = "glossary-inline-term";
-          span.dataset.term = canonicalKey;
-          // Native browser tooltip – can be replaced later with fancy tooltip
-          if (GLOSSARY[canonicalKey]) {
-            span.title = GLOSSARY[canonicalKey];
-          }
-          span.textContent = matchedText;
-
-          frag.appendChild(span);
-          lastIndex = end;
-        }
-
-        // Remaining text after last match
-        if (lastIndex < text.length) {
-          frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-        }
-
-        // Replace original text node
-        node.parentNode.replaceChild(frag, node);
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Don’t recurse into the glossary panel or already-processed spans
-        if (
-          node.closest("aside#glossary-panel") ||
-          node.classList.contains("glossary-inline-term")
-        ) {
-          return;
-        }
-
-        let child = node.firstChild;
-        while (child) {
-          const next = child.nextSibling;
-          walk(child);
-          child = next;
-        }
-      }
-    }
-
-    walk(contentRoot);
-
-    // 5) (Optional but handy) – click on inline term opens glossary panel
-    document.addEventListener("click", function (e) {
-      const termSpan = e.target.closest(".glossary-inline-term");
-      if (!termSpan) return;
-
-      const termKey = termSpan.dataset.term;
-      const panel = document.getElementById("glossary-panel");
-      if (!panel) return;
-
-      // If you have a minimised state, expand it here
-      panel.classList.remove("glossary-minimised");
-
-      // If you have a search box in the glossary, you can auto-fill it:
-      const searchInput = document.getElementById("glossary-search-input");
-      if (searchInput) {
-        searchInput.value = termKey;
-        const event = new Event("input", { bubbles: true });
-        searchInput.dispatchEvent(event);
-      }
-
-      // Optional: if your glossary renders a list with term elements,
-      // you can also scroll to / highlight the specific entry there.
-      // (We can wire this once I see the exact glossary markup.)
-    });
-  });
-</script>
 
 
 
@@ -9498,6 +9354,7 @@ details.model-selection-no-scroll .model-selection-table-wrap td {
 </script>
 
 <!-- FINAL_HARDENING_V4_1_2026_08_16 -->
+<!-- FINAL_QUALITY_POLISH_V5_2026_08_16 -->
 </body>
 </html>
 
